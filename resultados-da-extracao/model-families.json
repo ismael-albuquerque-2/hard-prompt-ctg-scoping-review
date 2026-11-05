@@ -1,0 +1,124 @@
+{
+  "families": {
+    "GPT (OpenAI)": [
+      "gpt-3.5-turbo",
+      "gpt-4",
+      "gpt-4-turbo",
+      "gpt-4.1",
+      "gpt-4.1-mini",
+      "gpt-4.1-nano",
+      "gpt-4o",
+      "gpt-4o-mini",
+      "gpt-5",
+      "gpt-5.4",
+      "gpt-5.4-mini",
+      "gpt-5.5",
+      "o4-mini",
+      "text-davinci-003"
+    ],
+    "GPT-OSS (OpenAI)": [
+      "gpt-oss-20b",
+      "gpt-oss-120b"
+    ],
+    "Llama (Meta)": [
+      "llama-2-7b-chat",
+      "llama-3-8b",
+      "llama-3-8b-instruct",
+      "llama-3-70b",
+      "llama-3.1-8b",
+      "llama-3.1-8b-instruct",
+      "llama-3.1-70b",
+      "llama-3.2-1b-instruct",
+      "llama-3.2-3b-instruct",
+      "llama-3.2-11b-vision-instruct",
+      "llama-3.3-70b-instruct",
+      "llama-4-maverick"
+    ],
+    "Mistral/Mixtral": [
+      "mistral-7b",
+      "mistral-7b-it-v0.2",
+      "mistral-7b-instruct",
+      "mistral-7b-instruct-v0.3",
+      "mistral-small-instruct-2409",
+      "mistral-nemo-instruct-2407",
+      "ministral-8b",
+      "mistral-large-2407",
+      "mixtral-8x7b-instruct-v0.1",
+      "mixtral-8x22b"
+    ],
+    "Qwen (Alibaba)": [
+      "qwen2-7b-instruct",
+      "qwen2.5-7b",
+      "qwen2.5-14b",
+      "qwen2.5-32b",
+      "qwen2.5-72b",
+      "qwen3-0.6b",
+      "qwen3-1.7b",
+      "qwen3-4b",
+      "qwen3-4b-thk",
+      "qwen3-8b",
+      "qwen3-8b-thk",
+      "qwen3-32b",
+      "qwen3-32b-thk",
+      "qwen3-30b-a3b-inst",
+      "qwen3-235b-a22b-inst",
+      "qwen3-235b-a22b-thk"
+    ],
+    "Gemini (Google)": [
+      "gemini-2.5-pro",
+      "gemini-2.5-flash",
+      "gemini-3-flash-preview",
+      "gemini-3.1-pro-preview"
+    ],
+    "Gemma (Google)": [
+      "gemma-7b",
+      "gemma-2-9b-it",
+      "gemma-2-2b-it",
+      "gemma-3-12b"
+    ],
+    "DeepSeek": [
+      "deepseek-r1",
+      "deepseek-r1-14b",
+      "deepseek-r1-distill-llama-70b",
+      "deepseek-r1-0528-qwen3-8b",
+      "deepseek-v3",
+      "deepseek-v3.2",
+      "deepseek-chat",
+      "deepseek-coder-7b-instruct"
+    ],
+    "Claude (Anthropic)": [
+      "claude-sonnet-4",
+      "claude-3.7-sonnet",
+      "claude-opus-4.7"
+    ],
+    "Phi (Microsoft)": [
+      "phi-3-mini",
+      "phi-3-instruct"
+    ],
+    "Vicuna (LMSYS)": [
+      "vicuna-7b",
+      "vicuna-13b"
+    ],
+    "Outros": [
+      "alpaca-13b",
+      "aya-expanse-8b",
+      "breeze-7b",
+      "ernie-4.5-turbo",
+      "flan-t5-xxl",
+      "glm-4.5",
+      "gpt-3.5/4",
+      "hermes-4-405b",
+      "hermes-4-70b",
+      "intellect-3",
+      "kimi-k2-instruct",
+      "llama-3.1-nemotron",
+      "llamantino-3-anita-8b-inst-dpo-ita",
+      "longform-2.7b",
+      "maestrale-chat-v0.4-beta",
+      "minerva-7b-instruct-v1.0",
+      "olmo-7b-instruct",
+      "openchat-7b",
+      "velvet-14b"
+    ]
+  }
+}

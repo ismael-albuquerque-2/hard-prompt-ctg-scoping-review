@@ -1,0 +1,517 @@
+<!DOCTYPE html><html lang="pt-BR">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Saída do Parser</title>
+                    <style>html { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+/* ==========================================================================
+   Configurações Globais (Design Tokens) - Tema Científico
+   ========================================================================== */
+:root {
+    /* Paleta de Cores Funcional */
+    --color-brand-primary: #0056b3; 
+    --color-brand-secondary: #6b7280;
+    --color-interactive-link: #0056b3;
+    --color-interactive-link-hover: #003d82;
+    
+    --color-text-default: #111827;
+    --color-text-muted: #374151;
+    --color-text-inverted: #ffffff;
+    
+    --color-background-body: #ffffff;
+    --color-background-subtle: #f9fafb;
+    --color-background-code: #f3f4f6;
+    --color-background-neutral: #e5e7eb;
+    
+    --color-border-default: #e5e7eb;
+    --color-border-strong: #d1d5db;
+
+    /* Cores de Componentes Específicos */
+    --color-surface-highlight-bg: rgba(229, 231, 235, 0.5);
+    --color-surface-note-bg: #f9fafb;
+    --color-surface-note-border: #e5e7eb;
+    --color-surface-note-text: #374151;
+    --color-surface-table-header-bg: #567; /* Não será mais usado no novo estilo de tabela */
+    --color-surface-table-row-hover: #e6f0ff; /* Não será mais usado no novo estilo de tabela */
+    --color-surface-button-bg: #6c757d;
+    --color-surface-button-hover-bg: #5a6268;
+    --color-surface-tag-bg: #a0aec0;
+    
+    /* Tipografia */
+    --font-family-serif: Georgia, 'Times New Roman', serif;
+    --font-family-sans: 'Segoe UI', sans-serif;
+    --font-family-mono: 'Courier New', monospace;
+    
+    /* Escala de Espaçamento (1rem = 16px por padrão) */
+    --spacing-xxs: 0.25rem;
+    --spacing-xs:  0.5rem;
+    --spacing-sm:  0.75rem;
+    --spacing-md:  1rem;
+    --spacing-lg:  1.25rem;
+    --spacing-xl:  1.875rem;
+
+    /* Raios de Borda */
+    --border-radius-sm: 4px;
+    --border-radius-md: 6px;
+    --border-radius-lg: 8px;
+}
+
+
+/* ==========================================================================
+   1. Bloco Principal (Container)
+   ========================================================================== */
+
+.output {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: var(--spacing-md);
+    border: 2px solid var(--color-border-default);
+    border-radius: var(--border-radius-lg);
+    background: var(--color-background-body);
+    overflow-y: auto;
+    font-family: var(--font-family-serif);
+    line-height: 1.6;
+}
+
+
+/* ==========================================================================
+   2. Elementos de Bloco e Tipografia
+   ========================================================================== */
+
+/* --- Cabeçalhos --- */
+.output h1 {
+    margin: 0 0 var(--spacing-lg) 0; /* Aumenta a margem inferior */
+    padding: var(--spacing-md) 0; /* Remove padding lateral */
+    border-radius: 0; /* Remove bordas arredondadas */
+    box-shadow: none; /* Remove a sombra */
+    background: none; /* Remove o fundo */
+    font-size: 1.8rem; /* Aumenta um pouco a fonte */
+    color: var(--color-text-default); /* Cor de texto padrão (preto) */
+    text-align: center; /* Centraliza o título */
+}
+
+.output h2,
+.output h3,
+.output h4,
+.output h5,
+.output h6 {
+    margin: var(--spacing-lg) 0 0.625rem 0;
+    padding-left: 0; /* Remove o padding esquerdo */
+    border-left: none; /* Remove a borda esquerda */
+    color: var(--color-text-default); /* Usa a cor de texto principal */
+}
+
+.output h2 {
+    margin-top: var(--spacing-xl); /* Mais espaço antes de uma nova seção */
+    padding-bottom: 0.625rem;
+}
+
+/* --- Parágrafos e Listas --- */
+.output p {
+    margin: var(--spacing-md) 0;
+    text-align: justify; /* Justifica o texto */
+    hyphens: auto; /* Ajuda na quebra de linha do texto justificado */
+}
+
+.output ul,
+.output ol {
+    margin: 0.625rem 0 0.625rem var(--spacing-lg);
+    padding-left: var(--spacing-lg);
+}
+
+.output li {
+    margin: 0.3125rem 0;
+}
+
+.output ul.ct-list-custom-marker {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+/* --- Outros Elementos de Bloco --- */
+.output blockquote {
+    margin: var(--spacing-lg) 0;
+    padding: var(--spacing-md);
+    border-left: 3px solid var(--color-border-default); /* Borda mais sutil */
+    border-radius: 0;
+    background: none; /* Remove o fundo */
+    color: var(--color-text-muted);
+    font-style: italic;
+}
+
+.output hr {
+    height: 1px; /* Linha mais fina */
+    margin: var(--spacing-xl) 0;
+    border: 0;
+    background: var(--color-border-default); /* Cor sólida e sutil */
+}
+
+
+/* ==========================================================================
+   3. Elementos em Linha (Inline)
+   ========================================================================== */
+
+.output strong {
+    font-weight: bold;
+    color: var(--color-text-default);
+}
+
+.output em {
+    font-style: italic;
+}
+
+.output .highlight-text {
+    background-color: var(--color-surface-highlight-bg);
+    padding: 1px var(--spacing-xxs);
+    border-radius: 3px;
+}
+
+.output code {
+    padding: 0.125rem 0.3125rem;
+    border-radius: var(--border-radius-sm);
+    background: var(--color-background-code);
+    color: var(--color-text-muted);
+    font-family: var(--font-family-mono);
+    font-size: 0.9rem;
+    white-space: pre-wrap;
+}
+
+.output .noteblock,
+.output .noteblock-block {
+    border: 1px solid var(--color-surface-note-border);
+    border-radius: var(--border-radius-sm);
+    background-color: var(--color-surface-note-bg);
+    color: var(--color-surface-note-text);
+    font-family: var(--font-family-sans);
+    font-size: 0.9rem;
+}
+
+.output .noteblock {
+    display: inline-block;
+    margin: 0 0.125rem;
+    padding: 1px 0.375rem;
+}
+
+.output .noteblock-block {
+    display: block;
+    margin: var(--spacing-md) 0;
+    padding: var(--spacing-sm);
+}
+
+.output a {
+    color: var(--color-interactive-link);
+    text-decoration: underline; /* Sublinhado tradicional */
+    border-bottom: none; /* Remove a borda inferior */
+    transition: color 0.2s ease; /* Transição de cor */
+}
+
+.output a:hover {
+    color: var(--color-interactive-link-hover);
+    text-decoration: none; /* Remove o sublinhado no hover */
+}
+
+/* ==========================================================================
+   4. Componentes Específicos
+   ========================================================================== */
+
+/* --- Tabelas (Estilo Acadêmico) --- */
+.output table {
+    align-self: flex-start;
+    margin: var(--spacing-lg) 0;
+    border-collapse: collapse;
+    border: none; /* Remove borda externa principal */
+    border-top: 2px solid var(--color-text-default); /* Linha superior grossa */
+    border-bottom: 2px solid var(--color-text-default); /* Linha inferior grossa */
+    border-radius: 0;
+    box-shadow: none; /* Remove sombra */
+    min-width: fit-content;
+}
+
+.output caption {
+    padding: 0.625rem;
+    font-weight: bold;
+    background: none; /* Remove fundo */
+    color: var(--color-text-muted);
+    text-align: center;
+    white-space: nowrap;
+}
+
+.output th {
+    background-color: transparent; /* Remove cor de fundo */
+    color: var(--color-text-default); /* Cor de texto padrão */
+    font-weight: bold;
+}
+
+.output th,
+.output td {
+    padding: var(--spacing-sm) 0.625rem;
+    border: none; /* Remove todas as bordas internas por padrão */
+    text-align: left;
+}
+
+.output th {
+    border-bottom: 1px solid var(--color-text-default); /* Linha abaixo do cabeçalho */
+}
+
+.output tr:nth-child(even) {
+    background-color: transparent; /* Remove listras */
+}
+
+.output tr:hover {
+    background-color: transparent; /* Remove efeito de hover */
+    cursor: default; /* Cursor padrão */
+}
+
+
+/* --- Blocos de Código --- */
+.output pre {
+    margin: var(--spacing-md) 0;
+    padding: var(--spacing-md);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--border-radius-md);
+    background: var(--color-background-code);
+    overflow-x: auto;
+    font-family: var(--font-family-mono);
+    font-size: 0.875rem;
+}
+
+.code-container {
+    position: relative;
+    margin-bottom: var(--spacing-md);
+}
+
+.code-container pre {
+    margin: 0;
+    padding: 2.5rem var(--spacing-md) var(--spacing-md) var(--spacing-md);
+}
+
+.code-container pre code {
+    padding: 0;
+    border-radius: 0;
+    background: none;
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+.copy-btn {
+    position: absolute;
+    top: 0.625rem;
+    right: 0.625rem;
+    padding: 0.3125rem 0.625rem;
+    border: none;
+    border-radius: var(--border-radius-sm);
+    background-color: var(--color-surface-button-bg);
+    color: var(--color-text-inverted);
+    font-family: var(--font-family-sans);
+    font-size: 0.75rem;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.code-container:hover .copy-btn {
+    opacity: 1;
+}
+
+.copy-btn:hover {
+    background-color: var(--color-surface-button-hover-bg);
+}
+
+.lang-name {
+    position: absolute;
+    top: 0.625rem;
+    left: 0.625rem;
+    padding: 0.125rem var(--spacing-xs);
+    border-radius: var(--border-radius-sm);
+    background-color: var(--color-surface-tag-bg);
+    color: var(--color-text-inverted);
+    font-family: var(--font-family-sans);
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* --- Notas de Rodapé (Footnotes) --- */
+.footnote-ref {
+    padding: 0 0.1875rem;
+    border-radius: 3px;
+    background: var(--color-background-neutral);
+    color: var(--color-text-muted);
+    font-size: 0.8em;
+    text-decoration: none;
+    vertical-align: super;
+}
+
+.footnote-def {
+    margin: 0.625rem 0;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-left: 3px solid var(--color-brand-primary);
+    border-radius: var(--border-radius-sm);
+    background: var(--color-background-subtle);
+    font-size: 0.9em;
+}
+
+/* --- Componentes 'Cleartext' --- */
+.cleartext-div {
+    margin: var(--spacing-lg) 0;
+    padding: var(--spacing-md);
+    border: 2px solid var(--color-brand-secondary);
+    border-radius: var(--border-radius-lg);
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.cleartext-viewme {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-md);
+    margin: var(--spacing-lg) 0;
+    padding: var(--spacing-md);
+    border: 1px dashed var(--color-border-strong);
+    border-radius: var(--border-radius-lg);
+    background: var(--color-background-subtle);
+}
+
+.cleartext-viewme img,
+.cleartext-viewme video,
+.cleartext-viewme audio {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--border-radius-md);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    object-fit: cover;
+}
+
+
+/* ==========================================================================
+   5. COMPONENTES (v0.97 em diante)
+   ========================================================================== */
+
+/* --- Divs Colapsáveis --- */
+.output details.cleartext-div {
+    padding: 0;
+    background: var(--color-background-subtle);
+}
+
+.output summary {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-weight: bold;
+    cursor: pointer;
+    color: var(--color-text-muted);
+    outline: none;
+    list-style: none; /* Remove a seta padrão */
+}
+
+.output summary::-webkit-details-marker {
+    display: none; /* Remove a seta padrão no Chrome/Safari */
+}
+
+.output summary:before {
+    content: '▶'; /* Seta personalizada */
+    margin-right: 0.625rem;
+    font-size: 0.8em;
+    display: inline-block;
+    transition: transform 0.2s ease-in-out;
+}
+
+.output details[open] > summary:before {
+    transform: rotate(90deg);
+}
+
+.output .collapsible-content {
+    padding: 0 var(--spacing-md) var(--spacing-md) var(--spacing-md);
+    border-top: 1px solid var(--color-border-default);
+}
+
+/* --- Blocos de Visualização (iframes) --- */
+.cleartext-viewhtml,
+.cleartext-viewct {
+    margin: var(--spacing-lg) 0;
+    padding: 0.625rem;
+    border: 1px dashed var(--color-border-strong);
+    border-radius: var(--border-radius-lg);
+    background: var(--color-background-subtle);
+}
+
+.cleartext-viewhtml iframe,
+.cleartext-viewct iframe {
+    width: 100%;
+    min-height: 22rem; /* ~350px */
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--border-radius-md);
+    resize: vertical;
+}
+
+.cleartext-viewct {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+</style>
+                    <style>
+                        .page-container { 
+                            margin: 20px auto; 
+                            padding: 25px; 
+                            max-width: 800px; 
+                            border-radius: 8px; 
+                            box-shadow: 0 4px 12px rgba(0,0,0,0.08); 
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="page-container output"><h1>Detalhes da busca nas bases</h1>
+<h2>Introdução</h2>
+<p>Este arquivo relata em detalhes o processo de busca nas bases de dados desta revisão sistemática da literatura (RSL), incluindo as strings utilizadas, os filtros aplicados e ocorrências relevantes durante a execução, para fins de reprodutibilidade.</p>
+<p>Decidiu-se usar essas bases:</p>
+<ul><li>IEEE Xplore</li></ul><ul><li>OATD</li></ul><ul><li>Scopus</li></ul><ul><li>ACM Digital Library</li></ul><ul><li>Web Of Science</li></ul><ul><li>Lens.org</li></ul><ul><li>arXiv</li></ul>
+<h2>Perguntas importantes</h2>
+<h3>Como as strings de busca foram definidas?</h3>
+<p>As strings foram criadas para encontrar artigos que tenham todos esses três conceitos (exatamente ou sinônimos):</p>
+<ul><li>LLMs (modelos de linguagem)</li></ul><ul><li>CTG (geração controlada de texto)</li></ul><ul><li>Engenharia de prompt</li></ul>
+<h3>Onde os termos foram buscados?</h3>
+<p>Por padrão, definiu-se que os termos seriam buscados somente no título, resumo e nas keywords. Mas houve exceções.</p>
+<p>Na IEEE, criar uma string para isso a deixou tão longa que a base não aceitou. Por isso, permitiu-se que a pesquisa fosse feita no campo padrão, o <em>All Metadata</em>. Esse campo consiste numa busca no título, resumo, keywords e em outros metadados. Não inclui busca no texto completo dos artigos. A diferença entre <em>All Metadata</em> e uma busca somente em título, resumo e keywords provavelmente é mínima ou inexistente para a string de busca utilizada.</p>
+<p>Na OATD, não existe um modo de restringir a busca só a título, resumo e keywords. Esta base pesquisa em todos os metadados que tem disponível e ainda pesquisa nas primeiras 30 páginas.</p>
+<p>No arxiv, a busca foi feita no campo <em>all</em>. Nesta base, esse campo é a união de todos os metadados (assim como <em>All Metadata</em> no IEEE, mas sem keywords):</p>
+<ul><li>ti (title)</li></ul><ul><li>abs (abstract)</li></ul><ul><li>au (author)</li></ul><ul><li>co (comment)</li></ul><ul><li>jr (journal reference)</li></ul><ul><li>etc.</li></ul>
+<p>Não existe um campo &quot;keywords&quot; separado no arXiv. Novamente, a diferença entre <em>all</em> e uma busca somente em título, resumo e keywords é (provavelmente) mínima ou inexistente para a string de busca utilizada.</p>
+<h2>Strings de busca</h2>
+<p>Nesta seção serão apresentadas as strings de busca utilizadas e suas adaptações para cada base.</p>
+<p>Essa foi a string de busca principal:</p>
+<div class="code-container"><button onclick='copyCode("(\"large language model*\" OR \"LLM*\" OR \"foundation model*\" OR \"generative language model*\" OR \"instruction-tuned model*\" OR \"ChatGPT\" OR \"GPT-4\" OR \"LLaMA\" ) AND ( \"prompt engineering\" OR \"textual prompt*\" OR \"prompt design\" OR \"in-context learning\" OR \"few-shot\" OR \"zero-shot\" OR \"instruction prompting\" OR \"prompt template*\" ) AND ( \"controllable text generation\" OR \"CTG\" OR \"constrained generation\" OR \"controlled generation\" OR \"format adherence\" OR \"output constraint*\" OR \"constrained decoding\")", this)' class='copy-btn'>Copiar</button><pre><code>(&quot;large language model*&quot; OR &quot;LLM*&quot; OR &quot;foundation model*&quot; OR &quot;generative language model*&quot; OR &quot;instruction-tuned model*&quot; OR &quot;ChatGPT&quot; OR &quot;GPT-4&quot; OR &quot;LLaMA&quot; ) AND ( &quot;prompt engineering&quot; OR &quot;textual prompt*&quot; OR &quot;prompt design&quot; OR &quot;in-context learning&quot; OR &quot;few-shot&quot; OR &quot;zero-shot&quot; OR &quot;instruction prompting&quot; OR &quot;prompt template*&quot; ) AND ( &quot;controllable text generation&quot; OR &quot;CTG&quot; OR &quot;constrained generation&quot; OR &quot;controlled generation&quot; OR &quot;format adherence&quot; OR &quot;output constraint*&quot; OR &quot;constrained decoding&quot;)</code></pre></div>
+<p>Ela foi utilizada nessas bases:</p>
+<ul><li>IEEE Xplore</li></ul><ul><li>OATD</li></ul>
+<p>As bases de dados seguintes necessitaram de uma string adaptada para cada uma delas:</p>
+<ul><li>Scopus</li></ul><ul><li>ACM Digital Library</li></ul><ul><li>Web Of Science</li></ul><ul><li>Lens.org</li></ul><ul><li>arXiv</li></ul>
+<h3>Adaptações da string de busca</h3>
+<h4>Para a Scopus</h4>
+<div class="code-container"><button onclick='copyCode("TITLE-ABS-KEY ( ( \"large language model*\" OR \"LLM*\" OR \"foundation model*\" OR \"generative language model*\" OR \"instruction-tuned model*\" OR \"ChatGPT\" OR \"GPT-4\" OR \"LLaMA\" ) AND ( \"prompt engineering\" OR \"textual prompt*\" OR \"prompt design\" OR \"in-context learning\" OR \"few-shot\" OR \"zero-shot\" OR \"instruction prompting\" OR \"prompt template*\" ) AND ( \"controllable text generation\" OR \"CTG\" OR \"constrained generation\" OR \"controlled generation\" OR \"format adherence\" OR \"output constraint*\" OR \"constrained decoding\" ) ) AND PUBYEAR > 2021 AND PUBYEAR < 2027 AND ( LIMIT-TO ( DOCTYPE,\"cp\" ) OR LIMIT-TO ( DOCTYPE,\"ar\" ) ) AND ( LIMIT-TO ( SUBJAREA,\"COMP\" ) OR LIMIT-TO ( SUBJAREA,\"MATH\" ) OR LIMIT-TO ( SUBJAREA,\"ENGI\" ) )", this)' class='copy-btn'>Copiar</button><pre><code>TITLE-ABS-KEY ( ( &quot;large language model*&quot; OR &quot;LLM*&quot; OR &quot;foundation model*&quot; OR &quot;generative language model*&quot; OR &quot;instruction-tuned model*&quot; OR &quot;ChatGPT&quot; OR &quot;GPT-4&quot; OR &quot;LLaMA&quot; ) AND ( &quot;prompt engineering&quot; OR &quot;textual prompt*&quot; OR &quot;prompt design&quot; OR &quot;in-context learning&quot; OR &quot;few-shot&quot; OR &quot;zero-shot&quot; OR &quot;instruction prompting&quot; OR &quot;prompt template*&quot; ) AND ( &quot;controllable text generation&quot; OR &quot;CTG&quot; OR &quot;constrained generation&quot; OR &quot;controlled generation&quot; OR &quot;format adherence&quot; OR &quot;output constraint*&quot; OR &quot;constrained decoding&quot; ) ) AND PUBYEAR &gt; 2021 AND PUBYEAR &lt; 2027 AND ( LIMIT-TO ( DOCTYPE,&quot;cp&quot; ) OR LIMIT-TO ( DOCTYPE,&quot;ar&quot; ) ) AND ( LIMIT-TO ( SUBJAREA,&quot;COMP&quot; ) OR LIMIT-TO ( SUBJAREA,&quot;MATH&quot; ) OR LIMIT-TO ( SUBJAREA,&quot;ENGI&quot; ) )</code></pre></div>
+<h4>Para a ACM Digital Library</h4>
+<div class="code-container"><button onclick='copyCode("(Title:(\"large language model*\" OR \"LLM*\" OR \"foundation model*\" OR \"generative language model*\" OR \"instruction-tuned model*\" OR \"ChatGPT\" OR \"GPT-4\" OR \"LLaMA\") OR Abstract:(\"large language model*\" OR \"LLM*\" OR \"foundation model*\" OR \"generative language model*\" OR \"instruction-tuned model*\" OR \"ChatGPT\" OR \"GPT-4\" OR \"LLaMA\") OR Keyword:(\"large language model*\" OR \"LLM*\" OR \"foundation model*\" OR \"generative language model*\" OR \"instruction-tuned model*\" OR \"ChatGPT\" OR \"GPT-4\" OR \"LLaMA\")) AND (Title:(\"prompt engineering\" OR \"textual prompt*\" OR \"prompt design\" OR \"in-context learning\" OR \"few-shot\" OR \"zero-shot\" OR \"instruction prompting\" OR \"prompt template*\") OR Abstract:(\"prompt engineering\" OR \"textual prompt*\" OR \"prompt design\" OR \"in-context learning\" OR \"few-shot\" OR \"zero-shot\" OR \"instruction prompting\" OR \"prompt template*\") OR Keyword:(\"prompt engineering\" OR \"textual prompt*\" OR \"prompt design\" OR \"in-context learning\" OR \"few-shot\" OR \"zero-shot\" OR \"instruction prompting\" OR \"prompt template*\")) AND (Title:(\"controllable text generation\" OR \"CTG\" OR \"constrained generation\" OR \"controlled generation\" OR \"format adherence\" OR \"output constraint*\" OR \"constrained decoding\") OR Abstract:(\"controllable text generation\" OR \"CTG\" OR \"constrained generation\" OR \"controlled generation\" OR \"format adherence\" OR \"output constraint*\" OR \"constrained decoding\") OR Keyword:(\"controllable text generation\" OR \"CTG\" OR \"constrained generation\" OR \"controlled generation\" OR \"format adherence\" OR \"output constraint*\" OR \"constrained decoding\"))", this)' class='copy-btn'>Copiar</button><pre><code>(Title:(&quot;large language model*&quot; OR &quot;LLM*&quot; OR &quot;foundation model*&quot; OR &quot;generative language model*&quot; OR &quot;instruction-tuned model*&quot; OR &quot;ChatGPT&quot; OR &quot;GPT-4&quot; OR &quot;LLaMA&quot;) OR Abstract:(&quot;large language model*&quot; OR &quot;LLM*&quot; OR &quot;foundation model*&quot; OR &quot;generative language model*&quot; OR &quot;instruction-tuned model*&quot; OR &quot;ChatGPT&quot; OR &quot;GPT-4&quot; OR &quot;LLaMA&quot;) OR Keyword:(&quot;large language model*&quot; OR &quot;LLM*&quot; OR &quot;foundation model*&quot; OR &quot;generative language model*&quot; OR &quot;instruction-tuned model*&quot; OR &quot;ChatGPT&quot; OR &quot;GPT-4&quot; OR &quot;LLaMA&quot;)) AND (Title:(&quot;prompt engineering&quot; OR &quot;textual prompt*&quot; OR &quot;prompt design&quot; OR &quot;in-context learning&quot; OR &quot;few-shot&quot; OR &quot;zero-shot&quot; OR &quot;instruction prompting&quot; OR &quot;prompt template*&quot;) OR Abstract:(&quot;prompt engineering&quot; OR &quot;textual prompt*&quot; OR &quot;prompt design&quot; OR &quot;in-context learning&quot; OR &quot;few-shot&quot; OR &quot;zero-shot&quot; OR &quot;instruction prompting&quot; OR &quot;prompt template*&quot;) OR Keyword:(&quot;prompt engineering&quot; OR &quot;textual prompt*&quot; OR &quot;prompt design&quot; OR &quot;in-context learning&quot; OR &quot;few-shot&quot; OR &quot;zero-shot&quot; OR &quot;instruction prompting&quot; OR &quot;prompt template*&quot;)) AND (Title:(&quot;controllable text generation&quot; OR &quot;CTG&quot; OR &quot;constrained generation&quot; OR &quot;controlled generation&quot; OR &quot;format adherence&quot; OR &quot;output constraint*&quot; OR &quot;constrained decoding&quot;) OR Abstract:(&quot;controllable text generation&quot; OR &quot;CTG&quot; OR &quot;constrained generation&quot; OR &quot;controlled generation&quot; OR &quot;format adherence&quot; OR &quot;output constraint*&quot; OR &quot;constrained decoding&quot;) OR Keyword:(&quot;controllable text generation&quot; OR &quot;CTG&quot; OR &quot;constrained generation&quot; OR &quot;controlled generation&quot; OR &quot;format adherence&quot; OR &quot;output constraint*&quot; OR &quot;constrained decoding&quot;))</code></pre></div>
+<h4>Para a Web Of Science</h4>
+<div class="code-container"><button onclick='copyCode("TS=((\"large language model*\" OR \"LLM*\" OR \"foundation model*\" OR \"generative language model*\" OR \"instruction-tuned model*\" OR \"ChatGPT\" OR \"GPT-4\" OR \"LLaMA\" ) AND ( \"prompt engineering\" OR \"textual prompt*\" OR \"prompt design\" OR \"in-context learning\" OR \"few-shot\" OR \"zero-shot\" OR \"instruction prompting\" OR \"prompt template*\" ) AND ( \"controllable text generation\" OR \"CTG\" OR \"constrained generation\" OR \"controlled generation\" OR \"format adherence\" OR \"output constraint*\" OR \"constrained decoding\"))", this)' class='copy-btn'>Copiar</button><pre><code>TS=((&quot;large language model*&quot; OR &quot;LLM*&quot; OR &quot;foundation model*&quot; OR &quot;generative language model*&quot; OR &quot;instruction-tuned model*&quot; OR &quot;ChatGPT&quot; OR &quot;GPT-4&quot; OR &quot;LLaMA&quot; ) AND ( &quot;prompt engineering&quot; OR &quot;textual prompt*&quot; OR &quot;prompt design&quot; OR &quot;in-context learning&quot; OR &quot;few-shot&quot; OR &quot;zero-shot&quot; OR &quot;instruction prompting&quot; OR &quot;prompt template*&quot; ) AND ( &quot;controllable text generation&quot; OR &quot;CTG&quot; OR &quot;constrained generation&quot; OR &quot;controlled generation&quot; OR &quot;format adherence&quot; OR &quot;output constraint*&quot; OR &quot;constrained decoding&quot;))</code></pre></div>
+<h4>Para a Lens</h4>
+<div class="code-container"><button onclick='copyCode("(title:(\"large language model\" OR \"large language models\" OR LLM* OR \"foundation model\" OR \"foundation models\" OR \"generative language model\" OR \"generative language models\" OR \"instruction-tuned model\" OR \"instruction-tuned models\" OR \"ChatGPT\" OR \"GPT-4\" OR \"LLaMA\") OR abstract:(\"large language model\" OR \"large language models\" OR LLM* OR \"foundation model\" OR \"foundation models\" OR \"generative language model\" OR \"generative language models\" OR \"instruction-tuned model\" OR \"instruction-tuned models\" OR \"ChatGPT\" OR \"GPT-4\" OR \"LLaMA\") OR keyword:(\"large language model\" OR \"large language models\" OR LLM* OR \"foundation model\" OR \"foundation models\" OR \"generative language model\" OR \"generative language models\" OR \"instruction-tuned model\" OR \"instruction-tuned models\" OR \"ChatGPT\" OR \"GPT-4\" OR \"LLaMA\")) AND (title:(\"prompt engineering\" OR \"textual prompt\" OR \"textual prompts\" OR \"prompt design\" OR \"in-context learning\" OR \"few-shot\" OR \"zero-shot\" OR \"instruction prompting\" OR \"prompt template\" OR \"prompt templates\") OR abstract:(\"prompt engineering\" OR \"textual prompt\" OR \"textual prompts\" OR \"prompt design\" OR \"in-context learning\" OR \"few-shot\" OR \"zero-shot\" OR \"instruction prompting\" OR \"prompt template\" OR \"prompt templates\") OR keyword:(\"prompt engineering\" OR \"textual prompt\" OR \"textual prompts\" OR \"prompt design\" OR \"in-context learning\" OR \"few-shot\" OR \"zero-shot\" OR \"instruction prompting\" OR \"prompt template\" OR \"prompt templates\")) AND (title:(\"controllable text generation\" OR \"CTG\" OR \"constrained generation\" OR \"controlled generation\" OR \"format adherence\" OR \"output constraint\" OR \"output constraints\" OR \"constrained decoding\") OR abstract:(\"controllable text generation\" OR \"CTG\" OR \"constrained generation\" OR \"controlled generation\" OR \"format adherence\" OR \"output constraint\" OR \"output constraints\" OR \"constrained decoding\") OR keyword:(\"controllable text generation\" OR \"CTG\" OR \"constrained generation\" OR \"controlled generation\" OR \"format adherence\" OR \"output constraint\" OR \"output constraints\" OR \"constrained decoding\"))", this)' class='copy-btn'>Copiar</button><pre><code>(title:(&quot;large language model&quot; OR &quot;large language models&quot; OR LLM* OR &quot;foundation model&quot; OR &quot;foundation models&quot; OR &quot;generative language model&quot; OR &quot;generative language models&quot; OR &quot;instruction-tuned model&quot; OR &quot;instruction-tuned models&quot; OR &quot;ChatGPT&quot; OR &quot;GPT-4&quot; OR &quot;LLaMA&quot;) OR abstract:(&quot;large language model&quot; OR &quot;large language models&quot; OR LLM* OR &quot;foundation model&quot; OR &quot;foundation models&quot; OR &quot;generative language model&quot; OR &quot;generative language models&quot; OR &quot;instruction-tuned model&quot; OR &quot;instruction-tuned models&quot; OR &quot;ChatGPT&quot; OR &quot;GPT-4&quot; OR &quot;LLaMA&quot;) OR keyword:(&quot;large language model&quot; OR &quot;large language models&quot; OR LLM* OR &quot;foundation model&quot; OR &quot;foundation models&quot; OR &quot;generative language model&quot; OR &quot;generative language models&quot; OR &quot;instruction-tuned model&quot; OR &quot;instruction-tuned models&quot; OR &quot;ChatGPT&quot; OR &quot;GPT-4&quot; OR &quot;LLaMA&quot;)) AND (title:(&quot;prompt engineering&quot; OR &quot;textual prompt&quot; OR &quot;textual prompts&quot; OR &quot;prompt design&quot; OR &quot;in-context learning&quot; OR &quot;few-shot&quot; OR &quot;zero-shot&quot; OR &quot;instruction prompting&quot; OR &quot;prompt template&quot; OR &quot;prompt templates&quot;) OR abstract:(&quot;prompt engineering&quot; OR &quot;textual prompt&quot; OR &quot;textual prompts&quot; OR &quot;prompt design&quot; OR &quot;in-context learning&quot; OR &quot;few-shot&quot; OR &quot;zero-shot&quot; OR &quot;instruction prompting&quot; OR &quot;prompt template&quot; OR &quot;prompt templates&quot;) OR keyword:(&quot;prompt engineering&quot; OR &quot;textual prompt&quot; OR &quot;textual prompts&quot; OR &quot;prompt design&quot; OR &quot;in-context learning&quot; OR &quot;few-shot&quot; OR &quot;zero-shot&quot; OR &quot;instruction prompting&quot; OR &quot;prompt template&quot; OR &quot;prompt templates&quot;)) AND (title:(&quot;controllable text generation&quot; OR &quot;CTG&quot; OR &quot;constrained generation&quot; OR &quot;controlled generation&quot; OR &quot;format adherence&quot; OR &quot;output constraint&quot; OR &quot;output constraints&quot; OR &quot;constrained decoding&quot;) OR abstract:(&quot;controllable text generation&quot; OR &quot;CTG&quot; OR &quot;constrained generation&quot; OR &quot;controlled generation&quot; OR &quot;format adherence&quot; OR &quot;output constraint&quot; OR &quot;output constraints&quot; OR &quot;constrained decoding&quot;) OR keyword:(&quot;controllable text generation&quot; OR &quot;CTG&quot; OR &quot;constrained generation&quot; OR &quot;controlled generation&quot; OR &quot;format adherence&quot; OR &quot;output constraint&quot; OR &quot;output constraints&quot; OR &quot;constrained decoding&quot;))</code></pre></div>
+<h4>Para o arXiv</h4>
+<p>Para o arXiv, a string foi adaptada para esse código de requisição, que foi utilizado no software <code>extrator-arxiv.html</code>, desenvolvido pelos autores para obter os resultados no arXiv:</p>
+<div class="code-container"><button onclick='copyCode("search_query=(all:\"large language model\"+OR+all:\"large language models\"+OR+all:\"LLM\"+OR+all:\"LLMs\"+OR+all:\"foundation model\"+OR+all:\"foundation models\"+OR+all:\"generative language model\"+OR+all:\"generative language models\"+OR+all:\"instruction-tuned model\"+OR+all:\"instruction-tuned models\"+OR+all:\"ChatGPT\"+OR+all:\"GPT-4\"+OR+all:\"LLaMA\")+AND+(all:\"prompt engineering\"+OR+all:\"textual prompt\"+OR+all:\"textual prompts\"+OR+all:\"prompt design\"+OR+all:\"in-context learning\"+OR+all:\"few-shot\"+OR+all:\"zero-shot\"+OR+all:\"instruction prompting\"+OR+all:\"prompt template\"+OR+all:\"prompt templates\")+AND+(all:\"controllable text generation\"+OR+all:\"CTG\"+OR+all:\"constrained generation\"+OR+all:\"controlled generation\"+OR+all:\"format adherence\"+OR+all:\"output constraint\"+OR+all:\"output constraints\"+OR+all:\"constrained decoding\")+AND+submittedDate:[20220101000000+TO+20261231235959]&start=0&max_results=1000", this)' class='copy-btn'>Copiar</button><pre><code>search_query=(all:&quot;large language model&quot;+OR+all:&quot;large language models&quot;+OR+all:&quot;LLM&quot;+OR+all:&quot;LLMs&quot;+OR+all:&quot;foundation model&quot;+OR+all:&quot;foundation models&quot;+OR+all:&quot;generative language model&quot;+OR+all:&quot;generative language models&quot;+OR+all:&quot;instruction-tuned model&quot;+OR+all:&quot;instruction-tuned models&quot;+OR+all:&quot;ChatGPT&quot;+OR+all:&quot;GPT-4&quot;+OR+all:&quot;LLaMA&quot;)+AND+(all:&quot;prompt engineering&quot;+OR+all:&quot;textual prompt&quot;+OR+all:&quot;textual prompts&quot;+OR+all:&quot;prompt design&quot;+OR+all:&quot;in-context learning&quot;+OR+all:&quot;few-shot&quot;+OR+all:&quot;zero-shot&quot;+OR+all:&quot;instruction prompting&quot;+OR+all:&quot;prompt template&quot;+OR+all:&quot;prompt templates&quot;)+AND+(all:&quot;controllable text generation&quot;+OR+all:&quot;CTG&quot;+OR+all:&quot;constrained generation&quot;+OR+all:&quot;controlled generation&quot;+OR+all:&quot;format adherence&quot;+OR+all:&quot;output constraint&quot;+OR+all:&quot;output constraints&quot;+OR+all:&quot;constrained decoding&quot;)+AND+submittedDate:[20220101000000+TO+20261231235959]&amp;start=0&amp;max_results=1000</code></pre></div>
+<p>Ao abrir o xml retornado, é possível ver uma versão legível da requisição (a string de busca, mas sem a adaptação para o http):</p>
+<div class="code-container"><button onclick='copyCode("<title>arXiv Query: search_query=(all:\"large language model\" OR all:\"large language models\" OR all:\"LLM\" OR all:\"LLMs\" OR all:\"foundation model\" OR all:\"foundation models\" OR all:\"generative language model\" OR all:\"generative language models\" OR all:\"instruction-tuned model\" OR all:\"instruction-tuned models\" OR all:\"ChatGPT\" OR all:\"GPT-4\" OR all:\"LLaMA\") AND (all:\"prompt engineering\" OR all:\"textual prompt\" OR all:\"textual prompts\" OR all:\"prompt design\" OR all:\"in-context learning\" OR all:\"few-shot\" OR all:\"zero-shot\" OR all:\"instruction prompting\" OR all:\"prompt template\" OR all:\"prompt templates\") AND (all:\"controllable text generation\" OR all:\"CTG\" OR all:\"constrained generation\" OR all:\"controlled generation\" OR all:\"format adherence\" OR all:\"output constraint\" OR all:\"output constraints\" OR all:\"constrained decoding\") AND submittedDate:\"202201010000 TO 202612312359\"&amp;id_list=&amp;start=0&amp;max_results=1000</title>", this)' class='copy-btn'>Copiar</button><pre><code>&lt;title&gt;arXiv Query: search_query=(all:&quot;large language model&quot; OR all:&quot;large language models&quot; OR all:&quot;LLM&quot; OR all:&quot;LLMs&quot; OR all:&quot;foundation model&quot; OR all:&quot;foundation models&quot; OR all:&quot;generative language model&quot; OR all:&quot;generative language models&quot; OR all:&quot;instruction-tuned model&quot; OR all:&quot;instruction-tuned models&quot; OR all:&quot;ChatGPT&quot; OR all:&quot;GPT-4&quot; OR all:&quot;LLaMA&quot;) AND (all:&quot;prompt engineering&quot; OR all:&quot;textual prompt&quot; OR all:&quot;textual prompts&quot; OR all:&quot;prompt design&quot; OR all:&quot;in-context learning&quot; OR all:&quot;few-shot&quot; OR all:&quot;zero-shot&quot; OR all:&quot;instruction prompting&quot; OR all:&quot;prompt template&quot; OR all:&quot;prompt templates&quot;) AND (all:&quot;controllable text generation&quot; OR all:&quot;CTG&quot; OR all:&quot;constrained generation&quot; OR all:&quot;controlled generation&quot; OR all:&quot;format adherence&quot; OR all:&quot;output constraint&quot; OR all:&quot;output constraints&quot; OR all:&quot;constrained decoding&quot;) AND submittedDate:&quot;202201010000 TO 202612312359&quot;&amp;amp;id_list=&amp;amp;start=0&amp;amp;max_results=1000&lt;/title&gt;</code></pre></div>
+<h2>Filtros utilizados</h2>
+<p>Esta seção descreve os filtros utilizados em cada base.</p>
+<ul><li><strong>Data</strong>: 2022 a 2026.</li></ul><ul><li><strong>Tipo de documento</strong>: </li><ul><li><strong>No Lens, o tipo foi restringido a</strong> <em>Journal Article, Conference Proceedings Article, Preprint</em> e <em>Dissertation</em>.</li></ul><ul><li>Na Scopus, foi restringido a <em>Conference Paper</em> e <em>Article</em>.</li></ul><ul><li><strong>Na Web Of Science, foi restringido a</strong> <em>Proceeding Paper, Early Access</em> e <em>Article</em>.</li></ul></ul>
+<p><span class="noteblock">Nota: OATD e arXiv só possuem, respectivamente, teses e dissertações; e preprints. Por isso não foi definida nenhuma restrição de tipo para elas.</span></p>
+<ul><li><strong>Área do conhecimento</strong>: </li><ul><li>Na Scopus, a busca foi restringida a <em>Computer Science, Mathematics</em> e <em>Engineering</em>.</li></ul></ul><ul><li>Outros filtros:</li><ul><li>Na Web Of Science, a opção <em>Exact Search</em> foi marcada para elevar a reprodutibilidade do estudo.</li></ul><ul><li>Na ACM, a pesquisa foi restringida à <em>ACM Full-Text Collection</em> (clicando no link <code>Limit your search to The ACM Full-Text Collection</code>).</li></ul></ul>
+<h2>Relato</h2>
+<p>A busca foi efetuada nos dias 10 e 11 de agosto de 2026. Os arquivos de exportação gerados por cada base estão guardados nas seguintes pastas deste repositório:</p>
+<div class="code-container"><button onclick='copyCode("/busca-nas-bases/arquivos-de-exportacao\n/busca-nas-bases/arquivos-de-exportacao-modificados", this)' class='copy-btn'>Copiar</button><pre><code>/busca-nas-bases/arquivos-de-exportacao
+/busca-nas-bases/arquivos-de-exportacao-modificados</code></pre></div>
+<p>Um estudo foi encontrado com DOI incorreto num resultado da Lens e da Web Of Science (o mesmo estudo em ambos os casos). O que gerou erros no preenchimento dos dados desse estudo pelas bases. Após uma análise do caso, os autores constataram que o problema estava no artigo, que possuía um DOI incorreto no seu PDF e isso pode ter gerado interpretações erradas dos agregadores.</p>
+<p>Este estudo é &quot;Teaching Model-Driven Low-Code Development Platforms&quot;, que estava com DOI deste outro estudo, que também teve alterações no seu registro: &quot;Using Grammar Masking to Ensure Syntactic Validity in LLM-based Modeling Tasks&quot;.</p>
+<p>Os autores fizeram correções nos registros desse estudo nos arquivos de exportação da Lens e da Web Of Science. Essas correções foram necessárias para evitar problemas internos no processo da revisão. Os arquivos corrigidos se encontram na pasta <code>arquivos-de-exportacao-modificados</code>. Os arquivos originais permanecem na pasta <code>arquivos-de-exportacao</code>.</p>
+<script>function copyCode(text,buttonElement){navigator.clipboard.writeText(text).then(()=>{const e=buttonElement.innerText;buttonElement.innerText='Copiado!',setTimeout(()=>{buttonElement.innerText=e},2e3)}).catch(e=>{console.error('Falha ao copiar o texto: ',e)})}</script></div>
+                </body>
+                </html>

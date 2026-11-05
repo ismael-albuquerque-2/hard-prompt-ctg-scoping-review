@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extrator de Resultados arXiv</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #b31b1b;
+            margin: 0;
+        }
+        
+        #helpBtn {
+            background-color: #6c757d;
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+        
+        #helpBtn:hover {
+            background-color: #5a6268;
+        }
+
+        p {
+            line-height: 1.5;
+        }
+        
+        .warning-box {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 10px;
+            border-left: 5px solid #ffeeba;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 12px;
+            font-family: monospace;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            resize: vertical;
+            margin-bottom: 15px;
+        }
+        
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        button:hover {
+            background-color: #0056b3;
+        }
+        
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        
+        #status {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: none;
+        }
+        
+        .info { background-color: #e8f4f8; color: #0c5460; border: 1px solid #bee5eb; display: block !important; }
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; display: block !important; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; display: block !important; }
+
+        /* Estilos do Modal (Popup) */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            overflow: auto;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 30px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 700px;
+            border-radius: 8px;
+            line-height: 1.6;
+        }
+
+        .modal-content h2 {
+            color: #b31b1b;
+            margin-top: 0;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .modal-content h3 {
+            color: #333;
+            margin-top: 20px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover, .close:focus {
+            color: black;
+            text-decoration: none;
+        }
+
+        .code-example {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-left: 4px solid #007bff;
+            font-family: monospace;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <h1>Extrator de Resultados arXiv</h1>
+        <button id="helpBtn">Ajuda</button>
+    </div>
+    
+    <div class="warning-box">
+        <strong>Atenção:</strong> Para que este extrator funcione, você precisa ter uma extensão <strong>Allow CORS</strong> instalada e <strong>ativada</strong> no seu navegador durante o uso.
+    </div>
+
+    <p>Cole a string da requisição formatada abaixo. <br>
+    <strong>Exemplo para teste:</strong> <code style="background:#eee; padding:2px 4px;">search_query=all:ChatGPT+AND+all:prompt&max_results=5</code></p>
+    
+    <textarea id="queryInput" placeholder="search_query=..."></textarea>
+    
+    <button id="downloadBtn">Buscar e Baixar XML</button>
+    
+    <div id="status"></div>
+
+    <!-- Estrutura do Modal de Ajuda -->
+    <div id="helpModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Sobre o Extrator de Resultados arXiv</h2>
+
+            <h3>O que é e qual problema resolve?</h3>
+            <p>O Extrator de Resultados arXiv é uma aplicação <em>client-side</em> em Vanilla JS. Sua função é atuar como uma interface direta de pesquisa massiva de preprints na base de dados arXiv. Ele recebe strings de busca, mas que seguem a sintaxe HTTP da API ArXiv. Ele devolve um arquivo XML retornado pela API.</p>
+
+            <h3>Pré-requisito Obrigatório</h3>
+            <p>Por realizar requisições de um arquivo local diretamente para <code>export.arxiv.org</code>, o navegador bloqueará a chamada devido às políticas de segurança de origem cruzada (CORS). <strong>É obrigatório</strong> instalar e ativar uma extensão do tipo "Allow CORS" no navegador para utilizar a ferramenta.</p>
+
+            <h3>Como Usar</h3>
+            <p>A API do arXiv não aceita textos fora da sintaxe adequada. A string inserida na área de texto deve seguir regras rígidas:</p>
+            <ul>
+                <li><strong>Prefixo Inicial:</strong> A instrução deve obrigatoriamente começar com <code>search_query=</code>.</li>
+                <li><strong>Distribuição de Campos:</strong> A API não entende escopos agrupados como <code>all:("A" OR "B")</code>. O prefixo deve ser distribuído termo a termo: <code>(all:"A"+OR+all:"B")</code>.</li>
+                <li><strong>Formatação de URL:</strong> Espaços entre termos e operadores lógicos devem ser convertidos em sinais de adição (<code>+</code>).</li>
+                <li><strong>Operadores:</strong> Devem ser em letras maiúsculas e encapsulados pelos sinais de adição (ex: <code>+AND+</code>, <code>+OR+</code>).</li>
+                <li><strong>Parâmetros de Controle:</strong> A string deve terminar definindo a paginação e o limite, como <code>&start=0&max_results=1000</code>.</li>
+                <li><strong>Atenção aos Limites:</strong> Embora o limite teórico da API seja 30.000 resultados, nos testes realizados, colocar esse valor causou erro HTTP 500. Ao reduzir para 1.000, a requisição funcionou normalmente. Recomenda-se manter o limite em torno de 1.000.</li>
+            </ul>
+            <p><em>Saiba mais consultando a documentação oficial da API do ArXiv em: <a href="https://info.arxiv.org/help/api/user-manual.html" target="_blank">https://info.arxiv.org/help/api/user-manual.html</a></em></p>
+
+            <h3>Exemplo Prático (Input válido)</h3>
+            <div class="code-example">
+                search_query=(all:"LLM"+OR+all:"ChatGPT")+AND+(all:"prompt"+OR+all:"zero-shot")&start=0&max_results=1000
+            </div>
+
+            <h3>Comportamento de Saída (Output)</h3>
+            <p>Após o clique, a interface aguardará a resposta (o que pode levar de 5 a 20 segundos para grandes volumes). Para reduzir o escopo desse programa, ele não realiza o <em>parse</em> visual do XML; ele transforma o texto bruto retornado em um <code>Blob</code> em memória e força o download de um arquivo físico nomeado como <code>arxiv_resultados_[timestamp].xml</code>. Esse arquivo é o xml com os resultados da pesquisa, retornado pela API.</p>
+        </div>
+    </div>
+
+    <script>
+        // --- Lógica do Modal de Ajuda ---
+        const modal = document.getElementById("helpModal");
+        const btnHelp = document.getElementById("helpBtn");
+        const spanClose = document.getElementsByClassName("close")[0];
+
+        btnHelp.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        spanClose.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // --- Lógica de Extração da API ---
+        const btn = document.getElementById('downloadBtn');
+        const input = document.getElementById('queryInput');
+        const statusDiv = document.getElementById('status');
+
+        btn.addEventListener('click', async () => {
+            const rawQuery = input.value.trim();
+            
+            if (!rawQuery) {
+                setStatus('Por favor, insira a string de busca.', 'error');
+                return;
+            }
+
+            btn.disabled = true;
+            setStatus('Aguardando resposta direta do arXiv... Se a string for complexa, a API pode demorar dezenas de segundos. Aguarde pacientemente.', 'info');
+
+            try {
+                const baseUrl = 'https://export.arxiv.org/api/query?';
+                const fullArxivUrl = baseUrl + rawQuery;
+
+                const response = await fetch(fullArxivUrl);
+                
+                if (!response.ok) {
+                    throw new Error(`Erro na API do arXiv. Status HTTP: ${response.status}. Verifique se a extensão CORS está ativada e se a string não é excessivamente pesada.`);
+                }
+
+                const xmlText = await response.text();
+
+                if (!xmlText.includes('<feed') && !xmlText.includes('xmlns=')) {
+                     throw new Error('A resposta recebida não parece ser um XML válido do arXiv.');
+                }
+
+                const blob = new Blob([xmlText], { type: 'application/xml' });
+                const tempUrl = window.URL.createObjectURL(blob);
+                
+                const link = document.createElement('a');
+                link.style.display = 'none';
+                link.href = tempUrl;
+                
+                const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+                link.download = `arxiv_resultados_${timestamp}.xml`;
+                
+                document.body.appendChild(link);
+                link.click();
+                
+                window.URL.revokeObjectURL(tempUrl);
+                document.body.removeChild(link);
+
+                setStatus('Download concluído com sucesso! Verifique a pasta de downloads.', 'success');
+
+            } catch (error) {
+                setStatus(`Falha na operação: ${error.message}`, 'error');
+            } finally {
+                btn.disabled = false;
+            }
+        });
+
+        function setStatus(message, type) {
+            statusDiv.textContent = message;
+            statusDiv.className = type;
+        }
+    </script>
+</body>
+</html>

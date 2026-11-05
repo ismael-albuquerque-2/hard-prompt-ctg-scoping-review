@@ -1,0 +1,102 @@
+[
+  {
+    "category_id": "controle_formato_estrutural_saida",
+    "name": "Controle de formato estrutural da saída",
+    "description": "Técnicas cujo objetivo é fazer o modelo aderir a um formato de saída (JSON, XML, CSV, HTML, schema, etc.), independentemente do conteúdo semântico gerado.",
+    "techniques": [
+      "P1.tech1", "P1.tech2", "P1.tech3", "P1.tech4", "P1.tech5", "P1.tech6",
+      "P4.tech1", "P4.tech2",
+      "C6.tech1", "C6.tech2", "C6.tech3", "C6.tech4", "C6.tech5",
+      "C6.tech6", "C6.tech7", "C6.tech8", "C6.tech9",
+      "C6.tech10", "C6.tech11", "C6.tech12", "C6.tech13",
+      "C6.tech14", "C6.tech15", "C6.tech16", "C6.tech17",
+      "C6.tech18", "C6.tech19", "C6.tech20", "C6.tech21",
+      "C6.tech22", "C6.tech23", "C6.tech24", "C6.tech25", "C6.tech26",
+      "C6.tech27", "C6.tech28", "C6.tech29", "C6.tech30",
+      "C6.tech31", "C6.tech32", "C6.tech33", "C6.tech34",
+      "C6.tech35", "C6.tech36", "C6.tech37", "C6.tech38",
+      "C6.tech39", "C6.tech40", "C6.tech41", "C6.tech42",
+      "C6.tech43", "C6.tech44", "C6.tech45", "C6.tech46", "C6.tech47",
+      "C6.tech48", "C6.tech49", "C6.tech50", "C6.tech51",
+      "C6.tech52", "C6.tech53", "C6.tech54", "C6.tech55",
+      "C6.tech56", "C6.tech57", "C6.tech58", "C6.tech59",
+      "C6.tech60", "C6.tech61", "C6.tech62", "C6.tech63",
+      "C6.tech64", "C6.tech65", "C6.tech66", "C6.tech67",
+      "C6.tech68", "C6.tech69", "C6.tech70", "C6.tech71", "C6.tech72",
+      "C6.tech73", "C6.tech74", "C6.tech75", "C6.tech76",
+      "C6.tech77", "C6.tech78", "C6.tech79", "C6.tech80",
+      "C6.tech81", "C6.tech82", "C6.tech83", "C6.tech84",
+      "C6.tech85", "C6.tech86", "C6.tech87", "C6.tech88", "C6.tech89",
+      "C8.tech1", "C8.tech2", "C8.tech3", "C8.tech4",
+      "C10.tech1",
+      "A6.tech1",
+      "P8.tech1",
+      "T1.tech1", "T1.tech2", "T1.tech3", "T1.tech4", "T1.tech5", "T1.tech6",
+      "P11.tech1", "P11.tech2"
+    ]
+  },
+  {
+    "category_id": "controle_atributos_texto_livre",
+    "name": "Controle de atributos em geração de texto livre",
+    "description": "Técnicas cujo objetivo é controlar algum atributo semântico, estilístico ou linguístico do texto gerado (comprimento, legibilidade, estilo, personalidade, restrições fonéticas/lexicais como lipogramas e palíndromos), sem o foco principal ser o formato estrutural da saída.",
+    "techniques": [
+      "P2.tech1", "P2.tech2", "P2.tech3", "P2.tech4", "P2.tech5",
+      "P3.tech1",
+      "P5.tech1", "P5.tech2", "P5.tech3", "P5.tech4", "P5.tech5", "P5.tech6",
+      "P9.tech1", "P9.tech2", "P9.tech3", "P9.tech4", "P9.tech5",
+      "P10.tech1", "P10.tech2", "P10.tech3",
+      "C9.tech1", "C9.tech2", "C9.tech3", "C9.tech4", "C9.tech5",
+      "C9.tech6", "C9.tech7", "C9.tech8", "C9.tech9", "C9.tech10",
+      "C9.tech11", "C9.tech12", "C9.tech13", "C9.tech14", "C9.tech15",
+      "C9.tech16", "C9.tech17", "C9.tech18", "C9.tech19", "C9.tech20",
+      "C9.tech21", "C9.tech22", "C9.tech23", "C9.tech24", "C9.tech25",
+      "C9.tech26", "C9.tech27", "C9.tech28",
+      "A4.tech1", "A4.tech2",
+      "C5.tech1", "C5.tech2", "C5.tech3", "C5.tech4", "C5.tech5",
+      "C5.tech6", "C5.tech7", "C5.tech8", "C5.tech9", "C5.tech10",
+      "A3.tech1", "A3.tech2", "A3.tech3", "A3.tech4", "A3.tech5",
+      "A3.tech6", "A3.tech7", "A3.tech8", "A3.tech9",
+      "A1.tech1", "A1.tech2", "A1.tech3", "A1.tech4", "A1.tech5"
+    ]
+  },
+  {
+    "category_id": "geracao_texto_longo_convencional",
+    "name": "Geração de texto longo convencional",
+    "description": "Técnicas voltadas a tarefas tradicionais de geração de texto longo em PLN, como sumarização, tradução, table-to-text, diálogo e geração de história a partir de título.",
+    "techniques": [
+      "C1.tech1", "C1.tech2", "C1.tech3", "C1.tech4", "C1.tech5",
+      "C1.tech6", "C1.tech7", "C1.tech8", "C1.tech9", "C1.tech10",
+      "C1.tech11", "C1.tech12", "C1.tech13", "C1.tech14",
+      "P6.tech1", "P6.tech2",
+      "P7.tech1",
+      "P3.tech2"
+    ]
+  },
+  {
+    "category_id": "extracao_transformacao_mapeamento_dados",
+    "name": "Extração, transformação e mapeamento de dados estruturados",
+    "description": "Técnicas cujo objetivo é extrair informação de texto/dados brutos ou mapear/transformar dados de um formato para outro, como extração de valores clínicos de relatórios ou geração de chamadas de API a partir de conversas.",
+    "techniques": [
+      "A7.tech1", "A7.tech2", "A7.tech3",
+      "C4.tech1", "C4.tech2", "C4.tech3", "C4.tech4", "C4.tech5",
+      "C4.tech6", "C4.tech7", "C4.tech8", "C4.tech9"
+    ]
+  },
+  {
+    "category_id": "tarefas_dominio_especifico_multimodal",
+    "name": "Tarefas de domínio específico ou multimodal",
+    "description": "Técnicas aplicadas a tarefas particulares de um domínio ou envolvendo multimodalidade, que não se encaixam nas categorias gerais anteriores, como geração de layout visual, classificação de imagens de satélite, resposta a perguntas sobre gráficos e geração de diagramas de modelagem.",
+    "techniques": [
+      "C2.tech1", "C2.tech2",
+      "A2.tech1",
+      "C3.tech1", "C3.tech2", "C3.tech3", "C3.tech4",
+      "A5.tech1", "A5.tech2", "A5.tech3", "A5.tech4", "A5.tech5",
+      "T2.tech1", "T2.tech2", "T2.tech3", "T2.tech4", "T2.tech5",
+      "T2.tech6", "T2.tech7", "T2.tech8", "T2.tech9", "T2.tech10",
+      "T2.tech11", "T2.tech12", "T2.tech13", "T2.tech14",
+      "T2.tech15", "T2.tech16", "T2.tech17", "T2.tech18",
+      "C7.tech1",
+      "P12.tech1", "P12.tech2", "P12.tech3", "P12.tech4", "P12.tech5", "P12.tech6"
+    ]
+  }
+]

@@ -1,0 +1,232 @@
+﻿Provider:OATD.org
+Database:Open Access Theses and Dissertations
+Content:text/plain; charset="utf8"
+
+TY  - THES
+ID  - oai:DiVA.org:kth-367949
+A1  - Ljunggren, Tobias
+TI  - AI-Driven Metric Extraction of Sustainability Data
+PB  - KTH
+PY  - 2025
+AB  - &#60;p&#62;Corporate sustainability reports provide essential
+      information regarding a company’s environmental impact, yet their
+      inconsistent formatting and lack of structure pose significant
+      challenges for automated Information Extraction (IE). This thesis
+      presents an end-to-end IE pipeline leveraging large language models
+      (LLMs) to extract quantitative sustainability metrics, such as
+      greenhouse gas emissions and energy use, from unstructured PDF
+      reports. The system integrates document parsing,
+      image-summarization, relevance classification, Retrieval-Augmented
+      Generation (RAG), In-Context Learning (ICL), Constrained Decoding
+      Generation (CDG), and rule-based validation. A benchmark dataset of
+      63 reports was compiled, with a subset used to construct one-shot
+      examples. Evaluation against a manually curated gold dataset
+      revealed that the system outperforms manual processing in speed but
+      falls short of expert-level accuracy. The highest-performing
+      extraction method achieved a precision of 48.4%, a recall of 18.0%,
+      and an F1 score of 26.3%. A modified MAP evaluation revealed that
+      using fine-tuned BERT models to classify related information could
+      slightly increase retrieval performance, but it decreased overall
+      accuracy. These results reflect the difficulty of processing
+      multimodal content and the limitations of semantic search in
+      retrieving the correct context within documents where multiple
+      sections discuss similar topics using overlapping terminology.
+      However, statistical validation using McNemar’s test demonstrated
+      that applying rule-based validation significantly improved overall
+      extraction accuracy, confirming the value of structured validation
+      in LLM-based workflows. Future work should explore improved
+      retrieval methods, better handling of multimodal content such as
+      image-based tables, and opportunities for human-AI collaboration.
+      Enhancements like fine-tuned embedding models, structured
+      intermediate outputs, and real-time user feedback could increase
+      accuracy and usability.&#60;/p&#62;%%%%&#60;p&#62;Företags
+      hållbarhetsrapporter tillhandahåller viktig information om ett
+      företags miljöpåverkan, men deras inkonsekventa formatering och
+      brist på struktur utgör betydande utmaningar för automatiserad
+      informationsextraktion (IE). Denna avhandling presenterar en
+      IE-pipeline som använder stora språkmodeller (LLM) för att
+      extrahera kvantitativa hållbarhetsmått, såsom
+      växthusgasutsläpp och energianvändning, från ostrukturerade
+      PDF-rapporter. Systemet integrerar dokumentparsning,
+      bildsammanfattning, relevansklassificering, Retrieval-Augmented
+      Generation (RAG), In-Context Learning (ICL), Constrained Decoding
+      Generation (CDG) och regelbaserad validering. Ett dataset
+      bestående av 63 rapporter sammanställdes, där en delmängd
+      användes för att konstruera one-shot-exempel. Utvärdering mot en
+      manuellt kurerad gulddataset visade att systemet överträffar
+      manuell bearbetning i hastighet men inte når upp till
+      expertnivåns noggrannhet. Den bäst presterande extraktionsmetoden
+      uppnådde en precision på 48,4%, en recall på 18,0% och ett
+      F1-värde på 26,3%. En&#8230;
+N1  - Electrical Engineering and Computer Science (EECS)
+KW  - Information Extraction; LLM; AI; BERT; RAG; Sustainability; ESG; Värdeutvinning; Stora språkmodeller; AI; BERT; RAG; Hållbarhet; ESG; Computer and Information Sciences; Data- och informationsvetenskap
+UR  - http://oatd.org/oatd/record?record=oai\:DiVA.org\:kth-367949&q=%28%22large%20language%20model%2A%22%20OR%20%22LLM%2A%22%20OR%20%22foundation%20model%2A%22%20OR%20%22generative%20language%20model%2A%22%20OR%20%22instruction-tuned%20model%2A%22%20OR%20%22ChatGPT%22%20OR%20%22GPT-4%22%20OR%20%22LLaMA%22%20%29%20AND%20%28%20%22prompt%20engineering%22%20OR%20%22textual%20prompt%2A%22%20OR%20%22prompt%20design%22%20OR%20%22in-context%20learning%22%20OR%20%22few-shot%22%20OR%20%22zero-shot%22%20OR%20%22instruction%20prompting%22%20OR%20%22prompt%20template%2A%22%20%29%20AND%20%28%20%22controllable%20text%20generation%22%20OR%20%22CTG%22%20OR%20%22constrained%20generation%22%20OR%20%22controlled%20generation%22%20OR%20%22format%20adherence%22%20OR%20%22output%20constraint%2A%22%20OR%20%22constrained%20decoding%22%29
+ER  - 
+
+TY  - THES
+ID  - oai:scholarsarchive.byu.edu:etd-12053
+A1  - Morain, Robert Kenneth
+TI  - Creativity in Large Language Models
+PB  - Brigham Young University
+PY  - 2025
+AB  - &#60;p&#62;As artificial intelligence systems approach human-level
+      performance across a wide variety of domains, creative domains
+      remain a critical yet underexplored area of research. Unlike
+      traditional AI tasks with well-defined objectives, creative tasks
+      rely on inherently subjective measures, making them particularly
+      challenging for machines that lack human experiential context. This
+      dissertation establishes the fundamental importance of creativity
+      in AI systems and presents methods for improving and evaluating the
+      creative capabilities of LLMs on the pathway toward AGI. This work
+      addresses and examines key limitations in current LLM creativity
+      through model innovations, development frameworks, and comparative
+      studies. The dissertation develops novel architectural approaches
+      including an external knowledge integration mechanism inspired by
+      human symbolic memory and black-box controllable text generation
+      methods. Additionally, it presents a game-based development
+      framework for creative agents and an automated knowledge extraction
+      pipeline for story generation systems. Through comparative studies
+      across multiple creative domains, this research provides empirical
+      insights into the capabilities and limitations of LLMs in creative
+      tasks. The work establishes evaluation frameworks for comparing
+      general-purpose LLMs against traditional computational creativity
+      systems and develops methods for assessing the effectiveness of
+      various prompting techniques in creative text generation. These
+      investigations show that LLM-generated creative artifacts are
+      generally preferred over those from traditional CC systems,
+      advanced prompting techniques (e.g., OPRO, chain-of-thought) do not
+      significantly outperform basic prompting, and that LLM-based
+      automatic evaluation is limited. Finally, this work reflects on the
+      advantages and limitations of enhancing LLM creativity and provides
+      directions for future work.&#60;/p&#62;
+N1  - Doctoral dissertation. PhD
+KW  - computational creativity; language model; controllable text generation; knowledge integration; prompt engineering; Physical Sciences and Mathematics
+UR  - http://oatd.org/oatd/record?record=oai\:scholarsarchive.byu.edu\:etd-12053&q=%28%22large%20language%20model%2A%22%20OR%20%22LLM%2A%22%20OR%20%22foundation%20model%2A%22%20OR%20%22generative%20language%20model%2A%22%20OR%20%22instruction-tuned%20model%2A%22%20OR%20%22ChatGPT%22%20OR%20%22GPT-4%22%20OR%20%22LLaMA%22%20%29%20AND%20%28%20%22prompt%20engineering%22%20OR%20%22textual%20prompt%2A%22%20OR%20%22prompt%20design%22%20OR%20%22in-context%20learning%22%20OR%20%22few-shot%22%20OR%20%22zero-shot%22%20OR%20%22instruction%20prompting%22%20OR%20%22prompt%20template%2A%22%20%29%20AND%20%28%20%22controllable%20text%20generation%22%20OR%20%22CTG%22%20OR%20%22constrained%20generation%22%20OR%20%22controlled%20generation%22%20OR%20%22format%20adherence%22%20OR%20%22output%20constraint%2A%22%20OR%20%22constrained%20decoding%22%29
+ER  - 
+
+TY  - THES
+ID  - handle:11012/259292
+A1  - Sydorenko, Mariia
+TI  - Generování Blockly XML pro detekci událostí z logů pomocí jazykových modelů: Generating Blockly XML to detect alerts in logs using language models
+PB  - Brno University of Technology
+AB  - This thesis examines large language models and their applications
+      in log-based event detection, including their limitations and
+      techniques for enhancing performance such as prompt engineering,
+      retrieval-augmented generation (RAG), grammar-constrained decoding,
+      and fine-tuning. The target environment Logmanager was examined,
+      with emphasis on its alert rules in the platform-specific Blockly
+      implementation. A system for automated alert generation from
+      natural language was proposed and implemented, comprising an
+      intermediate JSON representation, a deterministic parser for
+      conversion to the target XML format, a RAG pipeline for dynamic
+      retrieval of relevant log fields, and two alternative approaches to
+      the generative model: fine-tuning a smaller model for local
+      deployment or utilizing a cloud-based large language model.
+      Evaluation showed that the best-performing configurations of both
+      approaches were capable of generating syntactically and
+      semantically valid alert structures, and of applying user-requested
+      corrections to existing alerts. Enforcing output format constraints
+      proved to be a critical factor in eliminating structurally invalid
+      outputs in both cases. This thesis demonstrates that automated
+      alert generation from natural language is feasible, with fine-tuned
+      small models proving to be a competitive alternative to cloud-based
+      solutions.
+KW  - velké jazykové modely; generování pravidel pro detekci událostí; doménově specifické generování pomocí LLM; generování strukturovaného výstupu; RAG; systémy pro správu logů; large language models; alert rule generation; domain-specific generation; structured output generation; RAG; log management systems
+UR  - http://oatd.org/oatd/record?record=handle\:11012\%2F259292&q=%28%22large%20language%20model%2A%22%20OR%20%22LLM%2A%22%20OR%20%22foundation%20model%2A%22%20OR%20%22generative%20language%20model%2A%22%20OR%20%22instruction-tuned%20model%2A%22%20OR%20%22ChatGPT%22%20OR%20%22GPT-4%22%20OR%20%22LLaMA%22%20%29%20AND%20%28%20%22prompt%20engineering%22%20OR%20%22textual%20prompt%2A%22%20OR%20%22prompt%20design%22%20OR%20%22in-context%20learning%22%20OR%20%22few-shot%22%20OR%20%22zero-shot%22%20OR%20%22instruction%20prompting%22%20OR%20%22prompt%20template%2A%22%20%29%20AND%20%28%20%22controllable%20text%20generation%22%20OR%20%22CTG%22%20OR%20%22constrained%20generation%22%20OR%20%22controlled%20generation%22%20OR%20%22format%20adherence%22%20OR%20%22output%20constraint%2A%22%20OR%20%22constrained%20decoding%22%29
+ER  - 
+
+TY  - THES
+ID  - handle:10477/90353
+A1  - Chen, Jian
+TI  - Guidance Conditions in Generative Modeling: Elevating Discriminative Capabilities and Controllability
+PB  - University at Buffalo
+PY  - 2025
+AB  - Generative models, such as diffusion models and large language
+      models (LLMs), play a crucial role in artificial intelligence due
+      to their remarkable generative quality and versatility. These
+      models leverage deep neural network architectures to sample new
+      data points from complex data distributions that cannot be
+      expressed in analytical form. Due to the demand for controllability
+      in real-world applications, various guidance methods have emerged
+      for conditional generation. For example, text-to-image generation
+      and image captioning utilize encoded features as conditions, while
+      in-context learning conditions generation directly on the input
+      data. Achieving this level of conditional adherence requires a
+      delicate balance between generative diversity and discriminative
+      precision. My research focuses on leveraging generative models for
+      generative tasks that require deterministic precision or
+      discriminative tasks under uncertainty. The first section of this
+      thesis introduces the development of the LRA-diffusion model, which
+      is a stochastic classifier trained using noisy labels. This work
+      formulates classification as an image-guided label generation task.
+      It learns from noisy labels and generates label estimation based on
+      learned label distribution for images by leveraging neighbor
+      consistency in the feature space of pre-trained models, such as
+      SimCLR and CLIP. The second section presents the development of
+      LACE, a diffusion model for layout generation, which unifies
+      various conditional layout generation tasks in a single model by
+      masking partial attributes in training. By training diffusion
+      models with differentiable constraints, LACE achieves superior
+      performance across several metrics, including FID, MaxIoU, and
+      Alignment, compared to existing discrete diffusion models. With the
+      advent of large language models (LLMs) and their ability to
+      understand and generate structured text, we explore how text
+      guidance and content awareness can further enhance controlled
+      generation in layout tasks. The third section introduces TextLap,
+      an LLM customized for layout generation, where generation is
+      explicitly conditioned on text prompts. By supervised fine-tuning
+      on curated datasets, TextLap learns to arrange spatial
+      relationships between layout elements and generate structured
+      representations, such as CSS and JSON. The final section focuses on
+      enhancing efficiency and accuracy in multi-modal large language
+      models (MLLMs) through refined multimodal conditioning. This work
+      introduces a self-visual-RAG framework that enables MLLMs to
+      process multi-page, visually rich documents efficiently. It
+      optimizes MLLMs as multimodal retrievers, reducing the input length
+      by retrieving relevant pages from the document, allowing MLLMs to
+      focus on a shorter context before generating responses. This
+      structured approach refines multimodal conditions, ensuring that
+      text generation remains accurate, contextually grounded, and
+      computationally efficient.%%%%**To request an accessible version of
+      the file(s) associated with this item, contact
+      library@buffalo.edu.&#8230;
+N1  - Doctoral dissertation. PhD
+KW  - computer science
+UR  - http://oatd.org/oatd/record?record=handle\:10477\%2F90353&q=%28%22large%20language%20model%2A%22%20OR%20%22LLM%2A%22%20OR%20%22foundation%20model%2A%22%20OR%20%22generative%20language%20model%2A%22%20OR%20%22instruction-tuned%20model%2A%22%20OR%20%22ChatGPT%22%20OR%20%22GPT-4%22%20OR%20%22LLaMA%22%20%29%20AND%20%28%20%22prompt%20engineering%22%20OR%20%22textual%20prompt%2A%22%20OR%20%22prompt%20design%22%20OR%20%22in-context%20learning%22%20OR%20%22few-shot%22%20OR%20%22zero-shot%22%20OR%20%22instruction%20prompting%22%20OR%20%22prompt%20template%2A%22%20%29%20AND%20%28%20%22controllable%20text%20generation%22%20OR%20%22CTG%22%20OR%20%22constrained%20generation%22%20OR%20%22controlled%20generation%22%20OR%20%22format%20adherence%22%20OR%20%22output%20constraint%2A%22%20OR%20%22constrained%20decoding%22%29
+ER  - 
+
+TY  - THES
+ID  - handle:1721.1/162415
+A1  - Westenfelder, Finnian Ellis
+TI  - LLM-Supported Natural Language to Bash Translation
+PB  - MIT
+PY  - 2025
+AB  - The Bourne-Again Shell (Bash) command-line
+      interface for Linux systems has complex syntax and requires
+      extensive specialized knowledge. Using the natural language to Bash
+      command (NL2SH) translation capabilities of large language models
+      (LLMs) for command composition alleviates these issues. However,
+      the NL2SH performance of LLMs is difficult to assess due to
+      inaccurate test data and unreliable heuristics for determining the
+      functional equivalence of Bash commands. We present a manually
+      verified test dataset of 600 instruction-command pairs and a
+      training dataset of 40,939 pairs, increasing the size of previous
+      datasets by 441% and 135%, respectively. Further, we present a
+      novel functional equivalence heuristic that combines command
+      execution with LLM evaluation of command outputs. Our heuristic can
+      determine the functional equivalence of two Bash commands with 95%
+      confidence, a 16% increase over previous heuristics. Evaluation of
+      popular LLMs using our test dataset and heuristic demonstrates that
+      parsing, in-context learning, in-weight learning, and constrained
+      decoding can improve NL2SH accuracy by up to 32%. Additionally, we
+      consider military use cases for NL2SH models and discuss the
+      limitations of current Department of Defense documentation
+      standards for LLMs. We write and publish documentation for our
+      models and datasets to promote safe use. Our findings emphasize the
+      importance of dataset quality, execution-based evaluation,
+      translation method, and proper documentation for advancing NL2SH
+      translation and enabling responsible use. Our code is available at
+      https://github.com/westenfelder/NL2SH.
+N1  - Masters thesis. MSin Electrical Engineering and Computer Science, Institute for Data, Systems, and Society
+UR  - http://oatd.org/oatd/record?record=handle\:1721.1\%2F162415&q=%28%22large%20language%20model%2A%22%20OR%20%22LLM%2A%22%20OR%20%22foundation%20model%2A%22%20OR%20%22generative%20language%20model%2A%22%20OR%20%22instruction-tuned%20model%2A%22%20OR%20%22ChatGPT%22%20OR%20%22GPT-4%22%20OR%20%22LLaMA%22%20%29%20AND%20%28%20%22prompt%20engineering%22%20OR%20%22textual%20prompt%2A%22%20OR%20%22prompt%20design%22%20OR%20%22in-context%20learning%22%20OR%20%22few-shot%22%20OR%20%22zero-shot%22%20OR%20%22instruction%20prompting%22%20OR%20%22prompt%20template%2A%22%20%29%20AND%20%28%20%22controllable%20text%20generation%22%20OR%20%22CTG%22%20OR%20%22constrained%20generation%22%20OR%20%22controlled%20generation%22%20OR%20%22format%20adherence%22%20OR%20%22output%20constraint%2A%22%20OR%20%22constrained%20decoding%22%29
+ER  - 

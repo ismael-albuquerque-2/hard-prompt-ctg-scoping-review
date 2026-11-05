@@ -1,0 +1,1522 @@
+{
+  "techniques": [
+    {
+      "technique_id": "C1.tech1",
+      "study_id": "C1",
+      "objective": "Gerar textos longos (resumos, simplificações, traduções, diálogos, table-to-text) em setting zero-shot, sem demonstrações nem diretrizes adicionais.",
+      "description": "O prompt é montado com a instrução da tarefa, o contexto de entrada e a query, sem demonstrações nem guidelines. O formato segue \"{I}\\n{C}\\n{Q}\". O modelo recebe o prompt e gera a resposta diretamente, sem etapas intermediárias. A técnica é avaliada em sete tarefas de geração longa: SAMSum, CNN, XL-Sum, SWiPE, IWSLT17 en-ja, Synthetic Persona e CommonGen-Challenge."
+    },
+    {
+      "technique_id": "C1.tech2",
+      "study_id": "C1",
+      "objective": "Gerar textos longos em setting few-shot com k demonstrações aleatórias (k=3 ou k=5 dependendo da tarefa), sem diretrizes adicionais.",
+      "description": "O prompt inclui a instrução da tarefa, k demonstrações selecionadas aleatoriamente do conjunto de treino, o contexto e a query. O formato segue \"{I}\\n{Df}\\n{C}\\n{Q}\". Os valores de k são: 3 para SAMSum, CNN, SWiPE; 5 para XL-Sum, IWSLT17, Syn. Persona, CommGen-Chall. O modelo recebe o prompt e gera a resposta diretamente."
+    },
+    {
+      "technique_id": "C1.tech3",
+      "study_id": "C1",
+      "objective": "Gerar textos longos em zero-shot usando um prompt cuja instrução foi otimizada iterativamente pelo algoritmo APO (Automatic Prompt Optimization).",
+      "description": "O algoritmo APO otimiza iterativamente o texto da instrução em D_train (50 amostras). São 5 iterações; em cada uma, 1 amostra com menor ROUGE-L é usada como erro para gerar gradientes textuais, 5 gradientes são gerados e 5 novos prompts são amostrados, além de 1 paráfrase. O prompt otimizado resultante (instrução + contexto + query) é enviado ao modelo na inferência, que gera a resposta diretamente. O prompt otimizado é específico para Mistral."
+    },
+    {
+      "technique_id": "C1.tech4",
+      "study_id": "C1",
+      "objective": "Gerar textos longos em few-shot usando um prompt cuja instrução e demonstrações foram otimizadas pelo APO.",
+      "description": "Similar a E5, mas o prompt inclui demonstrações. O APO otimiza a instrução e as demonstrações em D_train. Na inferência, o prompt otimizado (instrução + demonstrações + contexto + query) é enviado ao modelo, que gera a resposta diretamente. O prompt otimizado é específico para Mistral."
+    },
+    {
+      "technique_id": "C1.tech5",
+      "study_id": "C1",
+      "objective": "Gerar textos longos em zero-shot usando um prompt otimizado pelo APO, específico para ChatGPT.",
+      "description": "Similar a E5, mas o APO otimiza o prompt especificamente para ChatGPT. O texto do prompt otimizado difere do otimizado para Mistral, pois o APO adapta a instrução ao modelo alvo. Na inferência, o prompt otimizado (instrução + contexto + query) é enviado ao ChatGPT, que gera a resposta diretamente."
+    },
+    {
+      "technique_id": "C1.tech6",
+      "study_id": "C1",
+      "objective": "Gerar textos longos em few-shot usando um prompt otimizado pelo APO, específico para ChatGPT.",
+      "description": "Similar a E6, mas otimizado para ChatGPT. O APO otimiza a instrução e as demonstrações para o ChatGPT. Na inferência, o prompt otimizado (instrução + demonstrações + contexto + query) é enviado ao modelo, que gera a resposta diretamente."
+    },
+    {
+      "technique_id": "C1.tech7",
+      "study_id": "C1",
+      "objective": "Gerar textos longos em zero-shot com diretrizes textuais (Metric Guidelines e/ou Output Constraint Guidelines) aprendidas automaticamente pelo algoritmo LongGuide a partir de dados de treino.",
+      "description": "LongGuide aprende diretrizes de D_train (até 50 amostras) em 5 passos: (1) seleção de até 5 métricas relevantes por iteração, com 5 iterações; (2) autoavaliação das métricas nas respostas de treino via Self-consistency (3 amostras); (3) geração de definições textuais das métricas calibradas pelos scores; (4) cálculo de min, max e média de sentenças e tokens para gerar a OCG; (5) seleção da melhor combinação (MG, OCG, MG-OCG ou nenhuma) em D_train. Na inferência, o prompt é \"{I}\\n{C}\\n{Q}\\n{G_best}\" e enviado ao modelo, que gera a resposta diretamente. A combinação selecionada varia por tarefa (ex: MG-OCG para SAMSum, OCG para CNN, MG para SWiPE)."
+    },
+    {
+      "technique_id": "C1.tech8",
+      "study_id": "C1",
+      "objective": "Gerar textos longos em few-shot com diretrizes LongGuide.",
+      "description": "Similar a E9, mas o prompt inclui demonstrações. O formato na inferência é \"{I}\\n{Df}\\n{C}\\n{Q}\\n{G_best}\". As demonstrações são k exemplos (3 ou 5 dependendo da tarefa). As diretrizes são as mesmas aprendidas por LongGuide para Mistral."
+    },
+    {
+      "technique_id": "C1.tech9",
+      "study_id": "C1",
+      "objective": "Gerar textos longos em zero-shot com diretrizes LongGuide aprendidas especificamente pelo ChatGPT.",
+      "description": "Similar a E9, mas as Metric Guidelines são geradas pelo próprio ChatGPT, resultando em diretrizes textuais diferentes das geradas por Mistral. A combinação selecionada também pode diferir por tarefa (ex: MG-OCG para SAMSum e CNN, OCG para XL-Sum, ZS para SWiPE). Na inferência, o prompt \"{I}\\n{C}\\n{Q}\\n{G_best}\" é enviado ao ChatGPT, que gera a resposta diretamente."
+    },
+    {
+      "technique_id": "C1.tech10",
+      "study_id": "C1",
+      "objective": "Gerar textos longos em few-shot com diretrizes LongGuide para ChatGPT.",
+      "description": "Similar a E11, mas com demonstrações. O formato na inferência é \"{I}\\n{Df}\\n{C}\\n{Q}\\n{G_best}\". As diretrizes são as aprendidas por LongGuide para ChatGPT."
+    },
+    {
+      "technique_id": "C1.tech11",
+      "study_id": "C1",
+      "objective": "Avaliar o impacto da remoção do Step 2 (coleta de scores de métricas via autoavaliação) do LongGuide na geração zero-shot.",
+      "description": "LongGuide sem o Step 2: as métricas selecionadas no Step 1 são diretamente instruídas ao modelo para otimização, sem a calibração por scores de autoavaliação. As métricas são apresentadas sem definições calibradas. Na inferência, o prompt inclui as métricas não calibradas e é enviado ao modelo, que gera a resposta diretamente. Testado em SAMSum, SWiPE e CommGen-Chall."
+    },
+    {
+      "technique_id": "C1.tech12",
+      "study_id": "C1",
+      "objective": "Avaliar o impacto da remoção do Step 2 do LongGuide na geração few-shot.",
+      "description": "Similar a E13, mas com demonstrações no prompt. As métricas não calibradas são incluídas junto com as demonstrações. Na inferência, o prompt (instrução + demonstrações + contexto + query + métricas não calibradas) é enviado ao modelo."
+    },
+    {
+      "technique_id": "C1.tech13",
+      "study_id": "C1",
+      "objective": "Gerar textos longos usando um grande número de demonstrações (10 para CNN, 50 para SWiPE e CommGen-Chall), sem diretrizes adicionais.",
+      "description": "O prompt inclui a instrução da tarefa, um grande número de demonstrações (10 para CNN, 50 para SWiPE e CommGen-Chall, até o limite da janela de contexto de 1500 tokens de gpt-3.5-turbo-1106), o contexto e a query. O modelo recebe o prompt e gera a resposta diretamente."
+    },
+    {
+      "technique_id": "C1.tech14",
+      "study_id": "C1",
+      "objective": "Gerar textos longos com muitas demonstrações (10-50 shots) e diretrizes LongGuide.",
+      "description": "Similar a E15, mas com diretrizes LongGuide adicionadas ao prompt. O formato na inferência é \"{I}\\n{Df}\\n{C}\\n{Q}\\n{G_best}\". As diretrizes são as aprendidas por LongGuide para ChatGPT."
+    },
+    {
+      "technique_id": "P1.tech1",
+      "study_id": "P1",
+      "objective": "Extrair valores de índices fisiológicos (FFR e iFR) e suas localizações anatômicas de relatórios de angiografia coronária em português, preenchendo um template JSON estruturado.",
+      "description": "A técnica consiste em enviar ao modelo um único prompt em português, sem exemplos (zero-shot). O prompt identifica o modelo como especialista em relatórios de angiografia/coronariografia e angioplastia, explica brevemente os índices FFR e iFR, e fornece um template JSON plano com 10 chaves nomeadas (Tronco_Comum_FFR, Tronco_Comum_iFR, Descendente_Anterior_FFR, Descendente_Anterior_iFR, Circunflexa_FFR, Circunflexa_iFR, Coronária_Direita_FFR, Coronária_Direita_iFR, Outras_artérias_FFR, Outras_artérias_iFR), todas inicializadas com null. O relatório CAG é inserido no prompt, seguido de instruções para responder apenas com o template preenchido em JSON válido, usando números decimais ou null, sem texto adicional. O prompt é enviado ao modelo e a resposta JSON é obtida diretamente, sem etapas intermediárias, mecanismos de reenvio ou programas auxiliares."
+    },
+    {
+      "technique_id": "P1.tech2",
+      "study_id": "P1",
+      "objective": "Extrair valores de índices fisiológicos (FFR e iFR) e suas localizações anatômicas de relatórios de angiografia coronária em português, preenchendo um template JSON estruturado.",
+      "description": "A técnica consiste em enviar ao modelo um único prompt em português com estratégia few-shot: 3 exemplos de relatórios CAG pareados com seus respectivos valores extraídos são incluídos no prompt antes do relatório alvo, para guiar o modelo na extração. O prompt contém a mesma instrução de especialista, o template JSON plano com 10 chaves nomeadas inicializadas com null, os 3 exemplos, o relatório alvo e as instruções para responder apenas com o template preenchido em JSON válido. O prompt é enviado ao modelo e a resposta JSON é obtida diretamente, sem etapas intermediárias, mecanismos de reenvio ou programas auxiliares."
+    },
+    {
+      "technique_id": "P1.tech3",
+      "study_id": "P1",
+      "objective": "Extrair valores de índices fisiológicos (FFR e iFR) e suas localizações anatômicas de relatórios de angiografia coronária em português, preenchendo um template JSON estruturado.",
+      "description": "A técnica é uma variação da estratégia few-shot em que os 3 exemplos incluídos no prompt contêm valores implausíveis (fora do range conhecido de FFR/iFR), e valores fora do range conhecido são removidos dos valores extraídos. O prompt contém a mesma instrução de especialista, o template JSON plano com 10 chaves nomeadas inicializadas com null, os 3 exemplos com valores implausíveis, o relatório alvo e as instruções para responder apenas com o template preenchido em JSON válido. O prompt é enviado ao modelo e a resposta JSON é obtida diretamente, sem etapas intermediárias, mecanismos de reenvio ou programas auxiliares."
+    },
+    {
+      "technique_id": "P1.tech4",
+      "study_id": "P1",
+      "objective": "Extrair valores de índices fisiológicos (FFR e iFR) e suas localizações anatômicas de relatórios de angiografia coronária em português, preenchendo um template JSON estruturado.",
+      "description": "A técnica consiste em enviar ao modelo um único prompt em português, sem exemplos (zero-shot), utilizando um template JSON com estrutura aninhada (nested) em vez do template plano. Neste template, cada artéria é uma chave contendo sub-chaves 'FFR' e 'iFR' (ex.: {\"Tronco Comum\": {\"FFR\": null, \"iFR\": null}, \"Descendente Anterior\": {\"FFR\": null, \"iFR\": null}, ...}). O restante do prompt é idêntico: instrução de especialista, relatório CAG inserido, e instruções para responder apenas com o template preenchido em JSON válido. O prompt é enviado ao modelo e a resposta JSON é obtida diretamente, sem etapas intermediárias, mecanismos de reenvio ou programas auxiliares."
+    },
+    {
+      "technique_id": "P1.tech5",
+      "study_id": "P1",
+      "objective": "Extrair valores de índices fisiológicos (FFR e iFR) e suas localizações anatômicas de relatórios de angiografia coronária em português, preenchendo um template JSON estruturado.",
+      "description": "A técnica é uma variação few-shot com template JSON aninhado (nested). O prompt inclui 3 exemplos de relatórios CAG pareados com valores extraídos, o template JSON com estrutura aninhada (cada artéria contém sub-chaves 'FFR' e 'iFR'), o relatório alvo e instruções para responder em JSON válido. O prompt é enviado ao modelo e a resposta JSON é obtida diretamente, sem etapas intermediárias, mecanismos de reenvio ou programas auxiliares."
+    },
+    {
+      "technique_id": "P1.tech6",
+      "study_id": "P1",
+      "objective": "Extrair valores de índices fisiológicos (FFR e iFR) e suas localizações anatômicas de relatórios de angiografia coronária em português, preenchendo um template JSON estruturado.",
+      "description": "A técnica é uma variação few-shot com valores implausíveis e template JSON aninhado (nested). O prompt inclui 3 exemplos com valores implausíveis (fora do range conhecido de FFR/iFR), o template JSON com estrutura aninhada, o relatório alvo e instruções para responder em JSON válido. Valores fora do range conhecido são removidos dos valores extraídos. O prompt é enviado ao modelo e a resposta JSON é obtida diretamente, sem etapas intermediárias, mecanismos de reenvio ou programas auxiliares."
+    },
+    {
+      "technique_id": "A1.tech1",
+      "study_id": "A1",
+      "objective": "Gerar um Songci que satisfaça as restrições estruturais, tonais e de rima de um Cipai específico, sobre um tema designado, sem fornecer exemplos ou regras adicionais ao modelo.",
+      "description": "O prompt contém apenas a instrução mínima para que o modelo gere um Songci, especificando o Cipai e o tema, sem incluir exemplos de poemas, regras formais ou qualquer orientação adicional. O modelo deve recorrer exclusivamente ao seu conhecimento latente sobre a forma poética. O prompt é enviado ao modelo em uma única interação e a resposta é aceita diretamente como saída final."
+    },
+    {
+      "technique_id": "A1.tech2",
+      "study_id": "A1",
+      "objective": "Gerar um Songci que satisfaça as restrições estruturais, tonais e de rima de um Cipai específico, sobre um tema designado, fornecendo um exemplo de Songci canônico como guia de estilo e formato.",
+      "description": "O prompt inclui um Songci canônico extraído do corpus curado como exemplo, juntamente com a instrução para gerar um novo Songci sob o Cipai e tema designados. O exemplo serve como guia de estilo, estrutura e formato para a geração. O prompt é enviado ao modelo em uma única interação e a resposta é aceita diretamente como saída final."
+    },
+    {
+      "technique_id": "A1.tech3",
+      "study_id": "A1",
+      "objective": "Gerar a segunda estrofe de um Songci que satisfaça as restrições estruturais, tonais e de rima de um Cipai específico, completando uma primeira estrofe canônica fornecida no prompt.",
+      "description": "O prompt apresenta a primeira estrofe de um Songci canônico para estabelecer ritmo e estilo, e instrui o modelo a completar o poema gerando a segunda estrofe. A avaliação foca exclusivamente na metade gerada pelo modelo, garantindo-se que não seja uma reprodução direta da segunda estrofe original. O prompt é enviado ao modelo em uma única interação e a resposta é aceita diretamente como saída final."
+    },
+    {
+      "technique_id": "A1.tech4",
+      "study_id": "A1",
+      "objective": "Gerar um Songci que satisfaça as restrições estruturais, tonais e de rima de um Cipai específico, sobre um tema designado, fornecendo as regras formais explicitamente no prompt.",
+      "description": "O prompt apresenta explicitamente as regras estruturais, tonais e de rima do Cipai alvo, além da instrução para gerar o Songci sob o tema designado. O modelo recebe todas as informações sobre a forma poética diretamente no prompt, sem depender exclusivamente de conhecimento latente. O prompt é enviado ao modelo em uma única interação e a resposta é aceita diretamente como saída final."
+    },
+    {
+      "technique_id": "A1.tech5",
+      "study_id": "A1",
+      "objective": "Gerar um Songci que satisfaça as restrições estruturais, tonais e de rima de um Cipai específico, sobre um tema designado, solicitando ao modelo que primeiro articule as regras formais antes de gerar o poema.",
+      "description": "O prompt instrui o modelo a primeiro articular as regras formais do Cipai (estrutura, tonalidade e rima) e, em seguida, gerar o Songci sob o tema designado. O texto de raciocínio produzido pelo modelo é avaliado separadamente do Songci em si. O prompt é enviado ao modelo em uma única interação e a resposta é aceita diretamente como saída final."
+    },
+    {
+      "technique_id": "C2.tech1",
+      "study_id": "C2",
+      "objective": "Gerar diagramas de classe sintaticamente válidos na DSL CD4A a partir de tarefas de modelagem descritas em linguagem natural.",
+      "description": "A técnica é few-shot learning. O prompt é composto por uma tarefa de modelagem descrita em linguagem natural (por exemplo, descrever um sistema de votação, um sistema automotivo ou um sistema de gerenciamento hospitalar) acompanhada de exemplos genéricos e independentes de domínio da DSL CD4A. Esses exemplos mostram modelos CD4A válidos contendo classes, atributos, herança, associações e enumerações, de modo que o modelo aprenda a sintaxe da linguagem. O prompt é enviado ao modelo de linguagem em uma única requisição e a resposta é obtida diretamente, sem etapas intermediárias, sem reenvios condicionados e sem mecanismos de persistência. Um parser baseado na gramática da DSL é utilizado exclusivamente para verificar a correção sintática do modelo gerado, como instrumento de medição externo, sem fazer parte do processo de geração."
+    },
+    {
+      "technique_id": "C2.tech2",
+      "study_id": "C2",
+      "objective": "Gerar requisitos em Structured English (SEN) sintaticamente válidos a partir de descrições de requisitos em linguagem natural.",
+      "description": "A técnica é few-shot learning. O prompt é composto por uma descrição de requisito em linguagem natural acompanhada de exemplos genéricos da DSL SEN (Structured English), que mostram a estrutura controlada da linguagem com padrões como 'After Q: Formula, if P: Formula holds, then in response S: Formula eventually holds time: TimeBound'. Os exemplos ensinam ao modelo a sintaxe específica de SEN, incluindo o uso de escopos, fórmulas e limites temporais. O prompt é enviado ao modelo de linguagem em uma única requisição e a resposta é obtida diretamente, sem etapas intermediárias, sem reenvios condicionados e sem mecanismos de persistência. Um parser é utilizado exclusivamente para verificar a correção sintática do modelo SEN gerado, como instrumento de medição externo, sem fazer parte do processo de geração."
+    },
+    {
+      "technique_id": "A2.tech1",
+      "study_id": "A2",
+      "objective": "Gerar perguntas de múltipla escolha (MCQs) cognitivamente diversas (text-based, inferential e main idea) a partir de textos acadêmicos expositivos, em formato JSON estruturado.",
+      "description": "Técnica zero-shot de prompt único. O prompt fornece ao modelo o texto-fonte dentro de tags delimitadoras <source>, instrui a geração de cinco perguntas de múltipla escolha (duas text-based, duas inferenciais e uma de ideia principal), inclui definições breves de cada tipo de questão e especifica um template JSON com chaves nomeadas (question1 a question5, cada uma com type, question e answer) para a estrutura de saída. Não há exemplos (zero-shot), não há etapas intermediárias e não há mecanismos de validação ou reenvio: o prompt é enviado uma única vez ao modelo e a resposta é aceita diretamente."
+    },
+    {
+      "technique_id": "C3.tech1",
+      "study_id": "C3",
+      "objective": "Responder perguntas sobre dados de gráficos serializados em texto usando apenas instrução direta, sem exemplos ou raciocínio induzido.",
+      "description": "O prompt é composto por um preâmbulo de instrução único que determina: usar apenas a tabela fornecida, retornar a resposta final após 'Answer:', números como valores bare arredondados a duas casas decimais, booleanos como Yes/No e respostas categóricas como a string exata da célula. Os dados do gráfico são serializados em formato textual linha a linha (CSV-like) com nomes de colunas e unidades normalizados. A tabela serializada e a pergunta em linguagem natural são concatenadas após a instrução, e o prompt termina com 'Answer:'. O prompt é enviado uma única vez ao modelo via API e a resposta é aceita diretamente, sem reenvio, sem exemplares, sem gatilhos de raciocínio e sem encadeamento de conversas."
+    },
+    {
+      "technique_id": "C3.tech2",
+      "study_id": "C3",
+      "objective": "Responder perguntas sobre dados de gráficos serializados em texto utilizando três exemplares da mesma categoria de raciocínio para guiar o formato da resposta.",
+      "description": "O prompt inicia com o mesmo preâmbulo de instrução do Zero-Shot. Antes da pergunta-alvo, três exemplares da mesma categoria de raciocínio (Arithmetic, Comparative, Boolean ou Direct Retrieval) são inseridos. Cada exemplar consiste em uma pequena tabela serializada, uma pergunta e uma resposta. Os exemplares são amostrados uniformemente sem reposição de um pool fixo de 50 itens (12–13 por categoria), com seed fixa para reprodutibilidade, e são disjuntos do conjunto de avaliação (sem compartilhamento de imagens, tabelas ou perguntas). Após os exemplares, a tabela serializada e a pergunta do item-alvo são concatenadas, terminando com 'Answer:'. O prompt é enviado uma única vez ao modelo via API e a resposta é aceita diretamente. Não há rastros de raciocínio nos exemplares, gatilho de CoT nem encadeamento de conversas."
+    },
+    {
+      "technique_id": "C3.tech3",
+      "study_id": "C3",
+      "objective": "Responder perguntas sobre dados de gráficos serializados em texto induzindo raciocínio passo a passo por meio de um gatilho de CoT, sem exemplares.",
+      "description": "O prompt segue a mesma estrutura do Zero-Shot: preâmbulo de instrução, tabela serializada e pergunta. Contudo, em vez de terminar diretamente com 'Answer:', um gatilho de CoT (por exemplo, 'Let's think step by step.') é acrescentado, seguido por uma linha em branco 'Reasoning:' e então 'Answer:'. Nenhum exemplar é fornecido. O prompt é enviado uma única vez ao modelo via API e a resposta é aceita diretamente, sem reenvio nem encadeamento de conversas."
+    },
+    {
+      "technique_id": "C3.tech4",
+      "study_id": "C3",
+      "objective": "Responder perguntas sobre dados de gráficos serializados em texto combinando exemplares com rastros de raciocínio passo a passo e um scaffold de raciocínio no item-alvo.",
+      "description": "O prompt inicia com o mesmo preâmbulo de instrução das demais estratégias. Três exemplares da mesma categoria de raciocínio são inseridos antes da pergunta-alvo, amostrados do mesmo pool fixo de 50 itens com seed fixa. Diferentemente do Few-Shot, cada exemplar inclui um rastro de raciocínio conciso e padronizado (step-by-step) antes da resposta. Após os exemplares, a tabela serializada e a pergunta do item-alvo são concatenadas, seguidas por uma linha em branco 'Reasoning:' (scaffold de raciocínio) e então 'Answer:'. O prompt é enviado uma única vez ao modelo via API e a resposta é aceita diretamente, sem reenvio nem encadeamento de conversas."
+    },
+    {
+      "technique_id": "P2.tech1",
+      "study_id": "P2",
+      "objective": "Gerar resumos com controle de comprimento (50 palavras e 1 sentença) usando prompting direto sem prefilling, avaliando a aderência ao alvo de comprimento.",
+      "description": "A técnica consiste em enviar ao modelo um único prompt contendo uma instrução de sistema ('You are an assistant who replies with a summary to every message.') e uma mensagem de usuário com o template 'Summarize the following text in {length} words:\\n\\n{input}' (ou a variante em sentenças). Não há prefilling da resposta do assistente. O modelo recebe o prompt e gera diretamente a saída final, sem etapas intermediárias, validação ou reenvio. O comprimento alvo é inserido como parâmetro textual no template. A estratégia é zero-shot, sem exemplos fornecidos."
+    },
+    {
+      "technique_id": "P2.tech2",
+      "study_id": "P2",
+      "objective": "Gerar resumos com controle de comprimento em múltiplas medidas (palavras, caracteres, tokens, sentenças, bullet points) usando prompting direto com prefilling da resposta do assistente, avaliando a aderência ao alvo de comprimento.",
+      "description": "A técnica consiste em enviar ao modelo um prompt com instrução de sistema ('You are an assistant who replies with a summary to every message.'), uma mensagem de usuário com o template 'Summarize the following text in {length} words:\\n\\n{input}', e um prefilling da resposta do assistente com o texto 'Sure! Here is a summary of the text in {length} words:\\n\\n'. O modelo então continua a geração a partir desse ponto. Não há etapas intermediárias, validação ou reenvio. A estratégia é zero-shot. O prefilling reforça a instrução de comprimento, melhorando o instruction-following. Para bullet points, o símbolo '•' é adicionado como prefixo na resposta para definir o formato tipográfico."
+    },
+    {
+      "technique_id": "P2.tech3",
+      "study_id": "P2",
+      "objective": "Melhorar a aderência ao comprimento alvo em medidas de caracteres e tokens convertendo o alvo para a medida de palavras, na qual o modelo tem desempenho superior, e então gerando o resumo com o alvo convertido.",
+      "description": "A técnica consiste em dois passos. Primeiro, um cálculo matemático converte o alvo de comprimento da medida original (caracteres ou tokens) para palavras: para caracteres, Wtarget = Ctarget × αc→w (onde αc→w ≈ 0.158477); para tokens, Wtarget = Ttarget × αt→w (onde αt→w ≈ 0.798047). Segundo, o prompt é montado com o alvo convertido em palavras usando o template com prefilling: instrução de sistema, mensagem de usuário 'Summarize the following text in {Wtarget} words:\\n\\n{input}', e prefilling 'Sure! Here is a summary of the text in {Wtarget} words:\\n\\n'. O modelo gera a saída final diretamente. A estratégia é zero-shot. Não há validação ou reenvio da saída."
+    },
+    {
+      "technique_id": "P2.tech4",
+      "study_id": "P2",
+      "objective": "Compensar o viés sistemático de sub/sobregeneração do modelo ajustando o alvo de palavras por meio de um modelo polinomial de terceiro grau antes de gerar o resumo.",
+      "description": "A técnica consiste em dois passos. Primeiro, um cálculo polinomial ajusta o alvo original de palavras: Wt'arget = 23.7904 + 4.3×10⁻⁵·Wtarget + 1.226×10⁻²·Wtarget² − 3.3×10⁻⁵·Wtarget³. Segundo, o prompt é montado com o alvo ajustado usando o template com prefilling: instrução de sistema, mensagem de usuário 'Summarize the following text in {Wt'arget} words:\\n\\n{input}', e prefilling 'Sure! Here is a summary of the text in {Wt'arget} words:\\n\\n'. O modelo gera a saída final diretamente. A estratégia é zero-shot. Não há validação ou reenvio da saída."
+    },
+    {
+      "technique_id": "P2.tech5",
+      "study_id": "P2",
+      "objective": "Combinar aproximação de comprimento (conversão de caracteres/tokens para palavras) com ajuste de alvo polinomial para melhorar a aderência em medidas de caracteres e tokens.",
+      "description": "A técnica combina dois cálculos sequenciais antes da montagem do prompt. Primeiro, o alvo na medida original (caracteres ou tokens) é convertido para palavras usando os fatores de aproximação (αc→w ou αt→w). Segundo, o alvo convertido em palavras é ajustado pelo modelo polinomial de terceiro grau (Wt'arget = 23.7904 + 4.3×10⁻⁵·W + 1.226×10⁻²·W² − 3.3×10⁻⁵·W³). O prompt final é montado com o alvo ajustado usando o template com prefilling: instrução de sistema, mensagem de usuário 'Summarize the following text in {L't'arget} words:\\n\\n{input}', e prefilling correspondente. O modelo gera a saída final diretamente. A estratégia é zero-shot. Não há validação ou reenvio."
+    },
+    {
+      "technique_id": "P3.tech1",
+      "study_id": "P3",
+      "objective": "Reduzir o comprimento das respostas do modelo por meio de instrução textual direta que solicita concisão.",
+      "description": "A técnica consiste em integrar a instrução 'Keep the answer short and concise' ao template padrão de resposta do Alpaca, que já contém a instrução da tarefa e a entrada de dados. O prompt montado é enviado ao modelo em uma interação de turno único, sem etapas intermediárias, sem mecanismos de reenvio ou validação, e sem uso de ferramentas externas. A resposta do modelo é aceita diretamente como saída final. O comprimento total em tokens das respostas é medido sobre 100 instruções (números 10001 a 10100 do dataset alpaca-data de 52k)."
+    },
+    {
+      "technique_id": "P3.tech2",
+      "study_id": "P3",
+      "objective": "Fazer o modelo recusar respostas quando o documento de referência não contém informação relevante para a pergunta, em tarefas de DocQA.",
+      "description": "A técnica consiste em adicionar ao prompt de tarefas de DocQA a instrução 'If there are no references in the known information, respond with No relevant information available, and avoid fabricating facts'. O prompt, contendo o documento de referência, a pergunta e a instrução de recusa, é enviado ao modelo em uma interação de turno único para cada entrada do dataset wikipedia-trivia (entradas 10001 a 10200, sendo 80% positivas e 20% negativas). Não há etapas intermediárias, mecanismos de reenvio ou uso de ferramentas externas. A resposta do modelo é aceita diretamente como saída final."
+    },
+    {
+      "technique_id": "P4.tech1",
+      "study_id": "P4",
+      "objective": "Gerar JSON válido a partir de uma descrição de dados estruturados em linguagem natural, sem exemplo de formato.",
+      "description": "O prompt descreve dados estruturados em linguagem natural (por exemplo, um pedido com ID, cliente e itens) e instrui o modelo a retornar esses dados como JSON com campos nomeados específicos (ex.: 'Return as JSON with fields for id, customer (with id and name), and items array (with sku, qty, price)'). Não é fornecido nenhum exemplo de formato; o modelo depende exclusivamente de seu conhecimento de treinamento sobre a sintaxe JSON. O processo consiste em um único envio do prompt ao modelo, que diretamente gera a string JSON como saída, sem etapas intermediárias, recuperação de informação, cálculos ou uso de outros modelos."
+    },
+    {
+      "technique_id": "P4.tech2",
+      "study_id": "P4",
+      "objective": "Gerar texto válido na sintaxe TOON a partir de uma descrição de dados estruturados em linguagem natural, utilizando aprendizado one-shot in-context.",
+      "description": "O prompt inicia com uma instrução rígida de formato ('You are to produce output STRICTLY in TOON format'), seguida das regras sintáticas do TOON (indentação de 2 espaços, notação para escalares 'fieldName: value', objetos com campos aninhados, arrays de objetos 'arrayName[N]:', arrays tabulares 'arrayName[N]{field1, field2}:'), um exemplo universal de referência demonstrando diversas construções TOON (escalares, objetos aninhados, arrays de objetos, arrays tabulares, metadados) e, por fim, a descrição da tarefa com os dados a serem serializados. O exemplo é universal e não adaptado ao caso específico, para garantir comparação justa com a geração JSON sem exemplo sob medida. O processo consiste em um único envio do prompt ao modelo, que diretamente gera o texto TOON como saída, sem etapas intermediárias, recuperação de informação, cálculos ou uso de outros modelos."
+    },
+    {
+      "technique_id": "C4.tech1",
+      "study_id": "C4",
+      "objective": "Gerar chamadas de API corretas a partir de conversas multi-turno no dataset DSTC8 usando few-shot in-context learning com documentação de API e dois exemplares.",
+      "description": "O prompt é composto por quatro partes: (1) instrução de tarefa descrevendo o objetivo de gerar uma chamada de API, (2) documentação das APIs relevantes para a amostra, contendo nomes de pacotes, funções, argumentos obrigatórios e opcionais e valores possíveis para cada argumento, (3) dois exemplares relacionados com conversa e chamada de API correspondente, e (4) o histórico de conversa multi-turno entre usuário e assistente. O prompt é enviado ao modelo em um único turno e a resposta é aceita diretamente, sem etapas intermediárias, reenvios ou validação. A decodificação é greedy search com temperature 0. A saída é uma chamada de API em formato de função Python, por exemplo: Restaurants_1.FindRestaurants(city=\"Mountain View\", cuisine=\"American\", price_range=\"moderate\")."
+    },
+    {
+      "technique_id": "C4.tech2",
+      "study_id": "C4",
+      "objective": "Gerar chamadas de API corretas a partir de conversas multi-turno no dataset DSTC8 usando few-shot in-context learning com documentação de API e dois exemplares, com decodificação beam search.",
+      "description": "O prompt é composto por quatro partes: (1) instrução de tarefa, (2) documentação das APIs relevantes (pacotes, funções, argumentos obrigatórios/opcionais, valores possíveis), (3) dois exemplares relacionados com conversa e chamada de API correspondente, e (4) o histórico de conversa multi-turno. O prompt é enviado ao modelo em um único turno e a resposta é aceita diretamente, sem reenvios ou validação. A decodificação é beam search com beam size 4 e temperature 0. A saída é uma chamada de API em formato de função Python."
+    },
+    {
+      "technique_id": "C4.tech3",
+      "study_id": "C4",
+      "objective": "Gerar chamadas de API corretas a partir de conversas multi-turno no dataset API Bank usando zero-shot in-context learning com documentação de API.",
+      "description": "O prompt é composto por três partes: (1) instrução de tarefa descrevendo o objetivo de gerar uma chamada de API, (2) documentação das APIs relevantes para a amostra, contendo nomes de pacotes, funções, argumentos obrigatórios e opcionais e valores possíveis, e (3) o histórico de conversa multi-turno entre usuário e assistente. Não há exemplares (zero-shot). O prompt é enviado ao modelo em um único turno e a resposta é aceita diretamente, sem etapas intermediárias, reenvios ou validação. A decodificação é greedy search com temperature 0. A saída é uma chamada de API em formato de função Python."
+    },
+    {
+      "technique_id": "C4.tech4",
+      "study_id": "C4",
+      "objective": "Gerar chamadas de API corretas a partir de conversas multi-turno no dataset API Bank usando zero-shot in-context learning com documentação de API, com decodificação beam search.",
+      "description": "O prompt é composto por três partes: (1) instrução de tarefa, (2) documentação das APIs relevantes (pacotes, funções, argumentos obrigatórios/opcionais, valores possíveis), e (3) o histórico de conversa multi-turno. Não há exemplares (zero-shot). O prompt é enviado ao modelo em um único turno e a resposta é aceita diretamente, sem reenvios ou validação. A decodificação é beam search com beam size 4 e temperature 0. A saída é uma chamada de API em formato de função Python."
+    },
+    {
+      "technique_id": "C4.tech5",
+      "study_id": "C4",
+      "objective": "Avaliar a capacidade de gerar chamadas de API corretas no DSTC8 quando a documentação de API é removida do prompt, testando a eficiência de contexto com few-shot in-context learning.",
+      "description": "O prompt é composto por três partes: (1) instrução de tarefa, (2) dois exemplares relacionados com conversa e chamada de API correspondente, e (3) o histórico de conversa multi-turno. A documentação de API é intencionalmente removida do prompt para avaliar o impacto na acurácia. O prompt é enviado ao modelo em um único turno e a resposta é aceita diretamente, sem reenvios ou validação. A decodificação é greedy search com temperature 0. A saída é uma chamada de API em formato de função Python."
+    },
+    {
+      "technique_id": "C4.tech6",
+      "study_id": "C4",
+      "objective": "Avaliar a capacidade de gerar chamadas de API corretas no DSTC8 quando a documentação de API é removida do prompt, testando a eficiência de contexto com few-shot in-context learning e beam search.",
+      "description": "O prompt é composto por três partes: (1) instrução de tarefa, (2) dois exemplares relacionados com conversa e chamada de API correspondente, e (3) o histórico de conversa multi-turno. A documentação de API é intencionalmente removida do prompt. O prompt é enviado ao modelo em um único turno e a resposta é aceita diretamente, sem reenvios ou validação. A decodificação é beam search com beam size 4 e temperature 0. A saída é uma chamada de API em formato de função Python."
+    },
+    {
+      "technique_id": "C4.tech7",
+      "study_id": "C4",
+      "objective": "Avaliar a capacidade de gerar chamadas de API corretas no API Bank quando a documentação de API é removida do prompt, testando a eficiência de contexto com zero-shot in-context learning.",
+      "description": "O prompt é composto por duas partes: (1) instrução de tarefa e (2) o histórico de conversa multi-turno. Não há documentação de API nem exemplares. O prompt é enviado ao modelo em um único turno e a resposta é aceita diretamente, sem reenvios ou validação. A decodificação é greedy search com temperature 0. A saída é uma chamada de API em formato de função Python."
+    },
+    {
+      "technique_id": "C4.tech8",
+      "study_id": "C4",
+      "objective": "Avaliar a capacidade de gerar chamadas de API corretas no API Bank quando a documentação de API é removida do prompt, testando a eficiência de contexto com zero-shot in-context learning e beam search.",
+      "description": "O prompt é composto por duas partes: (1) instrução de tarefa e (2) o histórico de conversa multi-turno. Não há documentação de API nem exemplares. O prompt é enviado ao modelo em um único turno e a resposta é aceita diretamente, sem reenvios ou validação. A decodificação é beam search com beam size 4 e temperature 0. A saída é uma chamada de API em formato de função Python."
+    },
+    {
+      "technique_id": "C4.tech9",
+      "study_id": "C4",
+      "objective": "Analisar preliminarmente em que posição de ranking a chamada de API correta aparece entre as top-10 sequências geradas por beam search no DSTC8.",
+      "description": "O prompt é composto por quatro partes: (1) instrução de tarefa, (2) documentação das APIs relevantes, (3) dois exemplares relacionados, e (4) o histórico de conversa multi-turno. O prompt é enviado ao modelo em um único turno e a resposta é aceita diretamente. A decodificação é beam search com beam size 10 e temperature 0. São consideradas as 10 sequências de maior probabilidade como candidatas. A análise é realizada sobre 100 amostras do DSTC8 e a métrica reportada é a acurácia top-1 (se a sequência correta é a de maior probabilidade)."
+    },
+    {
+      "technique_id": "C5.tech1",
+      "study_id": "C5",
+      "objective": "Gerar continuação de história em nível de complexidade CEFR específico usando instrução simples em linguagem natural.",
+      "description": "O prompt é composto por um contexto inicial de 50 a 70 palavras extraído do corpus ELG, seguido de uma instrução em linguagem natural que solicita ao modelo continuar a história garantindo legibilidade para um nível CEFR específico (A2, B1, B2, C1 ou C2). Não há enriquecimento adicional do prompt com informações do padrão. O prompt é enviado diretamente ao modelo e a resposta é aceita como saída final. Trata-se de um processo de turno único, sem etapas intermediárias, sem lookup, sem cálculos e sem reenvio."
+    },
+    {
+      "technique_id": "C5.tech2",
+      "study_id": "C5",
+      "objective": "Gerar continuação de história alinhada ao nível CEFR alvo usando informações descritivas de aspectos do padrão.",
+      "description": "O prompt é composto por um contexto inicial de 50 a 70 palavras extraído do corpus ELG, seguido de uma instrução que solicita ao modelo continuar a história no nível CEFR alvo, acrescida de critérios numerados com informações de aspectos do padrão (Meaning/Purpose, Structure, Grammatical Complexity). Essas informações são recuperadas de um arquivo CSV que contém os descritores de nível compilados por Natova (2021). O processo envolve uma etapa de lookup: extrai-se a especificação de nível do prompt, busca-se no arquivo CSV os descritores correspondentes ao nível-alvo, e o prompt final é montado com essas informações adicionais antes do envio ao modelo em turno único."
+    },
+    {
+      "technique_id": "C5.tech3",
+      "study_id": "C5",
+      "objective": "Gerar continuação de história alinhada ao nível CEFR alvo usando exemplares literários como referência implícita.",
+      "description": "O prompt é composto por um contexto inicial de 50 a 70 palavras extraído do corpus ELG, seguido de uma instrução que solicita ao modelo continuar a história no nível CEFR alvo, acrescida de exemplares literários recomendados para o nível. Os exemplares são recuperados de uma lista predefinida por nível obtida da plataforma Penguin Readers (por exemplo, para B1: Frankenstein de Mary Shelley, Wuthering Heights de Emily Brontë, Midsummer Night's Dream de Shakespeare). O processo envolve uma etapa de lookup: identifica-se o nível-alvo, buscam-se os exemplares correspondentes na lista, e o prompt final é montado com essa informação antes do envio ao modelo em turno único."
+    },
+    {
+      "technique_id": "C5.tech4",
+      "study_id": "C5",
+      "objective": "Refinar história gerada para atingir nível CEFR alvo usando flags linguísticas comparativas com gold standard.",
+      "description": "Processo em duas etapas de geração. Na primeira etapa, gera-se conteúdo inicial usando outro método de prompting (por exemplo, STANDARDIZE-A). Na segunda etapa, calculam-se flags linguísticas do conteúdo gerado (como type-token ratio, contagem total e média de palavras e sentenças, densidade de entidades, entre outros) usando a ferramenta LFTK (Linguistic Feature Tool Kit). Os valores calculados são comparados com as médias de um corpus gold standard do nível-alvo (Cambridge Exams). Um verbalizador transforma a comparação em instruções direcionais em linguagem natural (por exemplo, 'Increase the complexity by aiming for higher type token ratio' ou 'Decrease the complexity by aiming for lower average number of words'). O prompt de reescrita é montado com a história inicial e as instruções direcionais, e enviado ao modelo para gerar a saída final."
+    },
+    {
+      "technique_id": "C5.tech5",
+      "study_id": "C5",
+      "objective": "Gerar continuação de história alinhada ao nível CEFR alvo combinando todos os artefatos de conhecimento do padrão.",
+      "description": "Combina todos os artefatos de conhecimento em um único processo: informações de aspectos do padrão (recuperadas do CSV de descritores), exemplares literários (recuperados da lista Penguin Readers) e flags linguísticas (calculadas via LFTK e comparadas com gold standard do Cambridge Exams). O processo inclui a etapa de reescrita com instruções direcionais do STANDARDIZE-L. O prompt final é montado com contexto, instrução de nível, aspectos, exemplares e flags, e enviado ao modelo para gerar a saída final."
+    },
+    {
+      "technique_id": "C5.tech6",
+      "study_id": "C5",
+      "objective": "Gerar história a partir de palavra-tema alinhada ao nível CCS alvo usando instrução simples em linguagem natural.",
+      "description": "O prompt é composto por uma palavra-tema (substantivo em inglês no plural, selecionado aleatoriamente do corpus COCA) e uma instrução em linguagem natural que solicita ao modelo escrever uma história sobre aquela palavra-tema, garantindo legibilidade para um nível CCS específico (Elementary, grades 4–8, ou Advanced, grades 9–12). Não há enriquecimento adicional do prompt. O prompt é enviado diretamente ao modelo e a resposta é aceita como saída final. Trata-se de um processo de turno único, sem etapas intermediárias."
+    },
+    {
+      "technique_id": "C5.tech7",
+      "study_id": "C5",
+      "objective": "Gerar história a partir de palavra-tema alinhada ao nível CCS alvo usando informações descritivas de aspectos do padrão.",
+      "description": "O prompt é composto por uma palavra-tema e uma instrução que solicita ao modelo escrever uma história no nível CCS alvo, acrescida de critérios com informações de aspectos do padrão CCS (Qualitative/Meaning, Qualitative/Syntax, Quantitative/Length). Essas informações são recuperadas de um arquivo estruturado com os descritores do CCS. O processo envolve uma etapa de lookup: extrai-se a especificação de nível do prompt, buscam-se os descritores correspondentes ao nível-alvo, e o prompt final é montado com essas informações adicionais antes do envio ao modelo em turno único."
+    },
+    {
+      "technique_id": "C5.tech8",
+      "study_id": "C5",
+      "objective": "Gerar história a partir de palavra-tema alinhada ao nível CCS alvo usando exemplares literários como referência implícita.",
+      "description": "O prompt é composto por uma palavra-tema e uma instrução que solicita ao modelo escrever uma história no nível CCS alvo, acrescida de exemplares literários recomendados para o nível. Os exemplares são recuperados do website oficial do CCS (para Elementary: Little Women, The Adventures of Tom Sawyer, The Road Not Taken; para Advanced: Jane Eyre, The Great Gatsby, Fahrenheit 451). O processo envolve uma etapa de lookup: identifica-se o nível-alvo, buscam-se os exemplares correspondentes na lista, e o prompt final é montado com essa informação antes do envio ao modelo em turno único."
+    },
+    {
+      "technique_id": "C5.tech9",
+      "study_id": "C5",
+      "objective": "Refinar história gerada para atingir nível CCS alvo usando flags linguísticas comparativas com gold standard.",
+      "description": "Processo em duas etapas de geração. Na primeira etapa, gera-se conteúdo inicial usando outro método de prompting. Na segunda etapa, calculam-se flags linguísticas do conteúdo gerado (como type-token ratio, contagem de palavras e sentenças, densidade de entidades, conjunções coordenativas e subordinativas) usando a ferramenta LFTK. Os valores calculados são comparados com as médias do corpus gold standard CCS (Flor et al., 2013). Um verbalizador transforma a comparação em instruções direcionais em linguagem natural. O prompt de reescrita é montado com a história inicial e as instruções direcionais, e enviado ao modelo para gerar a saída final."
+    },
+    {
+      "technique_id": "C5.tech10",
+      "study_id": "C5",
+      "objective": "Gerar história a partir de palavra-tema alinhada ao nível CCS alvo combinando todos os artefatos de conhecimento do padrão.",
+      "description": "Combina todos os artefatos de conhecimento em um único processo: informações de aspectos do padrão CCS (recuperadas de arquivo estruturado), exemplares literários (recuperados do website oficial CCS) e flags linguísticas (calculadas via LFTK e comparadas com gold standard de Flor et al., 2013). O processo inclui a etapa de reescrita com instruções direcionais do STANDARDIZE-L. O prompt final é montado com a palavra-tema, instrução de nível, aspectos, exemplares e flags, e enviado ao modelo para gerar a saída final."
+    },
+    {
+      "technique_id": "P5.tech1",
+      "study_id": "P5",
+      "objective": "Gerar texto que satisfaça aproximadamente 45 atributos (hard e soft) extraídos de documentos do FineWeb, avaliando a taxa de satisfação de restrições estruturais e semânticas.",
+      "description": "A técnica consiste em enviar ao modelo um único prompt contendo uma lista de aproximadamente 45 atributos (em média 7,8 soft e 38,1 hard por documento) extraídos de um texto do FineWeb, acompanhados da instrução para gerar um texto que satisfaça o máximo possível desses atributos. O template segue a estrutura: 'You are an expert at generating text that matches given attributes. Your task is to generate a text that satisfies as many of the provided attributes as possible. ### Hard Attributes: {hard attributes} ### Soft Attributes: {soft attributes}'. O prompt é enviado uma única vez ao modelo e a resposta é aceita diretamente, sem mecanismos de reenvio, validação intermediária ou encadeamento de conversas."
+    },
+    {
+      "technique_id": "P5.tech2",
+      "study_id": "P5",
+      "objective": "Gerar texto que satisfaça aproximadamente 30 atributos (hard e soft) do pool global multi-source, avaliando a taxa de satisfação de restrições em contexto de generalização global.",
+      "description": "A técnica é idêntica em estrutura à de E1: um único prompt contendo uma lista de atributos (em média 5,1 soft e 24,8 hard por documento) extraídos do pool multi-source, com a instrução para gerar texto que satisfaça o máximo possível desses atributos. O template segue a mesma estrutura com seções separadas para Hard Attributes e Soft Attributes. O prompt é enviado uma única vez e a resposta é aceita diretamente, sem mecanismos de reenvio ou validação. A diferença em relação a E1 reside exclusivamente no conjunto de atributos utilizado (Multi-source ao invés de FineWeb)."
+    },
+    {
+      "technique_id": "P5.tech3",
+      "study_id": "P5",
+      "objective": "Avaliar a taxa de satisfação de restrições (CSR) do modelo ao gerar texto condicionado a quantidades variáveis de atributos (de 10 a 50), evidenciando a degradação de desempenho com o aumento do número de restrições.",
+      "description": "A técnica consiste em enviar ao modelo um prompt contendo N atributos (onde N varia de 10 a 50) e instruí-lo a gerar um texto que satisfaça esses atributos. O template segue a estrutura padrão de geração: instrução para gerar texto alinhado aos atributos fornecidos, com seções separadas para hard e soft attributes. O prompt é enviado uma única vez e a resposta é aceita diretamente, sem mecanismos de reenvio. A avaliação mede a CSR (Constraint Satisfaction Rate), que abrange restrições hard verificadas por scripts Python e restrições soft avaliadas por um juiz LLM."
+    },
+    {
+      "technique_id": "P5.tech4",
+      "study_id": "P5",
+      "objective": "Avaliar a degradação do hard score à medida que a posição dos atributos hard dentro do prompt se desloca para posições mais tardias.",
+      "description": "A técnica consiste em enviar ao modelo um prompt contendo atributos hard posicionados em diferentes locais dentro do prompt (variando sistematicamente a posição), com a instrução para gerar texto que satisfaça esses atributos. O template segue a estrutura padrão de geração com seções para hard e soft attributes. O prompt é enviado uma única vez e a resposta é aceita diretamente, sem mecanismos de reenvio. A avaliação mede especificamente o hard score, ou seja, a taxa de satisfação de restrições hard verificáveis programaticamente por scripts Python."
+    },
+    {
+      "technique_id": "P5.tech5",
+      "study_id": "P5",
+      "objective": "Avaliar a relação entre CSR e qualidade textual (BERTScore/F1) à medida que o número de atributos varia de 10 a 50, para o modelo original sem treinamento adicional.",
+      "description": "A técnica consiste em enviar ao modelo um prompt contendo N atributos (onde N varia de 10 a 50) e instruí-lo a gerar texto que satisfaça esses atributos. O template segue a mesma estrutura de geração com seções para Hard Attributes e Soft Attributes. O prompt é enviado uma única vez e a resposta é aceita diretamente. A avaliação mede a CSR (que inclui restrições hard verificáveis programaticamente) e também BERTScore/F1 como métrica de qualidade semântica do texto gerado. O experimento busca caracterizar o trade-off entre satisfação de restrições e qualidade textual."
+    },
+    {
+      "technique_id": "P5.tech6",
+      "study_id": "P5",
+      "objective": "Avaliar a capacidade de generalização do modelo para atributos posicionais inéditos e mais desafiadores (posição absoluta e relativa de palavras no texto gerado).",
+      "description": "A técnica consiste em enviar ao modelo um prompt contendo 50 atributos posicionais extraídos de documentos do FineWeb, divididos em dois tipos: (1) posição absoluta de uma palavra (e.g., 'a k-ésima palavra, k ≤ 5, deve ser A') e (2) posição relativa entre duas palavras (e.g., 'a palavra A deve aparecer antes da palavra B'). O template segue a estrutura padrão de geração com instrução para satisfazer os atributos. O prompt é enviado uma única vez e a resposta é aceita diretamente, sem mecanismos de reenvio. A avaliação mede o score de satisfação dessas restrições posicionais, que são verificáveis programaticamente."
+    },
+    {
+      "technique_id": "P6.tech1",
+      "study_id": "P6",
+      "objective": "Gerar artigos de notícias completos a partir de apenas um título (headline), sem fornecer informações explícitas sobre a estrutura de discurso desejada, servindo como baseline zero-shot.",
+      "description": "A técnica consiste em enviar um único prompt ao modelo contendo apenas o título da notícia como informação de entrada, sem nenhuma instrução adicional sobre a estrutura de discurso ou seções esperadas. O modelo gera o artigo completo de uma só vez em um único turno de interação. Não há mecanismos de reenvio, validação ou encadeamento de prompts. O texto gerado é aceito diretamente como a saída final para posterior avaliação de fluência e estrutura."
+    },
+    {
+      "technique_id": "P6.tech2",
+      "study_id": "P6",
+      "objective": "Gerar receitas completas a partir de um título e uma lista de ingredientes, sem fornecer informações explícitas sobre a estrutura de discurso (sequência de ações) desejada, servindo como baseline zero-shot.",
+      "description": "A técnica consiste em enviar um único prompt ao modelo contendo o título do prato e a lista de ingredientes como informação de entrada, sem nenhuma instrução adicional sobre a estrutura de discurso ou seções de ações esperadas. O modelo gera a receita completa de uma só vez em um único turno de interação. Não há mecanismos de reenvio, validação ou encadeamento de prompts. O texto gerado é aceito diretamente como a saída final para posterior avaliação de fluência e estrutura."
+    },
+    {
+      "technique_id": "P7.tech1",
+      "study_id": "P7",
+      "objective": "Gerar sequências completas de eventos (atividades, timestamps, atributos de evento e de sequência) para Predictive Process Monitoring, condicionadas em informações de nível de sequência (timestamp inicial, dia da semana, hora de início, comprimento alvo).",
+      "description": "A técnica é um prompting instrucional com poucos exemplos (10-shot) condicionado por bucket de comprimento. O prompt é composto por três partes: (1) uma instrução de tarefa com dez regras de formato obrigatório — gerar apenas a sequência de eventos, preservar o formato linha-a-linha indexado (índice, atividade, atributos, timestamp), manter timestamps cronológicos, produzir exatamente o número de eventos especificado no input e apender uma linha final END; (2) dez exemplos few-shot no formato <INPUT>/<OUTPUT>, pré-selecionados do mesmo bucket de comprimento da sequência alvo e reutilizados para todas as sequências daquele bucket; (3) o input da sequência alvo contendo identificador do caso, timestamp inicial, dia da semana, hora de início e comprimento desejado. O modelo recebe o prompt montado e gera diretamente a sequência de eventos como texto, sem reenvio, validação iterativa ou seleção entre múltiplas saídas. A saída é então parseada linha a linha para reconstruir o log de eventos estruturado."
+    },
+    {
+      "technique_id": "P8.tech1",
+      "study_id": "P8",
+      "objective": "Gerar um IEP em formato JSON seguindo o schema hierárquico SMART Goal Ladder (ParentConcern, SmartGoal, GoalLadder) a partir de uma transcrição de entrevista pai-professor em chinês tradicional, em regime zero-shot.",
+      "description": "A técnica é zero-shot: um único prompt é enviado ao modelo contendo a especificação completa do schema hierárquico de três camadas (ParentConcern com raw_quote, domain e is_primary; SmartGoal com behavior e mastery; GoalLadder com annual_goal e 2–3 semester_goals) juntamente com a transcrição da entrevista pai-professor em chinês tradicional. O modelo gera diretamente uma saída JSON em conformidade com o schema, sem exemplos prévios, sem fine-tuning e sem mecanismos de retry ou validação condicional. O processo é de nível 1: o prompt é enviado e a resposta é aceita diretamente, sem etapas intermediárias."
+    },
+    {
+      "technique_id": "C6.tech1",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato CSV para a tarefa de reconhecimento de entidades utilizando prompting 0-shot.",
+      "description": "A técnica consiste em prompting 0-shot para geração estruturada em formato CSV. O prompt é composto por instruções em linguagem natural descrevendo a estrutura esperada (cabeçalho 'entity,category', com cada entidade e sua categoria em linhas separadas por vírgula), seguidas diretamente pela pergunta da tarefa de reconhecimento de entidades, sem exemplos. O modelo é instruído a gerar tokens de raciocínio intermediário e, em seguida, a resposta final estruturada entre os delimitadores '[[ ]]'. O processo é de envio único: o prompt é enviado ao modelo e a resposta é obtida diretamente, sem mecanismos de reenvio, validação ou intervenção externa. Não há constrained decoding; o modelo gera todos os tokens livremente."
+    },
+    {
+      "technique_id": "C6.tech2",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato CSV para a tarefa de reconhecimento de entidades utilizando prompting 1-shot.",
+      "description": "A técnica consiste em prompting 1-shot para geração estruturada em formato CSV. O prompt é composto por instruções em linguagem natural descrevendo a estrutura esperada (cabeçalho 'entity,category'), um exemplo de par pergunta-resposta em CSV selecionado aleatoriamente do dataset, e a pergunta da tarefa de reconhecimento de entidades. O modelo gera tokens de raciocínio intermediário e a resposta final estruturada entre '[[ ]]'. Envio único, sem mecanismos de reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech3",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato CSV para a tarefa de reconhecimento de entidades utilizando prompting 2-shot.",
+      "description": "A técnica consiste em prompting 2-shot para geração estruturada em formato CSV. O prompt é composto por instruções descrevendo a estrutura CSV esperada (cabeçalho 'entity,category'), dois exemplos de pares pergunta-resposta em CSV selecionados aleatoriamente do dataset, e a pergunta da tarefa. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech4",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato CSV para a tarefa de reconhecimento de entidades utilizando prompting 3-shot.",
+      "description": "A técnica consiste em prompting 3-shot para geração estruturada em formato CSV. O prompt contém instruções descrevendo a estrutura CSV (cabeçalho 'entity,category'), três exemplos de pares pergunta-resposta em CSV, e a pergunta da tarefa. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech5",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato CSV para a tarefa de reconhecimento de entidades utilizando prompting 4-shot.",
+      "description": "A técnica consiste em prompting 4-shot para geração estruturada em formato CSV. O prompt contém instruções descrevendo a estrutura CSV (cabeçalho 'entity,category'), quatro exemplos de pares pergunta-resposta em CSV, e a pergunta da tarefa. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech6",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato JSON para a tarefa de recuperação de conhecimento (MMLU-Pro) utilizando prompting 0-shot.",
+      "description": "A técnica consiste em prompting 0-shot para geração estruturada em formato JSON. O prompt contém instruções descrevendo a estrutura JSON esperada (objeto com chave 'answer' contendo a letra da resposta de múltipla escolha), seguido diretamente pela pergunta do MMLU-Pro, sem exemplos. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech7",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato JSON para a tarefa de recuperação de conhecimento (MMLU-Pro) utilizando prompting 1-shot.",
+      "description": "A técnica consiste em prompting 1-shot para geração estruturada em formato JSON. O prompt contém instruções descrevendo a estrutura JSON (chave 'answer'), um exemplo de par pergunta-resposta em JSON, e a pergunta do MMLU-Pro. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech8",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato JSON para a tarefa de recuperação de conhecimento (MMLU-Pro) utilizando prompting 2-shot.",
+      "description": "A técnica consiste em prompting 2-shot para geração estruturada em formato JSON. O prompt contém instruções descrevendo a estrutura JSON (chave 'answer'), dois exemplos de pares pergunta-resposta em JSON, e a pergunta do MMLU-Pro. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech9",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato JSON para a tarefa de recuperação de conhecimento (MMLU-Pro) utilizando prompting 3-shot.",
+      "description": "A técnica consiste em prompting 3-shot para geração estruturada em formato JSON. O prompt contém instruções descrevendo a estrutura JSON (chave 'answer'), três exemplos de pares pergunta-resposta em JSON, e a pergunta do MMLU-Pro. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech10",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato STARS para a tarefa de recuperação de conhecimento (MMLU-Pro) utilizando prompting 0-shot.",
+      "description": "A técnica consiste em prompting 0-shot para geração estruturada em formato STARS. O prompt contém instruções descrevendo que a resposta (uma letra maiúscula) deve ser repetida cinco vezes separada por asteriscos (ex: 'A*A*A*A*A'), seguido diretamente pela pergunta de múltipla escolha do MMLU-Pro, sem exemplos. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech11",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato STARS para a tarefa de recuperação de conhecimento (MMLU-Pro) utilizando prompting 1-shot.",
+      "description": "A técnica consiste em prompting 1-shot para geração estruturada em formato STARS. O prompt contém instruções descrevendo o formato STARS (repetir a letra cinco vezes separada por asteriscos), um exemplo de par pergunta-resposta, e a pergunta do MMLU-Pro. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech12",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato STARS para a tarefa de recuperação de conhecimento (MMLU-Pro) utilizando prompting 2-shot.",
+      "description": "A técnica consiste em prompting 2-shot para geração estruturada em formato STARS. O prompt contém instruções descrevendo o formato STARS, dois exemplos de pares pergunta-resposta, e a pergunta do MMLU-Pro. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech13",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato STARS para a tarefa de recuperação de conhecimento (MMLU-Pro) utilizando prompting 3-shot.",
+      "description": "A técnica consiste em prompting 3-shot para geração estruturada em formato STARS. O prompt contém instruções descrevendo o formato STARS, três exemplos de pares pergunta-resposta, e a pergunta do MMLU-Pro. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech14",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato JSON para a tarefa de recuperação de conhecimento (MMLU-sociologia) utilizando prompting 0-shot.",
+      "description": "A técnica consiste em prompting 0-shot para geração estruturada em formato JSON. O prompt contém instruções descrevendo a estrutura JSON esperada (objeto com chave 'answer' contendo a letra da resposta), seguido diretamente pela pergunta do subconjunto de sociologia do MMLU, sem exemplos. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech15",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato JSON para a tarefa de recuperação de conhecimento (MMLU-sociologia) utilizando prompting 1-shot.",
+      "description": "A técnica consiste em prompting 1-shot para geração estruturada em formato JSON. O prompt contém instruções descrevendo a estrutura JSON (chave 'answer'), um exemplo de par pergunta-resposta em JSON, e a pergunta do subconjunto de sociologia do MMLU. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech16",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato JSON para a tarefa de recuperação de conhecimento (MMLU-sociologia) utilizando prompting 2-shot.",
+      "description": "A técnica consiste em prompting 2-shot para geração estruturada em formato JSON. O prompt contém instruções descrevendo a estrutura JSON (chave 'answer'), dois exemplos de pares pergunta-resposta em JSON, e a pergunta do subconjunto de sociologia do MMLU. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech17",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato JSON para a tarefa de recuperação de conhecimento (MMLU-sociologia) utilizando prompting 3-shot.",
+      "description": "A técnica consiste em prompting 3-shot para geração estruturada em formato JSON. O prompt contém instruções descrevendo a estrutura JSON (chave 'answer'), três exemplos de pares pergunta-resposta em JSON, e a pergunta do subconjunto de sociologia do MMLU. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech18",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato STARS para a tarefa de recuperação de conhecimento (MMLU-sociologia) utilizando prompting 0-shot.",
+      "description": "A técnica consiste em prompting 0-shot para geração estruturada em formato STARS. O prompt contém instruções descrevendo que a letra da resposta deve ser repetida cinco vezes separada por asteriscos, seguido diretamente pela pergunta do subconjunto de sociologia do MMLU, sem exemplos. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech19",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato STARS para a tarefa de recuperação de conhecimento (MMLU-sociologia) utilizando prompting 1-shot.",
+      "description": "A técnica consiste em prompting 1-shot para geração estruturada em formato STARS. O prompt contém instruções descrevendo o formato STARS, um exemplo de par pergunta-resposta, e a pergunta do subconjunto de sociologia do MMLU. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech20",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato STARS para a tarefa de recuperação de conhecimento (MMLU-sociologia) utilizando prompting 2-shot.",
+      "description": "A técnica consiste em prompting 2-shot para geração estruturada em formato STARS. O prompt contém instruções descrevendo o formato STARS, dois exemplos de pares pergunta-resposta, e a pergunta do subconjunto de sociologia do MMLU. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech21",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato STARS para a tarefa de recuperação de conhecimento (MMLU-sociologia) utilizando prompting 3-shot.",
+      "description": "A técnica consiste em prompting 3-shot para geração estruturada em formato STARS. O prompt contém instruções descrevendo o formato STARS, três exemplos, e a pergunta do subconjunto de sociologia do MMLU. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech22",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato JSON para a tarefa de recuperação de conhecimento (MMLU-estatística) utilizando prompting 0-shot.",
+      "description": "A técnica consiste em prompting 0-shot para geração estruturada em formato JSON. O prompt contém instruções descrevendo a estrutura JSON esperada (objeto com chave 'answer'), seguido diretamente pela pergunta do subconjunto de estatística do MMLU, sem exemplos. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech23",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato JSON para a tarefa de recuperação de conhecimento (MMLU-estatística) utilizando prompting 1-shot.",
+      "description": "A técnica consiste em prompting 1-shot para geração estruturada em formato JSON. O prompt contém instruções descrevendo a estrutura JSON (chave 'answer'), um exemplo de par pergunta-resposta em JSON, e a pergunta do subconjunto de estatística do MMLU. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech24",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato JSON para a tarefa de recuperação de conhecimento (MMLU-estatística) utilizando prompting 2-shot.",
+      "description": "A técnica consiste em prompting 2-shot para geração estruturada em formato JSON. O prompt contém instruções descrevendo a estrutura JSON (chave 'answer'), dois exemplos de pares pergunta-resposta em JSON, e a pergunta do subconjunto de estatística do MMLU. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech25",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato JSON para a tarefa de recuperação de conhecimento (MMLU-estatística) utilizando prompting 3-shot.",
+      "description": "A técnica consiste em prompting 3-shot para geração estruturada em formato JSON. O prompt contém instruções descrevendo a estrutura JSON (chave 'answer'), três exemplos, e a pergunta do subconjunto de estatística do MMLU. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech26",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato JSON para a tarefa de recuperação de conhecimento (MMLU-estatística) utilizando prompting 4-shot.",
+      "description": "A técnica consiste em prompting 4-shot para geração estruturada em formato JSON. O prompt contém instruções descrevendo a estrutura JSON (chave 'answer'), quatro exemplos, e a pergunta do subconjunto de estatística do MMLU. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech27",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato STARS para a tarefa de recuperação de conhecimento (MMLU-estatística) utilizando prompting 0-shot.",
+      "description": "A técnica consiste em prompting 0-shot para geração estruturada em formato STARS. O prompt contém instruções descrevendo que a letra da resposta deve ser repetida cinco vezes separada por asteriscos, seguido diretamente pela pergunta do subconjunto de estatística do MMLU, sem exemplos. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech28",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato STARS para a tarefa de recuperação de conhecimento (MMLU-estatística) utilizando prompting 1-shot.",
+      "description": "A técnica consiste em prompting 1-shot para geração estruturada em formato STARS. O prompt contém instruções descrevendo o formato STARS, um exemplo de par pergunta-resposta, e a pergunta do subconjunto de estatística do MMLU. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech29",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato STARS para a tarefa de recuperação de conhecimento (MMLU-estatística) utilizando prompting 2-shot.",
+      "description": "A técnica consiste em prompting 2-shot para geração estruturada em formato STARS. O prompt contém instruções descrevendo o formato STARS, dois exemplos, e a pergunta do subconjunto de estatística do MMLU. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech30",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato STARS para a tarefa de recuperação de conhecimento (MMLU-estatística) utilizando prompting 3-shot.",
+      "description": "A técnica consiste em prompting 3-shot para geração estruturada em formato STARS. O prompt contém instruções descrevendo o formato STARS, três exemplos, e a pergunta do subconjunto de estatística do MMLU. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech31",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato JSON para a tarefa de recuperação de conhecimento (MMLU-virologia) utilizando prompting 0-shot.",
+      "description": "A técnica consiste em prompting 0-shot para geração estruturada em formato JSON. O prompt contém instruções descrevendo a estrutura JSON esperada (objeto com chave 'answer'), seguido diretamente pela pergunta do subconjunto de virologia do MMLU, sem exemplos. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech32",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato JSON para a tarefa de recuperação de conhecimento (MMLU-virologia) utilizando prompting 1-shot.",
+      "description": "A técnica consiste em prompting 1-shot para geração estruturada em formato JSON. O prompt contém instruções descrevendo a estrutura JSON (chave 'answer'), um exemplo de par pergunta-resposta em JSON, e a pergunta do subconjunto de virologia do MMLU. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech33",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato JSON para a tarefa de recuperação de conhecimento (MMLU-virologia) utilizando prompting 2-shot.",
+      "description": "A técnica consiste em prompting 2-shot para geração estruturada em formato JSON. O prompt contém instruções descrevendo a estrutura JSON (chave 'answer'), dois exemplos, e a pergunta do subconjunto de virologia do MMLU. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech34",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato JSON para a tarefa de recuperação de conhecimento (MMLU-virologia) utilizando prompting 3-shot.",
+      "description": "A técnica consiste em prompting 3-shot para geração estruturada em formato JSON. O prompt contém instruções descrevendo a estrutura JSON (chave 'answer'), três exemplos, e a pergunta do subconjunto de virologia do MMLU. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech35",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato STARS para a tarefa de recuperação de conhecimento (MMLU-virologia) utilizando prompting 0-shot.",
+      "description": "A técnica consiste em prompting 0-shot para geração estruturada em formato STARS. O prompt contém instruções descrevendo que a letra da resposta deve ser repetida cinco vezes separada por asteriscos, seguido diretamente pela pergunta do subconjunto de virologia do MMLU, sem exemplos. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech36",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato STARS para a tarefa de recuperação de conhecimento (MMLU-virologia) utilizando prompting 1-shot.",
+      "description": "A técnica consiste em prompting 1-shot para geração estruturada em formato STARS. O prompt contém instruções descrevendo o formato STARS, um exemplo, e a pergunta do subconjunto de virologia do MMLU. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech37",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato STARS para a tarefa de recuperação de conhecimento (MMLU-virologia) utilizando prompting 2-shot.",
+      "description": "A técnica consiste em prompting 2-shot para geração estruturada em formato STARS. O prompt contém instruções descrevendo o formato STARS, dois exemplos, e a pergunta do subconjunto de virologia do MMLU. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech38",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato STARS para a tarefa de recuperação de conhecimento (MMLU-virologia) utilizando prompting 3-shot.",
+      "description": "A técnica consiste em prompting 3-shot para geração estruturada em formato STARS. O prompt contém instruções descrevendo o formato STARS, três exemplos, e a pergunta do subconjunto de virologia do MMLU. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech39",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato CSV para a tarefa de geração de sequências matemáticas utilizando prompting 0-shot.",
+      "description": "A técnica consiste em prompting 0-shot para geração estruturada em formato CSV. O prompt contém instruções descrevendo a estrutura CSV esperada (colunas 'index' e 'number', uma linha por valor da sequência), seguido diretamente pela pergunta sobre a sequência matemática, sem exemplos. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech40",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato CSV para a tarefa de geração de sequências matemáticas utilizando prompting 1-shot.",
+      "description": "A técnica consiste em prompting 1-shot para geração estruturada em formato CSV. O prompt contém instruções descrevendo a estrutura CSV (colunas 'index' e 'number'), um exemplo de par pergunta-resposta em CSV, e a pergunta sobre a sequência matemática. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech41",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato CSV para a tarefa de geração de sequências matemáticas utilizando prompting 2-shot.",
+      "description": "A técnica consiste em prompting 2-shot para geração estruturada em formato CSV. O prompt contém instruções descrevendo a estrutura CSV (colunas 'index' e 'number'), dois exemplos, e a pergunta sobre a sequência matemática. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech42",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato CSV para a tarefa de geração de sequências matemáticas utilizando prompting 3-shot.",
+      "description": "A técnica consiste em prompting 3-shot para geração estruturada em formato CSV. O prompt contém instruções descrevendo a estrutura CSV (colunas 'index' e 'number'), três exemplos, e a pergunta sobre a sequência matemática. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech43",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato HTML para a tarefa de geração de sequências matemáticas utilizando prompting 0-shot.",
+      "description": "A técnica consiste em prompting 0-shot para geração estruturada em formato HTML. O prompt contém instruções descrevendo a estrutura HTML esperada (lista ordenada com itens para cada valor da sequência), seguido diretamente pela pergunta sobre a sequência matemática, sem exemplos. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech44",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato HTML para a tarefa de geração de sequências matemáticas utilizando prompting 1-shot.",
+      "description": "A técnica consiste em prompting 1-shot para geração estruturada em formato HTML. O prompt contém instruções descrevendo a estrutura HTML (lista ordenada), um exemplo de par pergunta-resposta em HTML, e a pergunta sobre a sequência matemática. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech45",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato HTML para a tarefa de geração de sequências matemáticas utilizando prompting 2-shot.",
+      "description": "A técnica consiste em prompting 2-shot para geração estruturada em formato HTML. O prompt contém instruções descrevendo a estrutura HTML (lista ordenada), dois exemplos, e a pergunta sobre a sequência matemática. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech46",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato HTML para a tarefa de geração de sequências matemáticas utilizando prompting 3-shot.",
+      "description": "A técnica consiste em prompting 3-shot para geração estruturada em formato HTML. O prompt contém instruções descrevendo a estrutura HTML (lista ordenada), três exemplos, e a pergunta sobre a sequência matemática. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech47",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato HTML para a tarefa de geração de sequências matemáticas utilizando prompting 4-shot.",
+      "description": "A técnica consiste em prompting 4-shot para geração estruturada em formato HTML. O prompt contém instruções descrevendo a estrutura HTML (lista ordenada), quatro exemplos, e a pergunta sobre a sequência matemática. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech48",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato JSON para a tarefa de geração de sequências matemáticas utilizando prompting 0-shot.",
+      "description": "A técnica consiste em prompting 0-shot para geração estruturada em formato JSON. O prompt contém instruções descrevendo a estrutura JSON esperada (objeto com chaves 'number i' mapeando posição para valor), seguido diretamente pela pergunta sobre a sequência matemática, sem exemplos. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech49",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato JSON para a tarefa de geração de sequências matemáticas utilizando prompting 1-shot.",
+      "description": "A técnica consiste em prompting 1-shot para geração estruturada em formato JSON. O prompt contém instruções descrevendo a estrutura JSON (chaves 'number i'), um exemplo de par pergunta-resposta em JSON, e a pergunta sobre a sequência matemática. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech50",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato JSON para a tarefa de geração de sequências matemáticas utilizando prompting 2-shot.",
+      "description": "A técnica consiste em prompting 2-shot para geração estruturada em formato JSON. O prompt contém instruções descrevendo a estrutura JSON (chaves 'number i'), dois exemplos, e a pergunta sobre a sequência matemática. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech51",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato JSON para a tarefa de geração de sequências matemáticas utilizando prompting 3-shot.",
+      "description": "A técnica consiste em prompting 3-shot para geração estruturada em formato JSON. O prompt contém instruções descrevendo a estrutura JSON (chaves 'number i'), três exemplos, e a pergunta sobre a sequência matemática. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech52",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato XML para a tarefa de geração de sequências matemáticas utilizando prompting 0-shot.",
+      "description": "A técnica consiste em prompting 0-shot para geração estruturada em formato XML. O prompt contém instruções descrevendo a estrutura XML esperada (tags 'number' com atributo 'id' dentro de tag raiz 'answer'), seguido diretamente pela pergunta sobre a sequência matemática, sem exemplos. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech53",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato XML para a tarefa de geração de sequências matemáticas utilizando prompting 1-shot.",
+      "description": "A técnica consiste em prompting 1-shot para geração estruturada em formato XML. O prompt contém instruções descrevendo a estrutura XML (tags 'number' com atributo 'id'), um exemplo de par pergunta-resposta em XML, e a pergunta sobre a sequência matemática. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech54",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato XML para a tarefa de geração de sequências matemáticas utilizando prompting 2-shot.",
+      "description": "A técnica consiste em prompting 2-shot para geração estruturada em formato XML. O prompt contém instruções descrevendo a estrutura XML (tags 'number' com atributo 'id'), dois exemplos, e a pergunta sobre a sequência matemática. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech55",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato XML para a tarefa de geração de sequências matemáticas utilizando prompting 3-shot.",
+      "description": "A técnica consiste em prompting 3-shot para geração estruturada em formato XML. O prompt contém instruções descrevendo a estrutura XML (tags 'number' com atributo 'id'), três exemplos, e a pergunta sobre a sequência matemática. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech56",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato CSV para a tarefa de raciocínio booleano utilizando prompting 0-shot.",
+      "description": "A técnica consiste em prompting 0-shot para geração estruturada em formato CSV. O prompt contém instruções descrevendo a estrutura CSV esperada (cabeçalho 'person,candid' com linhas de IDs e valores de verdade), seguido diretamente pela pergunta de raciocínio booleano, sem exemplos. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech57",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato CSV para a tarefa de raciocínio booleano utilizando prompting 1-shot.",
+      "description": "A técnica consiste em prompting 1-shot para geração estruturada em formato CSV. O prompt contém instruções descrevendo a estrutura CSV (cabeçalho 'person,candid'), um exemplo de par pergunta-resposta em CSV, e a pergunta de raciocínio booleano. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech58",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato CSV para a tarefa de raciocínio booleano utilizando prompting 2-shot.",
+      "description": "A técnica consiste em prompting 2-shot para geração estruturada em formato CSV. O prompt contém instruções descrevendo a estrutura CSV (cabeçalho 'person,candid'), dois exemplos, e a pergunta de raciocínio booleano. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech59",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato CSV para a tarefa de raciocínio booleano utilizando prompting 3-shot.",
+      "description": "A técnica consiste em prompting 3-shot para geração estruturada em formato CSV. O prompt contém instruções descrevendo a estrutura CSV (cabeçalho 'person,candid'), três exemplos, e a pergunta de raciocínio booleano. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech60",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato HTML para a tarefa de raciocínio booleano utilizando prompting 0-shot.",
+      "description": "A técnica consiste em prompting 0-shot para geração estruturada em formato HTML. O prompt contém instruções descrevendo a estrutura HTML esperada (lista ordenada com itens para cada pessoa e seu valor de verdade), seguido diretamente pela pergunta de raciocínio booleano, sem exemplos. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech61",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato HTML para a tarefa de raciocínio booleano utilizando prompting 1-shot.",
+      "description": "A técnica consiste em prompting 1-shot para geração estruturada em formato HTML. O prompt contém instruções descrevendo a estrutura HTML (lista ordenada), um exemplo de par pergunta-resposta em HTML, e a pergunta de raciocínio booleano. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech62",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato HTML para a tarefa de raciocínio booleano utilizando prompting 2-shot.",
+      "description": "A técnica consiste em prompting 2-shot para geração estruturada em formato HTML. O prompt contém instruções descrevendo a estrutura HTML (lista ordenada), dois exemplos, e a pergunta de raciocínio booleano. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech63",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato HTML para a tarefa de raciocínio booleano utilizando prompting 3-shot.",
+      "description": "A técnica consiste em prompting 3-shot para geração estruturada em formato HTML. O prompt contém instruções descrevendo a estrutura HTML (lista ordenada), três exemplos, e a pergunta de raciocínio booleano. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech64",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato JSON para a tarefa de raciocínio booleano utilizando prompting 0-shot.",
+      "description": "A técnica consiste em prompting 0-shot para geração estruturada em formato JSON. O prompt contém instruções descrevendo a estrutura JSON esperada (objeto com chaves 'person 1', 'person 2', 'person 3' e valores 'yes'/'no'), seguido diretamente pela pergunta de raciocínio booleano, sem exemplos. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech65",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato JSON para a tarefa de raciocínio booleano utilizando prompting 1-shot.",
+      "description": "A técnica consiste em prompting 1-shot para geração estruturada em formato JSON. O prompt contém instruções descrevendo a estrutura JSON (chaves 'person 1/2/3'), um exemplo de par pergunta-resposta em JSON, e a pergunta de raciocínio booleano. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech66",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato JSON para a tarefa de raciocínio booleano utilizando prompting 2-shot.",
+      "description": "A técnica consiste em prompting 2-shot para geração estruturada em formato JSON. O prompt contém instruções descrevendo a estrutura JSON (chaves 'person 1/2/3'), dois exemplos, e a pergunta de raciocínio booleano. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech67",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato JSON para a tarefa de raciocínio booleano utilizando prompting 3-shot.",
+      "description": "A técnica consiste em prompting 3-shot para geração estruturada em formato JSON. O prompt contém instruções descrevendo a estrutura JSON (chaves 'person 1/2/3'), três exemplos, e a pergunta de raciocínio booleano. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech68",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato XML para a tarefa de raciocínio booleano utilizando prompting 0-shot.",
+      "description": "A técnica consiste em prompting 0-shot para geração estruturada em formato XML. O prompt contém instruções descrevendo a estrutura XML esperada (tags por pessoa com atributo 'person id' dentro de tag 'answer'), seguido diretamente pela pergunta de raciocínio booleano, sem exemplos. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech69",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato XML para a tarefa de raciocínio booleano utilizando prompting 1-shot.",
+      "description": "A técnica consiste em prompting 1-shot para geração estruturada em formato XML. O prompt contém instruções descrevendo a estrutura XML (tags por pessoa com atributo 'person id'), um exemplo de par pergunta-resposta em XML, e a pergunta de raciocínio booleano. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech70",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato XML para a tarefa de raciocínio booleano utilizando prompting 2-shot.",
+      "description": "A técnica consiste em prompting 2-shot para geração estruturada em formato XML. O prompt contém instruções descrevendo a estrutura XML (tags por pessoa com atributo 'person id'), dois exemplos, e a pergunta de raciocínio booleano. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech71",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato XML para a tarefa de raciocínio booleano utilizando prompting 3-shot.",
+      "description": "A técnica consiste em prompting 3-shot para geração estruturada em formato XML. O prompt contém instruções descrevendo a estrutura XML (tags por pessoa com atributo 'person id'), três exemplos, e a pergunta de raciocínio booleano. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech72",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato XML para a tarefa de raciocínio booleano utilizando prompting 4-shot.",
+      "description": "A técnica consiste em prompting 4-shot para geração estruturada em formato XML. O prompt contém instruções descrevendo a estrutura XML (tags por pessoa com atributo 'person id'), quatro exemplos, e a pergunta de raciocínio booleano. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech73",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato CSV para a tarefa de correção de erros tipográficos utilizando prompting 0-shot.",
+      "description": "A técnica consiste em prompting 0-shot para geração estruturada em formato CSV. O prompt contém instruções descrevendo a estrutura CSV esperada (duas colunas mapeando palavra errada para correção), seguido diretamente pelo texto com erros tipográficos, sem exemplos. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech74",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato CSV para a tarefa de correção de erros tipográficos utilizando prompting 1-shot.",
+      "description": "A técnica consiste em prompting 1-shot para geração estruturada em formato CSV. O prompt contém instruções descrevendo a estrutura CSV (duas colunas), um exemplo de par texto-correção em CSV, e o texto com erros tipográficos. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech75",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato CSV para a tarefa de correção de erros tipográficos utilizando prompting 2-shot.",
+      "description": "A técnica consiste em prompting 2-shot para geração estruturada em formato CSV. O prompt contém instruções descrevendo a estrutura CSV (duas colunas), dois exemplos, e o texto com erros tipográficos. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech76",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato CSV para a tarefa de correção de erros tipográficos utilizando prompting 3-shot.",
+      "description": "A técnica consiste em prompting 3-shot para geração estruturada em formato CSV. O prompt contém instruções descrevendo a estrutura CSV (duas colunas), três exemplos, e o texto com erros tipográficos. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech77",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato HTML para a tarefa de correção de erros tipográficos utilizando prompting 0-shot.",
+      "description": "A técnica consiste em prompting 0-shot para geração estruturada em formato HTML. O prompt contém instruções descrevendo a estrutura HTML esperada (lista ordenada com itens contendo palavra errada e correção), seguido diretamente pelo texto com erros tipográficos, sem exemplos. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech78",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato HTML para a tarefa de correção de erros tipográficos utilizando prompting 1-shot.",
+      "description": "A técnica consiste em prompting 1-shot para geração estruturada em formato HTML. O prompt contém instruções descrevendo a estrutura HTML (lista ordenada), um exemplo, e o texto com erros tipográficos. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech79",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato HTML para a tarefa de correção de erros tipográficos utilizando prompting 2-shot.",
+      "description": "A técnica consiste em prompting 2-shot para geração estruturada em formato HTML. O prompt contém instruções descrevendo a estrutura HTML (lista ordenada), dois exemplos, e o texto com erros tipográficos. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech80",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato HTML para a tarefa de correção de erros tipográficos utilizando prompting 3-shot.",
+      "description": "A técnica consiste em prompting 3-shot para geração estruturada em formato HTML. O prompt contém instruções descrevendo a estrutura HTML (lista ordenada), três exemplos, e o texto com erros tipográficos. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech81",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato JSON para a tarefa de correção de erros tipográficos utilizando prompting 0-shot.",
+      "description": "A técnica consiste em prompting 0-shot para geração estruturada em formato JSON. O prompt contém instruções descrevendo a estrutura JSON esperada (dicionário mapeando palavras erradas para correções), seguido diretamente pelo texto com erros tipográficos, sem exemplos. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech82",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato JSON para a tarefa de correção de erros tipográficos utilizando prompting 1-shot.",
+      "description": "A técnica consiste em prompting 1-shot para geração estruturada em formato JSON. O prompt contém instruções descrevendo a estrutura JSON (dicionário palavra-correção), um exemplo, e o texto com erros tipográficos. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech83",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato JSON para a tarefa de correção de erros tipográficos utilizando prompting 2-shot.",
+      "description": "A técnica consiste em prompting 2-shot para geração estruturada em formato JSON. O prompt contém instruções descrevendo a estrutura JSON (dicionário palavra-correção), dois exemplos, e o texto com erros tipográficos. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech84",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato JSON para a tarefa de correção de erros tipográficos utilizando prompting 3-shot.",
+      "description": "A técnica consiste em prompting 3-shot para geração estruturada em formato JSON. O prompt contém instruções descrevendo a estrutura JSON (dicionário palavra-correção), três exemplos, e o texto com erros tipográficos. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech85",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato XML para a tarefa de correção de erros tipográficos utilizando prompting 0-shot.",
+      "description": "A técnica consiste em prompting 0-shot para geração estruturada em formato XML. O prompt contém instruções descrevendo a estrutura XML esperada (tags 'misspelled' com atributo 'word' e correção como conteúdo), seguido diretamente pelo texto com erros tipográficos, sem exemplos. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech86",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato XML para a tarefa de correção de erros tipográficos utilizando prompting 1-shot.",
+      "description": "A técnica consiste em prompting 1-shot para geração estruturada em formato XML. O prompt contém instruções descrevendo a estrutura XML (tags 'misspelled' com atributo 'word'), um exemplo, e o texto com erros tipográficos. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech87",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato XML para a tarefa de correção de erros tipográficos utilizando prompting 2-shot.",
+      "description": "A técnica consiste em prompting 2-shot para geração estruturada em formato XML. O prompt contém instruções descrevendo a estrutura XML (tags 'misspelled' com atributo 'word'), dois exemplos, e o texto com erros tipográficos. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech88",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato XML para a tarefa de correção de erros tipográficos utilizando prompting 3-shot.",
+      "description": "A técnica consiste em prompting 3-shot para geração estruturada em formato XML. O prompt contém instruções descrevendo a estrutura XML (tags 'misspelled' com atributo 'word'), três exemplos, e o texto com erros tipográficos. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C6.tech89",
+      "study_id": "C6",
+      "objective": "Avaliar a conformidade estrutural na geração de saída em formato XML para a tarefa de correção de erros tipográficos utilizando prompting 4-shot.",
+      "description": "A técnica consiste em prompting 4-shot para geração estruturada em formato XML. O prompt contém instruções descrevendo a estrutura XML (tags 'misspelled' com atributo 'word'), quatro exemplos, e o texto com erros tipográficos. O modelo gera raciocínio intermediário e a resposta final entre '[[ ]]'. Envio único, sem reenvio ou constrained decoding."
+    },
+    {
+      "technique_id": "C7.tech1",
+      "study_id": "C7",
+      "objective": "Gerar planos de ação (árvores de comportamento) para agentes heterogêneos em simulação urbana a partir de instruções em linguagem natural.",
+      "description": "A técnica R&S (Reasoning & Summarizing) opera em duas etapas sucessivas de interação com o modelo. Na primeira etapa, elementos contextuais relevantes — conjuntos de habilidades dos agentes, requisitos de formato de saída, exemplos de saída esperada e informações geográficas — são recortados com base em restrições de comprimento máximo e combinados com as instruções em linguagem natural. Esse texto composto é enviado ao modelo, que é solicitado a raciocinar diretamente e gerar planos de ação para os agentes heterogêneos. Na segunda etapa, um novo prompt solicita ao modelo que sumarize a estrutura comportamental a partir da saída produzida na etapa de raciocínio, extraindo a árvore de comportamento estruturada.\n\nNão há uso de constrained decoding, entity alignment ou recuperação dinâmica de informação geográfica via function calls. Os exemplos de saída e os requisitos de formato são fornecidos diretamente como texto no prompt (estratégia few-shot estática), e o modelo opera em modo padrão de geração. O processo não inclui mecanismos de reenvio ou validação condicionada: a saída de cada etapa é aceita diretamente."
+    },
+    {
+      "technique_id": "C8.tech1",
+      "study_id": "C8",
+      "objective": "Avaliar a aderência estrutural de saída em formato JSON quando apenas uma instrução genérica de output JSON é fornecida no prompt, sem atributos nomeados nem descrições.",
+      "description": "Cinco templates representativos de tarefas distintas (análise de tweets, parsing de DNS, entre outras) são selecionados e reformulados para conter apenas uma instrução genérica de saída em JSON, sem especificação de nomes de atributos ou descrições. Três instâncias de entrada diversas são geradas por template, totalizando 15 prompts populados. Cada prompt é enviado em um único turno ao modelo e a resposta é coletada diretamente, sem etapas intermediárias, reenvios ou validações condicionais. A avaliação mede a consistência estrutural do JSON gerado (contagem de atributos, nomes, uniformidade) em escala de 1 a 5."
+    },
+    {
+      "technique_id": "C8.tech2",
+      "study_id": "C8",
+      "objective": "Avaliar a aderência estrutural de saída em formato JSON quando os nomes dos atributos são explicitamente listados no prompt, sem descrições detalhadas.",
+      "description": "Os mesmos cinco templates representativos são reformulados para incluir, além da instrução de saída em JSON, uma listagem explícita dos nomes dos atributos esperados (por exemplo, 'tweet_id', 'username', 'timestamp', 'engagement'). Três instâncias de entrada são geradas por template, totalizando 15 prompts populados. Cada prompt é enviado em um único turno ao modelo e a resposta é coletada diretamente. A avaliação mede a consistência estrutural do JSON gerado em escala de 1 a 5."
+    },
+    {
+      "technique_id": "C8.tech3",
+      "study_id": "C8",
+      "objective": "Avaliar a aderência estrutural de saída em formato JSON quando os nomes dos atributos e suas descrições detalhadas são fornecidos no prompt.",
+      "description": "Os mesmos cinco templates representativos são reformulados para incluir, além da instrução de saída em JSON e dos nomes dos atributos, descrições detalhadas para cada atributo (por exemplo, definir 'username' como o identificador Twitter prefixado com '@' e 'timestamp' no formato ISO 8601). Três instâncias de entrada são geradas por template, totalizando 15 prompts populados. Cada prompt é enviado em um único turno ao modelo e a resposta é coletada diretamente. A avaliação mede a consistência estrutural do JSON gerado em escala de 1 a 5, e adicionalmente uma medição binária verifica se a saída consiste exclusivamente na string JSON."
+    },
+    {
+      "technique_id": "C8.tech4",
+      "study_id": "C8",
+      "objective": "Avaliar se a adição de uma restrição de exclusão ('não forneça texto além da string JSON') a um prompt com formato JSON detalhado elimina texto redundante ao redor do objeto JSON gerado.",
+      "description": "Os mesmos 15 templates populados do experimento Pattern 3 recebem a adição da restrição de exclusão 'Do not provide any other output text beyond the JSON string', posicionada antes da definição de formato JSON, conforme a ordem de componentes identificada no estudo. Cada prompt é enviado em um único turno ao modelo e a resposta é coletada diretamente. A avaliação é binária: 1 se a saída consiste exclusivamente na string JSON pronta para parsing direto, 0 caso contrário."
+    },
+    {
+      "technique_id": "C9.tech1",
+      "study_id": "C9",
+      "objective": "Avaliar a capacidade do modelo de quantidade exata de palavras em italiano, por meio de zero-shot.",
+      "description": "Gerar frases em italiano com contagem exata de palavras (excluindo pontuação e espaços da contagem). A técnica utiliza a estratégia zero-shot: o modelo recebe apenas a instrução em linguagem natural descrevendo a restrição a ser cumprida, sem exemplos precedentes, num único envio de prompt. A resposta obtida diretamente do modelo, sem qualquer edição posterior, constitui a saída final avaliada. Para este grupo de modelos, o estudo relata explicitamente que a formulação foi refinada, tornando explícita a exclusão de pontuação e espaços da contagem, o que melhorou a precisão desses modelos especificamente."
+    },
+    {
+      "technique_id": "C9.tech2",
+      "study_id": "C9",
+      "objective": "Avaliar a capacidade do modelo de quantidade exata de palavras em italiano, por meio de zero-shot.",
+      "description": "Gerar frases em italiano com contagem exata de palavras (excluindo pontuação e espaços da contagem). A técnica utiliza a estratégia zero-shot: o modelo recebe apenas a instrução em linguagem natural descrevendo a restrição a ser cumprida, sem exemplos precedentes, num único envio de prompt. A resposta obtida diretamente do modelo, sem qualquer edição posterior, constitui a saída final avaliada."
+    },
+    {
+      "technique_id": "C9.tech3",
+      "study_id": "C9",
+      "objective": "Avaliar a capacidade do modelo de quantidade exata de caracteres em italiano, por meio de zero-shot.",
+      "description": "Gerar frases em italiano com contagem exata de caracteres (excluindo pontuação e espaços). A técnica utiliza a estratégia zero-shot: o modelo recebe apenas a instrução em linguagem natural descrevendo a restrição a ser cumprida, sem exemplos precedentes, num único envio de prompt. A resposta obtida diretamente do modelo, sem qualquer edição posterior, constitui a saída final avaliada. Para este grupo de modelos, o estudo relata explicitamente que a formulação foi refinada, tornando explícita a exclusão de pontuação e espaços da contagem, o que melhorou a precisão desses modelos especificamente."
+    },
+    {
+      "technique_id": "C9.tech4",
+      "study_id": "C9",
+      "objective": "Avaliar a capacidade do modelo de quantidade exata de caracteres em italiano, por meio de zero-shot.",
+      "description": "Gerar frases em italiano com contagem exata de caracteres (excluindo pontuação e espaços). A técnica utiliza a estratégia zero-shot: o modelo recebe apenas a instrução em linguagem natural descrevendo a restrição a ser cumprida, sem exemplos precedentes, num único envio de prompt. A resposta obtida diretamente do modelo, sem qualquer edição posterior, constitui a saída final avaliada."
+    },
+    {
+      "technique_id": "C9.tech5",
+      "study_id": "C9",
+      "objective": "Avaliar a capacidade do modelo de controle de diátese verbal em italiano, por meio de zero-shot.",
+      "description": "Gerar frases em italiano em uma diátese verbal especificada (ativa, passiva ou reflexiva/média). A técnica utiliza a estratégia zero-shot: o modelo recebe apenas a instrução em linguagem natural descrevendo a restrição a ser cumprida, sem exemplos precedentes, num único envio de prompt. A resposta obtida diretamente do modelo, sem qualquer edição posterior, constitui a saída final avaliada."
+    },
+    {
+      "technique_id": "C9.tech6",
+      "study_id": "C9",
+      "objective": "Avaliar a capacidade do modelo de controle de ordem dos constituintes em italiano, por meio de zero-shot.",
+      "description": "Gerar frases em italiano seguindo uma ordem específica de constituintes (permutações de Sujeito-Verbo-Objeto, como SOV, VSO etc.). A técnica utiliza a estratégia zero-shot: o modelo recebe apenas a instrução em linguagem natural descrevendo a restrição a ser cumprida, sem exemplos precedentes, num único envio de prompt. A resposta obtida diretamente do modelo, sem qualquer edição posterior, constitui a saída final avaliada."
+    },
+    {
+      "technique_id": "C9.tech7",
+      "study_id": "C9",
+      "objective": "Avaliar a capacidade do modelo de omissão de uma letra específica (lipograma) em italiano, por meio de zero-shot.",
+      "description": "Gerar texto em italiano omitindo uma letra específica (lipograma). A técnica utiliza a estratégia zero-shot: o modelo recebe apenas a instrução em linguagem natural descrevendo a restrição a ser cumprida, sem exemplos precedentes, num único envio de prompt. Sempre que possível, os autores evitaram terminologia técnica no prompt, descrevendo a tarefa diretamente e destacando a letra restrita entre aspas. A resposta obtida diretamente do modelo, sem qualquer edição posterior, constitui a saída final avaliada."
+    },
+    {
+      "technique_id": "C9.tech8",
+      "study_id": "C9",
+      "objective": "Avaliar a capacidade do modelo de inclusão obrigatória de uma letra específica (lipograma inverso) em italiano, por meio de zero-shot.",
+      "description": "Gerar frases em italiano garantindo a presença obrigatória de uma letra específica em cada palavra (lipograma inverso). A técnica utiliza a estratégia zero-shot: o modelo recebe apenas a instrução em linguagem natural descrevendo a restrição a ser cumprida, sem exemplos precedentes, num único envio de prompt. A resposta obtida diretamente do modelo, sem qualquer edição posterior, constitui a saída final avaliada."
+    },
+    {
+      "technique_id": "C9.tech9",
+      "study_id": "C9",
+      "objective": "Avaliar a capacidade do modelo de gerar palavras iniciando pela mesma letra (tautograma) em italiano, por meio de zero-shot.",
+      "description": "Gerar texto em italiano em que todas as palavras comecem com a mesma letra (tautograma). A técnica utiliza a estratégia zero-shot: o modelo recebe apenas a instrução em linguagem natural descrevendo a restrição a ser cumprida, sem exemplos precedentes, num único envio de prompt. Sempre que possível, os autores evitaram terminologia técnica no prompt, descrevendo a tarefa diretamente e destacando a letra alvo entre aspas. A resposta obtida diretamente do modelo, sem qualquer edição posterior, constitui a saída final avaliada."
+    },
+    {
+      "technique_id": "C9.tech10",
+      "study_id": "C9",
+      "objective": "Avaliar a capacidade do modelo de gerar anagrama de palavra em italiano, por meio de zero-shot.",
+      "description": "Gerar um anagrama válido em italiano para uma palavra italiana dada. A técnica utiliza a estratégia zero-shot: o modelo recebe apenas a instrução em linguagem natural descrevendo a restrição a ser cumprida, sem exemplos precedentes, num único envio de prompt. A resposta obtida diretamente do modelo, sem qualquer edição posterior, constitui a saída final avaliada."
+    },
+    {
+      "technique_id": "C9.tech11",
+      "study_id": "C9",
+      "objective": "Avaliar a capacidade do modelo de gerar anagrama de frase em italiano, por meio de zero-shot.",
+      "description": "Reorganizar as letras de uma frase italiana formando uma nova frase italiana com sentido (anagrama frasal). A técnica utiliza a estratégia zero-shot: o modelo recebe apenas a instrução em linguagem natural descrevendo a restrição a ser cumprida, sem exemplos precedentes, num único envio de prompt. A resposta obtida diretamente do modelo, sem qualquer edição posterior, constitui a saída final avaliada."
+    },
+    {
+      "technique_id": "C9.tech12",
+      "study_id": "C9",
+      "objective": "Avaliar a capacidade do modelo de gerar texto palindrômico em italiano, por meio de zero-shot.",
+      "description": "Gerar texto em italiano que se leia da mesma forma da esquerda para a direita e da direita para a esquerda (palíndromo). A técnica utiliza a estratégia zero-shot: o modelo recebe apenas a instrução em linguagem natural descrevendo a restrição a ser cumprida, sem exemplos precedentes, num único envio de prompt. Sempre que possível, os autores evitaram terminologia técnica no prompt. A resposta obtida diretamente do modelo, sem qualquer edição posterior, constitui a saída final avaliada."
+    },
+    {
+      "technique_id": "C9.tech13",
+      "study_id": "C9",
+      "objective": "Avaliar a capacidade do modelo de gerar acróstico em italiano, por meio de zero-shot.",
+      "description": "Gerar texto em italiano em que as letras iniciais das palavras formem uma palavra-alvo (acróstico). A técnica utiliza a estratégia zero-shot: o modelo recebe apenas a instrução em linguagem natural descrevendo a restrição a ser cumprida, sem exemplos precedentes, num único envio de prompt. A resposta obtida diretamente do modelo, sem qualquer edição posterior, constitui a saída final avaliada."
+    },
+    {
+      "technique_id": "C9.tech14",
+      "study_id": "C9",
+      "objective": "Avaliar a capacidade do modelo de quantidade exata de palavras em italiano, por meio de few-shot com 5 exemplos.",
+      "description": "Gerar frases em italiano com contagem exata de palavras (excluindo pontuação e espaços da contagem). A técnica utiliza a estratégia few-shot, na qual o prompt de instrução é precedido por 5 frases de exemplo que ilustram a restrição solicitada, extraídas do corpus Italian Universal Dependencies (treebank composto por sentenças de ISDT, VIT, PARTUT, PoSTWITTA e TWITTIRÒ). Os exemplos são inseridos no mesmo prompt enviado ao modelo, num único envio, sem etapas de revisão ou repetição. Para este grupo de modelos, a formulação torna explícita a exclusão de pontuação e espaços da contagem. A resposta obtida diretamente do modelo, sem qualquer edição posterior, constitui a saída final avaliada."
+    },
+    {
+      "technique_id": "C9.tech15",
+      "study_id": "C9",
+      "objective": "Avaliar a capacidade do modelo de quantidade exata de palavras em italiano, por meio de few-shot com 10 exemplos.",
+      "description": "Gerar frases em italiano com contagem exata de palavras (excluindo pontuação e espaços da contagem). A técnica utiliza a estratégia few-shot, na qual o prompt de instrução é precedido por 10 frases de exemplo extraídas do corpus Italian Universal Dependencies. Os exemplos são inseridos no mesmo prompt, num único envio, sem etapas de revisão. A formulação torna explícita a exclusão de pontuação e espaços da contagem. A resposta obtida diretamente do modelo, sem edição posterior, constitui a saída final avaliada."
+    },
+    {
+      "technique_id": "C9.tech16",
+      "study_id": "C9",
+      "objective": "Avaliar a capacidade do modelo de quantidade exata de palavras em italiano, por meio de few-shot com 15 exemplos.",
+      "description": "Gerar frases em italiano com contagem exata de palavras (excluindo pontuação e espaços da contagem). A técnica utiliza a estratégia few-shot, na qual o prompt de instrução é precedido por 15 frases de exemplo extraídas do corpus Italian Universal Dependencies. Os exemplos são inseridos no mesmo prompt, num único envio, sem etapas de revisão. A formulação torna explícita a exclusão de pontuação e espaços da contagem. A resposta obtida diretamente do modelo, sem edição posterior, constitui a saída final avaliada."
+    },
+    {
+      "technique_id": "C9.tech17",
+      "study_id": "C9",
+      "objective": "Avaliar a capacidade do modelo de quantidade exata de caracteres em italiano, por meio de few-shot com 5 exemplos.",
+      "description": "Gerar frases em italiano com contagem exata de caracteres (excluindo pontuação e espaços). A técnica utiliza a estratégia few-shot, na qual o prompt de instrução é precedido por 5 frases de exemplo extraídas do corpus Italian Universal Dependencies. Os exemplos são inseridos no mesmo prompt, num único envio, sem etapas de revisão. A formulação torna explícita a exclusão de pontuação e espaços da contagem. A resposta obtida diretamente do modelo, sem edição posterior, constitui a saída final avaliada."
+    },
+    {
+      "technique_id": "C9.tech18",
+      "study_id": "C9",
+      "objective": "Avaliar a capacidade do modelo de quantidade exata de caracteres em italiano, por meio de few-shot com 10 exemplos.",
+      "description": "Gerar frases em italiano com contagem exata de caracteres (excluindo pontuação e espaços). A técnica utiliza a estratégia few-shot, na qual o prompt de instrução é precedido por 10 frases de exemplo extraídas do corpus Italian Universal Dependencies. Os exemplos são inseridos no mesmo prompt, num único envio, sem etapas de revisão. A formulação torna explícita a exclusão de pontuação e espaços da contagem. A resposta obtida diretamente do modelo, sem edição posterior, constitui a saída final avaliada."
+    },
+    {
+      "technique_id": "C9.tech19",
+      "study_id": "C9",
+      "objective": "Avaliar a capacidade do modelo de quantidade exata de caracteres em italiano, por meio de few-shot com 15 exemplos.",
+      "description": "Gerar frases em italiano com contagem exata de caracteres (excluindo pontuação e espaços). A técnica utiliza a estratégia few-shot, na qual o prompt de instrução é precedido por 15 frases de exemplo extraídas do corpus Italian Universal Dependencies. Os exemplos são inseridos no mesmo prompt, num único envio, sem etapas de revisão. A formulação torna explícita a exclusão de pontuação e espaços da contagem. A resposta obtida diretamente do modelo, sem edição posterior, constitui a saída final avaliada."
+    },
+    {
+      "technique_id": "C9.tech20",
+      "study_id": "C9",
+      "objective": "Avaliar a capacidade do modelo de controle de diátese verbal em italiano, por meio de few-shot com 5 exemplos.",
+      "description": "Gerar frases em italiano em uma diátese verbal especificada (ativa, passiva ou reflexiva/média). A técnica utiliza a estratégia few-shot, na qual o prompt de instrução é precedido por 5 frases de exemplo extraídas do corpus Italian Universal Dependencies. Os exemplos são inseridos no mesmo prompt, num único envio, sem etapas de revisão. A resposta obtida diretamente do modelo, sem edição posterior, constitui a saída final avaliada."
+    },
+    {
+      "technique_id": "C9.tech21",
+      "study_id": "C9",
+      "objective": "Avaliar a capacidade do modelo de controle de diátese verbal em italiano, por meio de few-shot com 10 exemplos.",
+      "description": "Gerar frases em italiano em uma diátese verbal especificada (ativa, passiva ou reflexiva/média). A técnica utiliza a estratégia few-shot, na qual o prompt de instrução é precedido por 10 frases de exemplo extraídas do corpus Italian Universal Dependencies. Os exemplos são inseridos no mesmo prompt, num único envio, sem etapas de revisão. A resposta obtida diretamente do modelo, sem edição posterior, constitui a saída final avaliada."
+    },
+    {
+      "technique_id": "C9.tech22",
+      "study_id": "C9",
+      "objective": "Avaliar a capacidade do modelo de controle de diátese verbal em italiano, por meio de few-shot com 15 exemplos.",
+      "description": "Gerar frases em italiano em uma diátese verbal especificada (ativa, passiva ou reflexiva/média). A técnica utiliza a estratégia few-shot, na qual o prompt de instrução é precedido por 15 frases de exemplo extraídas do corpus Italian Universal Dependencies. Os exemplos são inseridos no mesmo prompt, num único envio, sem etapas de revisão. A resposta obtida diretamente do modelo, sem edição posterior, constitui a saída final avaliada."
+    },
+    {
+      "technique_id": "C9.tech23",
+      "study_id": "C9",
+      "objective": "Avaliar a capacidade do modelo de omissão de uma letra específica (lipograma) em italiano, por meio de few-shot com 5 exemplos.",
+      "description": "Gerar texto em italiano omitindo uma letra específica (lipograma). A técnica utiliza a estratégia few-shot, na qual o prompt de instrução é precedido por 5 frases de exemplo extraídas do corpus Italian Universal Dependencies. Os exemplos são inseridos no mesmo prompt, num único envio, sem etapas de revisão. Sempre que possível, os autores evitaram terminologia técnica no prompt. A resposta obtida diretamente do modelo, sem edição posterior, constitui a saída final avaliada."
+    },
+    {
+      "technique_id": "C9.tech24",
+      "study_id": "C9",
+      "objective": "Avaliar a capacidade do modelo de omissão de uma letra específica (lipograma) em italiano, por meio de few-shot com 10 exemplos.",
+      "description": "Gerar texto em italiano omitindo uma letra específica (lipograma). A técnica utiliza a estratégia few-shot, na qual o prompt de instrução é precedido por 10 frases de exemplo extraídas do corpus Italian Universal Dependencies. Os exemplos são inseridos no mesmo prompt, num único envio, sem etapas de revisão. Sempre que possível, os autores evitaram terminologia técnica no prompt. A resposta obtida diretamente do modelo, sem edição posterior, constitui a saída final avaliada."
+    },
+    {
+      "technique_id": "C9.tech25",
+      "study_id": "C9",
+      "objective": "Avaliar a capacidade do modelo de omissão de uma letra específica (lipograma) em italiano, por meio de few-shot com 15 exemplos.",
+      "description": "Gerar texto em italiano omitindo uma letra específica (lipograma). A técnica utiliza a estratégia few-shot, na qual o prompt de instrução é precedido por 15 frases de exemplo extraídas do corpus Italian Universal Dependencies. Os exemplos são inseridos no mesmo prompt, num único envio, sem etapas de revisão. Sempre que possível, os autores evitaram terminologia técnica no prompt. A resposta obtida diretamente do modelo, sem edição posterior, constitui a saída final avaliada."
+    },
+    {
+      "technique_id": "C9.tech26",
+      "study_id": "C9",
+      "objective": "Avaliar a capacidade do modelo de gerar texto palindrômico em italiano, por meio de few-shot com 5 exemplos.",
+      "description": "Gerar texto em italiano que se leia da mesma forma da esquerda para a direita e da direita para a esquerda (palíndromo). A técnica utiliza a estratégia few-shot, na qual o prompt de instrução é precedido por 5 frases de exemplo extraídas do corpus Italian Universal Dependencies. Os exemplos são inseridos no mesmo prompt, num único envio, sem etapas de revisão. Sempre que possível, os autores evitaram terminologia técnica no prompt. A resposta obtida diretamente do modelo, sem edição posterior, constitui a saída final avaliada."
+    },
+    {
+      "technique_id": "C9.tech27",
+      "study_id": "C9",
+      "objective": "Avaliar a capacidade do modelo de gerar texto palindrômico em italiano, por meio de few-shot com 10 exemplos.",
+      "description": "Gerar texto em italiano que se leia da mesma forma da esquerda para a direita e da direita para a esquerda (palíndromo). A técnica utiliza a estratégia few-shot, na qual o prompt de instrução é precedido por 10 frases de exemplo extraídas do corpus Italian Universal Dependencies. Os exemplos são inseridos no mesmo prompt, num único envio, sem etapas de revisão. Sempre que possível, os autores evitaram terminologia técnica no prompt. A resposta obtida diretamente do modelo, sem edição posterior, constitui a saída final avaliada."
+    },
+    {
+      "technique_id": "C9.tech28",
+      "study_id": "C9",
+      "objective": "Avaliar a capacidade do modelo de gerar texto palindrômico em italiano, por meio de few-shot com 15 exemplos.",
+      "description": "Gerar texto em italiano que se leia da mesma forma da esquerda para a direita e da direita para a esquerda (palíndromo). A técnica utiliza a estratégia few-shot, na qual o prompt de instrução é precedido por 15 frases de exemplo extraídas do corpus Italian Universal Dependencies. Os exemplos são inseridos no mesmo prompt, num único envio, sem etapas de revisão. Sempre que possível, os autores evitaram terminologia técnica no prompt. A resposta obtida diretamente do modelo, sem edição posterior, constitui a saída final avaliada."
+    },
+    {
+      "technique_id": "A3.tech1",
+      "study_id": "A3",
+      "objective": "Gerar descrições textuais controladas de tabelas, assegurando que todos os atributos selecionados no plano sejam realizados no texto gerado, com controle sobre formato, comprimento e cobertura.",
+      "description": "A técnica Poised opera em duas etapas. Na primeira, um modelo BART-large com prefix-tuning (utilizado como IA auxiliar, não como o modelo avaliado) recebe a tabela de entrada e gera um plano contendo a sequência de atributos relevantes para a descrição. Na segunda etapa, os atributos indicados pelo plano são extraídos da tabela original para formar uma tabela derivada. Em seguida, monta-se um prompt composto por quatro partes: (1) uma descrição da tarefa de geração de texto a partir de tabela; (2) dois exemplos do conjunto de treino, selecionados por correspondência exata do plano; (3) três instruções — Length Instruction (limitar a resposta a uma frase), Format Instruction (seguir o formato dos exemplos) e Coverage Instruction (cobrir todos os atributos do plano); e (4) a tabela derivada. Esse prompt é enviado ao LLM, cuja resposta constitui a FinalOutput. O BART atua como IA auxiliar na construção do prompt (pmaLevel 5), mas o LLM avaliado recebe exclusivamente texto."
+    },
+    {
+      "technique_id": "A3.tech2",
+      "study_id": "A3",
+      "objective": "Avaliar o impacto da remoção da instrução de formato sobre a controlabilidade da geração de descrições de tabelas.",
+      "description": "Variante da técnica Poised em que a Format Instruction é removida do prompt. O processo permanece idêntico ao da técnica completa: o BART com prefix-tuning gera o plano a partir da tabela, os atributos são extraídos para a tabela derivada, e o prompt é montado com a descrição da tarefa, dois exemplos, as instruções restantes (Length e Coverage) e a tabela derivada. A ausência da instrução de formato permite avaliar o impacto dessa restrição sobre a controlabilidade da geração."
+    },
+    {
+      "technique_id": "A3.tech3",
+      "study_id": "A3",
+      "objective": "Avaliar o impacto da remoção da instrução de comprimento sobre a controlabilidade da geração de descrições de tabelas.",
+      "description": "Variante da técnica Poised em que a Length Instruction é removida do prompt. O processo permanece idêntico ao da técnica completa, exceto que a instrução que limita a resposta a uma frase não está presente. As instruções de formato e cobertura são mantidas. O BART com prefix-tuning gera o plano, os atributos são extraídos para a tabela derivada, e o prompt é montado com a descrição da tarefa, dois exemplos, as instruções restantes (Format e Coverage) e a tabela derivada."
+    },
+    {
+      "technique_id": "A3.tech4",
+      "study_id": "A3",
+      "objective": "Avaliar o impacto da remoção da instrução de cobertura sobre a controlabilidade da geração de descrições de tabelas.",
+      "description": "Variante da técnica Poised em que a Coverage Instruction é removida do prompt. O processo permanece idêntico ao da técnica completa, exceto que a instrução que exige a cobertura de todos os atributos do plano não está presente. As instruções de comprimento e formato são mantidas. O BART com prefix-tuning gera o plano, os atributos são extraídos para a tabela derivada, e o prompt é montado com a descrição da tarefa, dois exemplos, as instruções restantes (Length e Format) e a tabela derivada."
+    },
+    {
+      "technique_id": "A3.tech5",
+      "study_id": "A3",
+      "objective": "Avaliar o impacto da ausência de exemplos sobre a controlabilidade da geração de descrições de tabelas.",
+      "description": "Variante da técnica Poised em que nenhum exemplo é incluído no prompt. O processo permanece idêntico ao da técnica completa: o BART com prefix-tuning gera o plano, os atributos são extraídos para a tabela derivada, e o prompt é montado com a descrição da tarefa, as três instruções (Length, Format e Coverage) e a tabela derivada, mas sem a seção de exemplos."
+    },
+    {
+      "technique_id": "A3.tech6",
+      "study_id": "A3",
+      "objective": "Avaliar o impacto do uso de apenas um exemplo sobre a controlabilidade da geração de descrições de tabelas.",
+      "description": "Variante da técnica Poised em que apenas um exemplo é incluído no prompt, em vez dos dois exemplos da técnica completa. O restante do processo permanece idêntico: o BART com prefix-tuning gera o plano, os atributos são extraídos para a tabela derivada, e o prompt é montado com a descrição da tarefa, um exemplo, as três instruções (Length, Format e Coverage) e a tabela derivada."
+    },
+    {
+      "technique_id": "A3.tech7",
+      "study_id": "A3",
+      "objective": "Avaliar o impacto do uso de três exemplos sobre a controlabilidade da geração de descrições de tabelas.",
+      "description": "Variante da técnica Poised em que três exemplos são incluídos no prompt, em vez dos dois exemplos da técnica completa. O restante do processo permanece idêntico: o BART com prefix-tuning gera o plano, os atributos são extraídos para a tabela derivada, e o prompt é montado com a descrição da tarefa, três exemplos, as três instruções (Length, Format e Coverage) e a tabela derivada."
+    },
+    {
+      "technique_id": "A3.tech8",
+      "study_id": "A3",
+      "objective": "Avaliar o impacto do uso de quatro exemplos sobre a controlabilidade da geração de descrições de tabelas.",
+      "description": "Variante da técnica Poised em que quatro exemplos são incluídos no prompt, em vez dos dois exemplos da técnica completa. O restante do processo permanece idêntico: o BART com prefix-tuning gera o plano, os atributos são extraídos para a tabela derivada, e o prompt é montado com a descrição da tarefa, quatro exemplos, as três instruções (Length, Format e Coverage) e a tabela derivada."
+    },
+    {
+      "technique_id": "A3.tech9",
+      "study_id": "A3",
+      "objective": "Avaliar o impacto do uso de cinco exemplos sobre a controlabilidade da geração de descrições de tabelas.",
+      "description": "Variante da técnica Poised em que cinco exemplos são incluídos no prompt, em vez dos dois exemplos da técnica completa. O restante do processo permanece idêntico: o BART com prefix-tuning gera o plano, os atributos são extraídos para a tabela derivada, e o prompt é montado com a descrição da tarefa, cinco exemplos, as três instruções (Length, Format e Coverage) e a tabela derivada."
+    },
+    {
+      "technique_id": "A4.tech1",
+      "study_id": "A4",
+      "objective": "Reescrever uma sentença para expressar um nível-alvo contínuo de extraversion, preservando a fidelidade semântica da sentença original.",
+      "description": "Técnica zero-shot com prompt contendo apenas a instrução de reescrita, sem exemplares. O modelo recebe a instrução de tarefa e a sentença acompanhada do score-alvo de extraversion, e gera a sentença reescrita em um único turno. Não há etapas intermediárias, mecanismos de validação, reenvio ou uso de ferramentas externas."
+    },
+    {
+      "technique_id": "A4.tech2",
+      "study_id": "A4",
+      "objective": "Reescrever uma sentença para expressar um nível-alvo contínuo de extraversion, preservando a fidelidade semântica da sentença original.",
+      "description": "Técnica few-shot com k=4 exemplares. O prompt contém a instrução de reescrita seguida de quatro pares (sentença original, sentença reescrita) com scores-alvo balanceados, pré-selecionados por similaridade SBERT na fase de preparação do experimento. O modelo gera a sentença reescrita em um único turno, sem validação, reenvio ou uso de ferramentas externas durante a inferência."
+    },
+    {
+      "technique_id": "P9.tech1",
+      "study_id": "P9",
+      "objective": "Gerar texto aberto em inglês com exatamente N palavras (N entre 1 e 1000), sem restrição de tópico, avaliando conformidade estrita de comprimento.",
+      "description": "A técnica CAPEL (Countdown-Aided Prompting for Exact Length) consiste em anexar ao prompt da tarefa um sufixo autocontido que instrui o modelo a intercalar marcadores de contagem regressiva (<N>, <N-1>, ..., <1>, <0>) com exatamente uma palavra em inglês por marcador. O sufixo especifica regras explícitas: os números nos marcadores devem decrescer de 1 em 1 sem saltos nem repetições; dois marcadores nunca podem aparecer consecutivamente sem uma palavra entre eles; nenhum texto extra é permitido após <0>; e apenas as palavras em inglês contam para o total, não os marcadores nem a pontuação. Um exemplo correto é fornecido no prompt (ex: <5>Hello,<4>world!<3>How's <2>everything?<1>Great.<0>), assim como erros típicos a evitar (parada prematura, marcadores duplicados, cauda só de marcadores). Para itens do MT-Bench que requerem código Python, uma regra adicional permite que uma linha completa de código conte como um token. O prompt é enviado uma única vez ao modelo e a resposta é aceita diretamente, sem reenvio, validação iterativa ou pós-processamento. Os marcadores de contagem são removidos apenas para fins de cálculo das métricas de avaliação."
+    },
+    {
+      "technique_id": "P9.tech2",
+      "study_id": "P9",
+      "objective": "Gerar texto aberto em inglês com exatamente N palavras (N entre 1 e 1000), sem restrição de tópico, usando apenas uma instrução ingênua de comprimento.",
+      "description": "A técnica baseline consiste em anexar ao prompt da tarefa uma instrução simples de comprimento, como 'Please answer the instruction in exactly ℓ words.' Nenhum andaime de contagem, exemplo, regra de formatação ou pós-edição é fornecido. O prompt é enviado uma única vez ao modelo e a resposta é aceita diretamente, sem reenvio ou validação iterativa. Esta técnica avalia a capacidade intrínseca do modelo de rastrear comprimento sob condições ordinárias de seguimento de instruções."
+    },
+    {
+      "technique_id": "P9.tech3",
+      "study_id": "P9",
+      "objective": "Gerar texto aberto em chinês com exatamente N caracteres (N entre 1 e 1000), sem restrição de tópico, avaliando conformidade estrita de comprimento.",
+      "description": "A técnica CAPEL adaptada para chinês funciona de maneira análoga à versão em inglês, mas a contagem é feita em caracteres individuais em vez de palavras. O sufixo de contagem regressiva instrui o modelo a intercalar marcadores (<N>, <N-1>, ..., <1>, <0>) com exatamente um caractere chinês por marcador. As mesmas regras estruturais se aplicam: decréscimo de 1 em 1 sem saltos nem repetições, sem marcadores consecutivos sem caractere entre eles, sem texto extra após <0>. O prompt é enviado uma única vez ao modelo e a resposta é aceita diretamente, sem reenvio ou validação iterativa. Os marcadores são removidos apenas para fins de avaliação."
+    },
+    {
+      "technique_id": "P9.tech4",
+      "study_id": "P9",
+      "objective": "Gerar texto aberto em chinês com exatamente N caracteres (N entre 1 e 1000), sem restrição de tópico, usando apenas uma instrução ingênua de comprimento.",
+      "description": "A técnica baseline para chinês consiste em anexar ao prompt uma instrução simples como 'Please answer the instruction in exactly ℓ characters.' Nenhum andaime de contagem, exemplo ou regra de formatação é fornecido. O prompt é enviado uma única vez ao modelo e a resposta é aceita diretamente, sem reenvio ou validação iterativa."
+    },
+    {
+      "technique_id": "P9.tech5",
+      "study_id": "P9",
+      "objective": "Responder a instruções diversificadas do MT-Bench-LI com exatamente ℓ palavras, preservando qualidade de conteúdo por meio de um rascunho prévio na mesma resposta.",
+      "description": "A técnica Draft→CAPEL instrui o modelo a, numa única resposta e numa única chamada de API, primeiro redigir um rascunho livre do conteúdo solicitado e em seguida revisá-lo aplicando a estratégia CAPEL (marcadores de contagem regressiva com as mesmas regras da IOPT CAPEL English). O rascunho é descartado e apenas a porção CAPEL formatada é avaliada. O objetivo é recuperar qualidade de conteúdo sacrificada pela imposição estrita de comprimento, mantendo o custo de uma única passagem sem chamadas adicionais."
+    },
+    {
+      "technique_id": "P10.tech1",
+      "study_id": "P10",
+      "objective": "Parafrasear um texto-fonte de modo a atingir um valor absoluto-alvo de legibilidade (FRES), sem qualquer reenvio condicionado a validação.",
+      "description": "A técnica consiste em enviar ao modelo um único prompt contendo o texto-fonte e uma instrução em linguagem natural pedindo que o documento seja parafraseado para um nível de legibilidade específico (por exemplo, 'Paraphrase this document for a professional. It should be extremely difficult to read...'), conforme a Tabela 3 do artigo, que define oito prompts distintos, um por valor-alvo de FRES (5, 20, 40, 55, 65, 75, 85, 95). A resposta do modelo a esse único envio é aceita diretamente como saída final, sem qualquer etapa de verificação, repetição ou seleção entre múltiplas gerações. Não há cadeia de prompts, arquivos, buscas ou uso de outras IAs no processo — apenas um envio e uma resposta."
+    },
+    {
+      "technique_id": "P10.tech2",
+      "study_id": "P10",
+      "objective": "Parafrasear um texto-fonte de modo a atingir um valor absoluto-alvo de legibilidade (FRES), com uma etapa adicional de detecção de saídas incoerentes.",
+      "description": "Assim como na técnica equivalente do ChatGPT, o modelo recebe um único prompt com o texto-fonte e uma instrução de paráfrase para um nível de legibilidade específico, conforme os oito prompts da Tabela 3. A resposta é obtida em um único envio, sem cadeia de prompts, arquivos ou outras IAs. Entretanto, esta implementação específica inclui um detector de 'lixo' (garbage detector) que verifica, após a geração, se a saída constitui um inglês coerente; quando a saída é identificada como incoerente, ela é substituída pelo texto original (não há reenvio ao modelo nem nova tentativa de geração — apenas uma substituição pós-hoc da string de saída). Essa etapa extra, ausente na técnica do ChatGPT, diferencia estruturalmente o processo desta técnica, ainda que não constitua formalmente um mecanismo de persistência (não há novo envio condicionado à validação)."
+    },
+    {
+      "technique_id": "P10.tech3",
+      "study_id": "P10",
+      "objective": "Parafrasear um texto-fonte de modo a atingir um valor absoluto-alvo de legibilidade (FRES), aplicando o mesmo prompt duas vezes em sequência para reforçar a aproximação ao valor-alvo.",
+      "description": "O processo consiste em duas etapas sucessivas dentro de um roteiro pré-planejado: primeiro, o modelo é solicitado a parafrasear o texto-fonte original segundo o prompt correspondente ao nível de legibilidade-alvo (conforme a Tabela 3); em seguida, o mesmo prompt idêntico é enviado novamente ao modelo, mas desta vez usando como entrada a saída gerada na primeira etapa, em vez do texto-fonte original. A saída da segunda etapa é a que constitui a saída final avaliada. Não há verificação de qualidade nem descarte condicionado de saídas entre as duas etapas — apenas o encadeamento sequencial planejado de dois envios do mesmo prompt, na mesma técnica."
+    },
+    {
+      "technique_id": "P11.tech1",
+      "study_id": "P11",
+      "objective": "Gerar, a partir de um prompt único enviado ao modelo sem exemplos prévios, um objeto JSON de enriquecimento de notícia contendo um resumo textual e cinco rótulos categóricos, avaliando a validade estrutural da saída e a aderência a restrições de formato do resumo (comprimento e abertura).",
+      "description": "O processo consiste em enviar ao modelo, em um único turno de conversa e sem nenhum exemplo de demonstração, um prompt contendo o artigo de notícia completo junto com instruções pedindo a produção de um objeto JSON com sete campos: um resumo em texto livre, cinco rótulos categóricos de vocabulário fechado (sentimento, urgência, enquadramento, tom e profundidade) e uma lista de tópicos em conjunto aberto. O modelo responde diretamente a esse prompt único, sem qualquer etapa intermediária de revisão, correção ou reenvio condicionado à qualidade da saída, e sem uso de decodificação restrita ou qualquer outro mecanismo de intervenção sobre a amostragem de tokens.\n\nA resposta obtida nessa única interação é tomada diretamente como saída final, sem qualquer pós-processamento, modificação humana ou concatenação com outras saídas. É essa saída (rotulada no estudo como arm \"Base (zero-shot)\") que é submetida à avaliação por um painel de três juízes quanto à validade do schema JSON e quanto ao atendimento dos itens estruturais do checklist de resumo, entre eles o comprimento (3-4 frases) e a proibição de abertura com certas fórmulas genéricas."
+    },
+    {
+      "technique_id": "P11.tech2",
+      "study_id": "P11",
+      "objective": "Gerar, a partir de um prompt que inclui de dois a três exemplos de demonstração dentro da mesma conversa, um objeto JSON de enriquecimento de notícia contendo um resumo textual e cinco rótulos categóricos, avaliando a validade estrutural da saída e a aderência a restrições de formato do resumo (comprimento e abertura).",
+      "description": "O processo consiste em montar um único prompt que combina, além do artigo de notícia completo e das instruções de tarefa, de dois a três exemplos completos de entrada-saída (pares de artigo e objeto JSON esperado) inseridos diretamente no texto do prompt, funcionando como demonstrações do formato e do conteúdo desejados antes do artigo-alvo a ser processado. Esse prompt único, já contendo as demonstrações e o artigo-alvo, é enviado ao modelo em um único turno de conversa; não há reenvio condicionado à validação da saída, nem uso de decodificação restrita ou qualquer outro mecanismo que intervenha na amostragem de tokens.\n\nA resposta obtida a esse envio único é tomada diretamente como saída final, sem qualquer pós-processamento, modificação humana ou concatenação com outras saídas. É essa saída (rotulada no estudo como arm \"Base + few-shot\") que é submetida à avaliação pelo mesmo painel de três juízes quanto à validade do schema JSON e quanto aos itens estruturais do checklist de resumo, entre eles comprimento e abertura."
+    },
+    {
+      "technique_id": "C10.tech1",
+      "study_id": "C10",
+      "objective": "Avaliar, sem impor um formato estrutural rígido de saída, o quanto o modelo segue espontaneamente instruções de formatação e restrições de estilo pedidas em linguagem natural no próprio prompt.",
+      "description": "O prompt do benchmark IFEval é montado e enviado ao modelo uma única vez, em zero-shot (nenhum exemplo demonstrativo é fornecido antes da pergunta). O prompt contém a tarefa a ser executada juntamente com uma ou mais instruções de formatação em linguagem natural (por exemplo, evitar determinada pontuação ou seguir um requisito de formatação específico), sem qualquer schema estrutural imposto por decodificação restrita. A geração ocorre com decodificação gulosa (greedy, temperatura=0), e a resposta obtida do modelo é aceita diretamente, sem qualquer etapa de validação, filtragem ou nova tentativa condicionada à qualidade, formato ou desempenho da saída. Não há encadeamento de prompts, uso de arquivos, recuperação de informação, chamadas de API nem uso de outras IAs auxiliares na montagem do prompt — apenas um único envio e uma única resposta direta."
+    },
+    {
+      "technique_id": "A5.tech1",
+      "study_id": "A5",
+      "objective": "Classificar um segmento (cluster) individual de imagem de satélite Sentinel-2 em uma categoria de cobertura do solo, sem restrição de formato de saída, usando a formulação inicial (não corrigida) do protocolo.",
+      "description": "Para cada cluster obtido pela segmentação K-means, o modelo recebe uma única mensagem contendo a imagem TCI (True Color Image) e uma máscara de segmentação colorida (com cores RGB distintas por cluster), sendo a máscara enviada antes da imagem TCI na sequência de envio. O prompt inclui uma descrição textual detalhada dos valores RGB de cada cluster (por exemplo, 'Cluster 2: RGB(31, 119, 180) — dark blue') e não impõe nenhuma restrição contra o uso de informações de cor pelo modelo. A tarefa pede que o modelo atribua uma categoria da taxonomia ESA WorldCover ao segmento, mas não especifica um formato de saída fixo, permitindo texto livre. A resposta obtida diretamente dessa única chamada, sem qualquer reenvio ou validação condicionada, constitui a saída final avaliada."
+    },
+    {
+      "technique_id": "A5.tech2",
+      "study_id": "A5",
+      "objective": "Classificar um segmento individual de imagem de satélite em categoria de cobertura do solo, testando o efeito isolado da conversão da máscara de segmentação para escala de cinza sobre a hibrida classificação por cor.",
+      "description": "Mesma configuração de E1 (máscara enviada antes do TCI, saída em texto livre, mesma tarefa de classificação por cluster), exceto que a máscara de segmentação passa a ser convertida para tons de cinza, com cada cluster recebendo um nível de cinza calculado proporcionalmente ao seu índice, acompanhado de um bloco XML de legenda que associa cada número de cluster ao respectivo tom de cinza. As descrições textuais de cor RGB são removidas do prompt, mas ainda não há proibição explícita de interpretação de cor nem exigência de formato JSON — a saída continua sendo texto livre."
+    },
+    {
+      "technique_id": "A5.tech3",
+      "study_id": "A5",
+      "objective": "Classificar um segmento individual em categoria de cobertura do solo, testando o efeito isolado de inverter a ordem de envio das imagens (TCI antes da máscara) sobre a atenção do modelo ao conteúdo real da cena.",
+      "description": "Mesma configuração de E2 (máscara em escala de cinza com legenda XML, saída em texto livre), exceto que a ordem de envio das imagens na mensagem é invertida: a imagem TCI é enviada primeiro, seguida da máscara em escala de cinza. Não há ainda proibição textual explícita contra interpretação de cor nem exigência de formato JSON fixo."
+    },
+    {
+      "technique_id": "A5.tech4",
+      "study_id": "A5",
+      "objective": "Classificar um segmento individual em categoria de cobertura do solo, testando o efeito isolado de uma proibição textual explícita contra o uso de cor da máscara como sinal de classificação.",
+      "description": "Mesma configuração de E3 (TCI enviado primeiro, máscara em escala de cinza com legenda XML, saída em texto livre), acrescida de uma instrução explícita no prompt proibindo a interpretação de qualquer cor da máscara como informação relevante (formulação do tipo 'Ignore every pixel colour in the mask...'). O formato de saída permanece texto livre, sem exigência de JSON."
+    },
+    {
+      "technique_id": "A5.tech5",
+      "study_id": "A5",
+      "objective": "Classificar um segmento individual de imagem de satélite em categoria de cobertura do solo, retornando categoria, grau de confiança e justificativa textual em formato JSON estruturado, evitando qualquer influência da cor da máscara de segmentação.",
+      "description": "Para cada cluster obtido pela segmentação (aqui, K-means), é feita uma chamada de API independente ao modelo, sem mensagem de sistema (o papel do modelo é definido dentro da própria mensagem do usuário). A mensagem do usuário contém, nesta ordem, a imagem TCI (RGB natural) e uma máscara binária referente exclusivamente ao cluster-alvo (branco para o cluster, preto para o restante), acompanhada de uma instrução explícita de que a cor branca da máscara não deve ser interpretada como qualquer classe (por exemplo, não deve ser confundida com neve ou água). O prompt exige explicitamente que o modelo baseie sua decisão apenas no conteúdo da imagem TCI e proíbe qualquer menção ou uso da cor da máscara."
+    },
+    {
+      "technique_id": "A6.tech1",
+      "study_id": "A6",
+      "objective": "Rotear tarefas para especialistas com base em correspondência de skills, mantendo estritamente o formato de saída JSON com um único campo assignToId, e avaliar a resistência do sistema a ataques de prompt injection.",
+      "description": "A técnica utiliza um prompt template do Salesforce Agentforce que recebe três entradas: uma descrição da tarefa em linguagem natural (CaseDescription), uma representação estruturada em JSON dos usuários disponíveis e seus respectivos níveis de proficiência (UserSkills, obtida por consulta ao banco de dados da plataforma), e arquivos opcionais anexados ao caso (CaseAttachments). O controlador Apex é acionado por um trigger quando um novo Case é criado, busca os dados de skills no banco de dados, monta o input estruturado e executa o prompt template. O prompt instrui o modelo a analisar a descrição da tarefa, identificar os skills necessários, compará-los com os perfis dos usuários disponíveis e selecionar o executor mais adequado. A saída exigida é estritamente um JSON contendo apenas o campo assignToId com o identificador do usuário selecionado. Após a geração, o controlador Apex valida a resposta contra a estrutura esperada; caso a validação falhe, um mecanismo de fallback é aplicado. O processo envolve um único envio ao modelo, sem reenvios condicionados à validação da saída."
+    },
+    {
+      "technique_id": "P12.tech1",
+      "study_id": "P12",
+      "objective": "Gerar variantes de avaliação que sejam simultaneamente diversas na superfície, equivalentes no construto de competência subjacente, aplicáveis à rubrica analítica e com dificuldade equiparada.",
+      "description": "O prompt fornece ao modelo o blueprint completo da avaliação (construto de competência, rubrica analítica com critérios e níveis, solução canônica) e enumera as quatro propriedades VARIA (P1–P4) como restrições. Não há exemplos. O modelo deve gerar N=10 variantes diretamente em um único turno."
+    },
+    {
+      "technique_id": "P12.tech2",
+      "study_id": "P12",
+      "objective": "Gerar variantes de avaliação que sejam simultaneamente diversas na superfície, equivalentes no construto de competência subjacente, aplicáveis à rubrica analítica e com dificuldade equiparada.",
+      "description": "Idêntico ao zero-shot, porém o prompt é acrescido de dois exemplos positivos (variantes âncora construídas por especialista que satisfazem todas as quatro propriedades) e dois exemplos negativos (um ilustrando cópia parafrástica, outro ilustrando desvio de construto). O modelo gera as variantes em um único turno."
+    },
+    {
+      "technique_id": "P12.tech3",
+      "study_id": "P12",
+      "objective": "Gerar variantes de avaliação que sejam simultaneamente diversas na superfície, equivalentes no construto de competência subjacente, aplicáveis à rubrica analítica e com dificuldade equiparada.",
+      "description": "O prompt exige que o modelo emita, em ordem, em um único turno: (i) leitura explícita do mapa de construto, (ii) plano de variação superficial chaveado às dimensões de dificuldade, (iii) rascunho da variante, e (iv) auto-verificação contra as propriedades P1–P4 antes de finalizar a saída."
+    },
+    {
+      "technique_id": "P12.tech4",
+      "study_id": "P12",
+      "objective": "Gerar variantes de avaliação que sejam simultaneamente diversas na superfície, equivalentes no construto de competência subjacente, aplicáveis à rubrica analítica e com dificuldade equiparada.",
+      "description": "O prompt expõe um scaffold parametrizado de dimensões superficiais (domínio, registro de jargão, nível de leitura, papel do stakeholder) com restrições explícitas de paridade. Cada variante é gerada sob uma atribuição diferente de dimensão superficial, mantendo a dificuldade numa banda estreita, tudo em um único turno de interação."
+    },
+    {
+      "technique_id": "P12.tech5",
+      "study_id": "P12",
+      "objective": "Gerar variantes de avaliação que sejam simultaneamente diversas na superfície, equivalentes no construto de competência subjacente, aplicáveis à rubrica analítica e com dificuldade equiparada.",
+      "description": "Idêntico ao structured chain-of-thought, exceto pela remoção da etapa de leitura do mapa de construto. O modelo emite o plano de variação superficial, o rascunho da variante e a auto-verificação contra as propriedades, tudo em um único turno."
+    },
+    {
+      "technique_id": "P12.tech6",
+      "study_id": "P12",
+      "objective": "Gerar variantes de avaliação que sejam simultaneamente diversas na superfície, equivalentes no construto de competência subjacente, aplicáveis à rubrica analítica e com dificuldade equiparada.",
+      "description": "Idêntico ao few-shot, exceto pela remoção dos dois exemplos negativos. O prompt mantém os dois exemplos positivos (variantes âncora que satisfazem todas as propriedades) e o modelo gera as variantes em um único turno."
+    },
+    {
+      "technique_id": "T1.tech1",
+      "study_id": "T1",
+      "objective": "Gerar uma estrutura JSON de regra de alerta para o Logmanager a partir de uma consulta em linguagem natural, usando um prompt curto.",
+      "description": "O prompt curto (prompt_short.txt, aproximadamente 2667 tokens) é estruturado com tags XML para separar seções semânticas (<role>, <output_contract>, <examples>). Inclui: descrição da tarefa e do domínio, especificação do formato de saída JSON, descrição resumida dos blocos disponíveis na sintaxe de alertas, listagem de campos universais (meta fields e tags disponíveis para qualquer log) e exemplos few-shot cobrindo padrões comuns como field matching simples, condições com regex e agrupamento de eventos com context window. O prompt é enviado ao modelo em uma única interação (single-turn) e a resposta JSON é aceita diretamente, sem mecanismos de retry, validação integrada ou reenvio condicionado. Não há uso de schema constraint ou grammar-constrained decoding nesta configuração."
+    },
+    {
+      "technique_id": "T1.tech2",
+      "study_id": "T1",
+      "objective": "Gerar uma estrutura JSON de regra de alerta para o Logmanager a partir de uma consulta em linguagem natural, usando um prompt longo com descrição detalhada da gramática.",
+      "description": "O prompt longo (prompt_long.txt, aproximadamente 6040 tokens) segue a mesma estrutura com tags XML do prompt curto (<role>, <output_contract>, <examples>), mas com nível de detalhe significativamente maior. Além dos elementos presentes no prompt curto (descrição da tarefa, formato de saída, campos universais e exemplos few-shot), inclui uma descrição mais completa da gramática de alertas, com exemplos de blocos individuais no formato JSON alvo e instruções sobre como podem ser combinados. O prompt é enviado ao modelo em uma única interação e a resposta JSON é aceita diretamente, sem mecanismos de retry ou validação integrada ao processo de geração. Não há uso de schema constraint ou grammar-constrained decoding nesta configuração."
+    },
+    {
+      "technique_id": "T1.tech3",
+      "study_id": "T1",
+      "objective": "Aplicar correções solicitadas pelo usuário a uma estrutura JSON de alerta existente, preservando as partes válidas da estrutura original.",
+      "description": "O prompt de correção para modelos cloud segue a estrutura do prompt longo de geração (tags XML com seções de role, task, rules e examples), mas com instruções adaptadas para o processo de correção: o modelo deve modificar apenas as partes solicitadas, preservar a estrutura e lógica originais, manter consistência de referências e alinhar o alert_description com a lógica atualizada. O prompt de usuário combina a estrutura JSON existente e a solicitação de correção no formato 'EXISTING ALERT: <JSON alert structure> USER REQUEST: <user correction query>'. A resposta é aceita diretamente em uma única interação, sem mecanismos de retry, validação integrada ou schema constraint."
+    },
+    {
+      "technique_id": "T1.tech4",
+      "study_id": "T1",
+      "objective": "Gerar uma estrutura JSON de regra de alerta para o Logmanager com contexto adicional de campos relevantes recuperados dinamicamente de uma base de conhecimento, usando top_k=10.",
+      "description": "Antes da geração, campos relevantes são recuperados de uma base de conhecimento (available_fields.csv) usando o modelo de embeddings MiniLM com prompt P1 ('Find all log field names and descriptions that are relevant for creating this alert:') e preprocessing breakdown (segmentação da query em sub-consultas). Os campos são ranqueados por similaridade de cosseno e os 10 melhores (top_k=10) são selecionados. Adicionalmente, campos universais (msg, raw, meta, meta.event@id) são sempre incluídos e keyword matching é aplicado. Os campos recuperados são anexados à query do usuário com o prefixo 'Suggested relevant fields:'. O prompt de instrução segue a estrutura descrita na seção 5.4.1 (tags XML, descrição de tarefa, formato de saída, sintaxe e exemplos few-shot). O modelo gera a resposta JSON em uma única interação, sem mecanismos de retry ou schema constraint."
+    },
+    {
+      "technique_id": "T1.tech5",
+      "study_id": "T1",
+      "objective": "Gerar uma estrutura JSON de regra de alerta para o Logmanager com contexto adicional de campos relevantes recuperados dinamicamente de uma base de conhecimento, usando top_k=30.",
+      "description": "Antes da geração, campos relevantes são recuperados de uma base de conhecimento (available_fields.csv) usando o modelo de embeddings MiniLM com prompt P1 e preprocessing breakdown. Os campos são ranqueados por similaridade de cosseno e os 30 melhores (top_k=30) são selecionados. Campos universais (msg, raw, meta, meta.event@id) são sempre incluídos e keyword matching é aplicado. Os campos recuperados são anexados à query do usuário com o prefixo 'Suggested relevant fields:'. O prompt de instrução segue a estrutura descrita na seção 5.4.1 (tags XML, descrição de tarefa, formato de saída, sintaxe e exemplos few-shot). O modelo gera a resposta JSON em uma única interação, sem mecanismos de retry ou schema constraint."
+    },
+    {
+      "technique_id": "T1.tech6",
+      "study_id": "T1",
+      "objective": "Gerar uma estrutura JSON de regra de alerta para o Logmanager com contexto adicional de campos relevantes recuperados dinamicamente de uma base de conhecimento, usando top_k=50.",
+      "description": "Antes da geração, campos relevantes são recuperados de uma base de conhecimento (available_fields.csv) usando o modelo de embeddings MiniLM com prompt P1 e preprocessing breakdown. Os campos são ranqueados por similaridade de cosseno e os 50 melhores (top_k=50) são selecionados. Campos universais (msg, raw, meta, meta.event@id) são sempre incluídos e keyword matching é aplicado. Os campos recuperados são anexados à query do usuário com o prefixo 'Suggested relevant fields:'. O prompt de instrução segue a estrutura descrita na seção 5.4.1 (tags XML, descrição de tarefa, formato de saída, sintaxe e exemplos few-shot). O modelo gera a resposta JSON em uma única interação, sem mecanismos de retry ou schema constraint."
+    },
+    {
+      "technique_id": "T2.tech1",
+      "study_id": "T2",
+      "objective": "Gerar um layout visual posicionando objetos específicos do conjunto COCO de 80 classes em uma cena, com os objetos-alvo fornecidos diretamente no prompt.",
+      "description": "A técnica consiste em enviar ao GPT-4 um prompt contendo três exemplos fixos (few-shot) que demonstram o formato desejado da saída, juntamente com a instrução textual que inclui a lista de objetos-alvo a serem posicionados. O processo de interação é direto: o prompt é enviado uma única vez e a resposta é aceita como saída final, sem etapas intermediárias, recuperação de informação ou mecanismos de validação e reenvio. Os exemplos fixos no prompt servem como template de formato, mostrando ao modelo a estrutura esperada da saída (coordenadas em formato de lista ou textual)."
+    },
+    {
+      "technique_id": "T2.tech2",
+      "study_id": "T2",
+      "objective": "Gerar um layout visual a partir apenas de uma descrição textual, extraindo autonomamente os objetos relevantes do conjunto COCO de 80 classes.",
+      "description": "A técnica consiste em enviar ao GPT-4 um prompt contendo três exemplos fixos (few-shot) que demonstram o formato desejado da saída, juntamente com a instrução textual, mas sem fornecer a lista de objetos-alvo. O modelo deve extrair autonomamente os objetos relevantes da descrição textual e gerar o layout. O processo de interação é direto: o prompt é enviado uma única vez e a resposta é aceita como saída final, sem etapas intermediárias, recuperação de informação ou mecanismos de validação e reenvio."
+    },
+    {
+      "technique_id": "T2.tech3",
+      "study_id": "T2",
+      "objective": "Gerar um layout visual posicionando objetos específicos do conjunto COCO de 80 classes, utilizando exemplos de demonstração recuperados do dataset InstLap-Train para aprimorar o in-context learning.",
+      "description": "Para cada prompt de teste, o sistema primeiro recupera os exemplos de demonstração mais relevantes do dataset InstLap-Train utilizando similaridade de cosseno de features de texto extraídas pelo CLIP. Esses exemplos recuperados são então inseridos no prompt junto com a instrução textual contendo os objetos-alvo. As coordenadas do layout nos exemplos são representadas como listas de inteiros. Após a montagem do prompt com os exemplos recuperados, ele é enviado ao GPT-4, que gera diretamente o layout. Não há mecanismo de validação ou reenvio da saída."
+    },
+    {
+      "technique_id": "T2.tech4",
+      "study_id": "T2",
+      "objective": "Gerar um layout visual a partir apenas de uma descrição textual, extraindo autonomamente os objetos relevantes do conjunto COCO de 80 classes, utilizando exemplos de demonstração recuperados do dataset InstLap-Train.",
+      "description": "Para cada prompt de teste, o sistema primeiro recupera os exemplos de demonstração mais relevantes do dataset InstLap-Train utilizando similaridade de cosseno de features de texto extraídas pelo CLIP. Esses exemplos recuperados são inseridos no prompt junto com a instrução textual, sem fornecer a lista de objetos-alvo. O modelo deve extrair autonomamente os objetos relevantes. As coordenadas do layout nos exemplos são representadas como listas de inteiros. Após a montagem do prompt, ele é enviado ao GPT-4, que gera diretamente o layout. Não há mecanismo de validação ou reenvio."
+    },
+    {
+      "technique_id": "T2.tech5",
+      "study_id": "T2",
+      "objective": "Gerar um layout visual posicionando objetos específicos do conjunto COCO de 80 classes, utilizando exemplos de demonstração em formato CSS recuperados do dataset InstLap-Train.",
+      "description": "Para cada prompt de teste, o sistema recupera os exemplos de demonstração mais relevantes do dataset InstLap-Train utilizando similaridade de cosseno de features de texto extraídas pelo CLIP. Esses exemplos recuperados são inseridos no prompt junto com a instrução textual contendo os objetos-alvo. Diferentemente de GPT-4(R), as coordenadas do layout nos exemplos são representadas em uma estrutura similar a CSS com valor máximo de 128. Após a montagem do prompt, ele é enviado ao GPT-4, que gera diretamente o layout. Não há mecanismo de validação ou reenvio."
+    },
+    {
+      "technique_id": "T2.tech6",
+      "study_id": "T2",
+      "objective": "Gerar um layout visual a partir apenas de uma descrição textual, extraindo autonomamente os objetos relevantes do conjunto COCO de 80 classes, utilizando exemplos de demonstração em formato CSS recuperados do dataset InstLap-Train.",
+      "description": "Para cada prompt de teste, o sistema recupera os exemplos de demonstração mais relevantes do dataset InstLap-Train utilizando similaridade de cosseno de features de texto extraídas pelo CLIP. Esses exemplos recuperados são inseridos no prompt junto com a instrução textual, sem fornecer a lista de objetos-alvo. As coordenadas do layout nos exemplos são representadas em uma estrutura similar a CSS com valor máximo de 128. Após a montagem do prompt, ele é enviado ao GPT-4, que gera diretamente o layout. Não há mecanismo de validação ou reenvio."
+    },
+    {
+      "technique_id": "T2.tech7",
+      "study_id": "T2",
+      "objective": "Gerar um layout visual posicionando objetos específicos do conjunto COCO de 80 classes, utilizando demonstrações visuais in-context em estruturas CSS para aprimorar as habilidades de planejamento visual.",
+      "description": "A técnica LayoutGPT utiliza demonstrações visuais in-context em estruturas CSS para guiar o GPT-3.5/4 no planejamento de layouts a partir de condições textuais. O prompt contém exemplos de layouts em formato CSS juntamente com a instrução textual que inclui os objetos-alvo. O processo de interação é direto: o prompt é enviado uma única vez e a resposta é aceita como saída final, sem etapas intermediárias, recuperação de informação ou mecanismos de validação e reenvio."
+    },
+    {
+      "technique_id": "T2.tech8",
+      "study_id": "T2",
+      "objective": "Gerar um layout visual a partir apenas de uma descrição textual, extraindo autonomamente os objetos relevantes do conjunto COCO de 80 classes, utilizando demonstrações visuais in-context em estruturas CSS.",
+      "description": "A técnica LayoutGPT utiliza demonstrações visuais in-context em estruturas CSS para guiar o GPT-3.5/4 no planejamento de layouts a partir de condições textuais. O prompt contém exemplos de layouts em formato CSS juntamente com a instrução textual, sem fornecer a lista de objetos-alvo. O modelo deve extrair autonomamente os objetos relevantes. O processo de interação é direto: o prompt é enviado uma única vez e a resposta é aceita como saída final, sem etapas intermediárias, recuperação de informação ou mecanismos de validação e reenvio."
+    },
+    {
+      "technique_id": "T2.tech9",
+      "study_id": "T2",
+      "objective": "Gerar um layout visual posicionando objetos com descrições aumentadas (open-set) em uma cena, com os objetos-alvo fornecidos diretamente no prompt.",
+      "description": "A técnica consiste em enviar ao GPT-4 um prompt contendo três exemplos fixos (few-shot) que demonstram o formato desejado da saída, juntamente com a instrução textual que inclui a lista de objetos-alvo com descrições aumentadas por LLM (open-set, sem restrição a um conjunto fixo de classes). O processo de interação é direto: o prompt é enviado uma única vez e a resposta é aceita como saída final, sem etapas intermediárias, recuperação de informação ou mecanismos de validação e reenvio."
+    },
+    {
+      "technique_id": "T2.tech10",
+      "study_id": "T2",
+      "objective": "Gerar um layout visual a partir apenas de uma descrição textual com objetos de vocabulário aberto (open-set), extraindo autonomamente os objetos relevantes.",
+      "description": "A técnica consiste em enviar ao GPT-4 um prompt contendo três exemplos fixos (few-shot) que demonstram o formato desejado da saída, juntamente com a instrução textual com descrições aumentadas (open-set), sem fornecer a lista de objetos-alvo. O modelo deve extrair autonomamente os objetos relevantes da descrição textual. O processo de interação é direto: o prompt é enviado uma única vez e a resposta é aceita como saída final, sem etapas intermediárias, recuperação de informação ou mecanismos de validação e reenvio."
+    },
+    {
+      "technique_id": "T2.tech11",
+      "study_id": "T2",
+      "objective": "Gerar um layout visual posicionando objetos com descrições aumentadas (open-set), utilizando exemplos de demonstração recuperados do dataset InstLap-Train.",
+      "description": "Para cada prompt de teste, o sistema recupera os exemplos de demonstração mais relevantes do dataset InstLap-Train utilizando similaridade de cosseno de features de texto extraídas pelo CLIP. Esses exemplos recuperados são inseridos no prompt junto com a instrução textual contendo os objetos-alvo com descrições aumentadas (open-set). As coordenadas do layout nos exemplos são representadas como listas de inteiros. Após a montagem do prompt, ele é enviado ao GPT-4, que gera diretamente o layout. Não há mecanismo de validação ou reenvio."
+    },
+    {
+      "technique_id": "T2.tech12",
+      "study_id": "T2",
+      "objective": "Gerar um layout visual a partir apenas de uma descrição textual com objetos de vocabulário aberto (open-set), extraindo autonomamente os objetos relevantes, utilizando exemplos recuperados do dataset InstLap-Train.",
+      "description": "Para cada prompt de teste, o sistema recupera os exemplos de demonstração mais relevantes do dataset InstLap-Train utilizando similaridade de cosseno de features de texto extraídas pelo CLIP. Esses exemplos recuperados são inseridos no prompt junto com a instrução textual com descrições aumentadas (open-set), sem fornecer a lista de objetos-alvo. As coordenadas do layout nos exemplos são representadas como listas de inteiros. Após a montagem do prompt, ele é enviado ao GPT-4, que gera diretamente o layout. Não há mecanismo de validação ou reenvio."
+    },
+    {
+      "technique_id": "T2.tech13",
+      "study_id": "T2",
+      "objective": "Gerar um layout visual posicionando objetos com descrições aumentadas (open-set), utilizando exemplos de demonstração em formato CSS recuperados do dataset InstLap-Train.",
+      "description": "Para cada prompt de teste, o sistema recupera os exemplos de demonstração mais relevantes do dataset InstLap-Train utilizando similaridade de cosseno de features de texto extraídas pelo CLIP. Esses exemplos recuperados são inseridos no prompt junto com a instrução textual contendo os objetos-alvo com descrições aumentadas (open-set). As coordenadas do layout nos exemplos são representadas em uma estrutura similar a CSS com valor máximo de 128. Após a montagem do prompt, ele é enviado ao GPT-4, que gera diretamente o layout. Não há mecanismo de validação ou reenvio."
+    },
+    {
+      "technique_id": "T2.tech14",
+      "study_id": "T2",
+      "objective": "Gerar um layout visual a partir apenas de uma descrição textual com objetos de vocabulário aberto (open-set), extraindo autonomamente os objetos relevantes, utilizando exemplos em formato CSS recuperados do dataset InstLap-Train.",
+      "description": "Para cada prompt de teste, o sistema recupera os exemplos de demonstração mais relevantes do dataset InstLap-Train utilizando similaridade de cosseno de features de texto extraídas pelo CLIP. Esses exemplos recuperados são inseridos no prompt junto com a instrução textual com descrições aumentadas (open-set), sem fornecer a lista de objetos-alvo. As coordenadas do layout nos exemplos são representadas em uma estrutura similar a CSS com valor máximo de 128. Após a montagem do prompt, ele é enviado ao GPT-4, que gera diretamente o layout. Não há mecanismo de validação ou reenvio."
+    },
+    {
+      "technique_id": "T2.tech15",
+      "study_id": "T2",
+      "objective": "Gerar um layout visual posicionando objetos com descrições aumentadas (open-set), utilizando demonstrações visuais in-context em estruturas CSS.",
+      "description": "A técnica LayoutGPT utiliza demonstrações visuais in-context em estruturas CSS para guiar o GPT-3.5/4 no planejamento de layouts a partir de condições textuais com descrições aumentadas (open-set). O prompt contém exemplos de layouts em formato CSS juntamente com a instrução textual que inclui os objetos-alvo. O processo de interação é direto: o prompt é enviado uma única vez e a resposta é aceita como saída final, sem etapas intermediárias, recuperação de informação ou mecanismos de validação e reenvio."
+    },
+    {
+      "technique_id": "T2.tech16",
+      "study_id": "T2",
+      "objective": "Gerar um layout visual a partir apenas de uma descrição textual com objetos de vocabulário aberto (open-set), extraindo autonomamente os objetos relevantes, utilizando demonstrações visuais in-context em estruturas CSS.",
+      "description": "A técnica LayoutGPT utiliza demonstrações visuais in-context em estruturas CSS para guiar o GPT-3.5/4 no planejamento de layouts a partir de condições textuais com descrições aumentadas (open-set), sem fornecer a lista de objetos-alvo. O modelo deve extrair autonomamente os objetos relevantes. O processo de interação é direto: o prompt é enviado uma única vez e a resposta é aceita como saída final, sem etapas intermediárias, recuperação de informação ou mecanismos de validação e reenvio."
+    },
+    {
+      "technique_id": "T2.tech17",
+      "study_id": "T2",
+      "objective": "Gerar um layout de texto visual para renderização em imagens, identificando e posicionando elementos de texto no benchmark InstLap-Bench.",
+      "description": "A técnica consiste em enviar ao GPT-4 um prompt contendo três exemplos fixos (few-shot) que demonstram o formato desejado da saída, juntamente com a instrução textual para gerar o layout de texto visual. O processo de interação é direto: o prompt é enviado uma única vez e a resposta é aceita como saída final, sem etapas intermediárias, recuperação de informação ou mecanismos de validação e reenvio."
+    },
+    {
+      "technique_id": "T2.tech18",
+      "study_id": "T2",
+      "objective": "Gerar um layout de texto visual para renderização em imagens, identificando e posicionando elementos de texto no benchmark InstLap-Bench, utilizando exemplos em formato CSS recuperados do dataset InstLap-Train.",
+      "description": "Para cada prompt de teste, o sistema recupera os exemplos de demonstração mais relevantes do dataset InstLap-Train utilizando similaridade de cosseno de features de texto extraídas pelo CLIP. Esses exemplos recuperados são inseridos no prompt junto com a instrução textual para gerar o layout de texto visual. As coordenadas do layout nos exemplos são representadas em uma estrutura similar a CSS com valor máximo de 128. Após a montagem do prompt, ele é enviado ao GPT-4, que gera diretamente o layout. Não há mecanismo de validação ou reenvio."
+    },
+    {
+      "technique_id": "A7.tech1",
+      "study_id": "A7",
+      "objective": "Mapear dados JSON não estruturados de sensores industriais para um formato JSON padronizado alinhado a especificações de Digital Product Passport, utilizando exemplos few-shot como guia.",
+      "description": "A técnica utiliza uma estratégia few-shot na qual o modelo recebe um prompt de sistema descrevendo a tarefa de transformação de dados: extrair e renomear campos conforme o formato-alvo, garantir a padronização de unidades (por exemplo, converter gramas para quilogramas), assegurar os tipos de dados corretos e retornar apenas JSON válido sem comentários adicionais. Em seguida, são fornecidos quatro exemplos ilustrativos de pares entrada-saída, cada um correspondendo a uma máquina distinta do dataset, gerados com a mesma lógica de perturbação usada para criar o dataset real, mas com valores diferentes para evitar memorização. Os exemplos foram pré-gerados e cacheados por nível de complexidade.\n\nApós os exemplos, a mensagem do usuário contém o JSON bruto de entrada a ser transformado. O prompt é montado dinamicamente por meio de templates do LangChain, e a resposta do modelo é aceita diretamente em uma única etapa de inferência, sem mecanismos de reenvio ou refinamento."
+    },
+    {
+      "technique_id": "A7.tech2",
+      "study_id": "A7",
+      "objective": "Mapear dados JSON não estruturados de sensores industriais para um formato JSON padronizado alinhado a especificações de Digital Product Passport, utilizando apenas a descrição do schema-alvo sem exemplos.",
+      "description": "A técnica utiliza uma estratégia zero-shot na qual o modelo recebe um prompt de sistema com a descrição de tarefa de transformação de dados (extrair e renomear campos, padronizar unidades, garantir tipos de dados e retornar apenas JSON válido), seguida de uma seção intermediária contendo uma descrição estruturada do schema-alvo gerada a partir do modelo Pydantic de destino. Nenhum exemplo de entrada-saída é fornecido ao modelo.\n\nA mensagem do usuário contém o JSON bruto de entrada. O prompt é montado dinamicamente via templates do LangChain, e a resposta é aceita diretamente em uma única etapa de inferência, sem mecanismos de reenvio ou refinamento."
+    },
+    {
+      "technique_id": "A7.tech3",
+      "study_id": "A7",
+      "objective": "Mapear dados JSON não estruturados de sensores industriais para um formato JSON padronizado alinhado a especificações de Digital Product Passport, utilizando apenas valores enumerados como orientação sem incluir o schema no prompt.",
+      "description": "A técnica utiliza uma variante da estratégia few-shot na qual apenas os valores enumerados (categóricos) são incluídos na seção de exemplos do prompt, em vez de pares completos de entrada-saída. O schema não é incluído explicitamente no prompt. O design assume que os valores de enumeração fornecidos oferecem orientação suficiente sobre o schema-alvo, ao mesmo tempo em que exigem que o modelo internalize o conjunto completo de valores categóricos possíveis.\n\nO prompt de sistema mantém a mesma descrição de tarefa das demais abordagens (extrair e renomear campos, padronizar unidades, garantir tipos e retornar JSON válido). A mensagem do usuário contém o JSON bruto de entrada. O prompt é montado dinamicamente via templates do LangChain, e a resposta é aceita diretamente em uma única etapa de inferência, sem mecanismos de reenvio ou refinamento."
+    }
+  ]
+}
